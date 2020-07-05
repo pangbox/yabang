@@ -4,6 +4,7 @@
 #include <commctrl.h>
 
 #include "splash.h"
+#include "resource.h"
 
 constexpr TCHAR g_className[] = TEXT("PangYa");
 HWND g_hWnd = nullptr;
@@ -46,7 +47,7 @@ bool CheckWndVersion() {
 	return versionInfo.dwPlatformId && (versionInfo.dwMajorVersion > 4 || versionInfo.dwMajorVersion == 4 && versionInfo.dwMinorVersion);
 }
 
-bool CheckRelatedDLL(HWND hWnd) {
+bool CheckRelatedDll(HWND hWnd) {
 	HMODULE directInput = LoadLibrary(TEXT("dinput8.dll"));
 	if (!directInput) {
 		MessageBox(hWnd, TEXT("DirectX 관련 파일을 찾을 수 없습니다."), TEXT("팡야"), 0);
@@ -106,10 +107,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 		wndClass.cbClsExtra = 0;
 		wndClass.cbWndExtra = 0;
 		wndClass.hInstance = hInstance;
-		wndClass.hIcon = LoadIcon(nullptr, IDI_APPLICATION); // LoadIcon(hInstance, (LPCSTR)0x65);
+		wndClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GAMEICON));
 		wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
 		wndClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(4));
-		wndClass.lpszMenuName = 0;
+		wndClass.lpszMenuName = nullptr;
 		wndClass.lpszClassName = g_className;
 		if (RegisterClass(&wndClass)) {
 			if (CheckWndVersion()) {
@@ -133,7 +134,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 					hInstance,
 					nullptr);
 				ShowWindow(hWnd, SW_HIDE);
-				if (CheckRelatedDLL(hWnd))
+				if (CheckRelatedDll(hWnd))
 				{
 					g_hWnd = hWnd;
 					MessageBox(nullptr, TEXT("Unimplemented."), TEXT("YaBang"), MB_OK);

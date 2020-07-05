@@ -10,5 +10,13 @@
     <ClInclude Include="baseobject.h" />
     <ClInclude Include="splash.h" />
     <ClInclude Include="singleton.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="yabang.ico" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
 </Project>

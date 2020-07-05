@@ -178,8 +178,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="splash.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="yabang.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

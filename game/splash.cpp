@@ -211,7 +211,7 @@ WPARAM CSplash::DoLoop() {
 	if (!this->m_hWnd) {
 		ShowSplash();
 	}
-	while (GetMessageA(&msg, 0, 0, 0)) {
+	while (GetMessageA(&msg, nullptr, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessageA(&msg);
 	}
