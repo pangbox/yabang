@@ -15,7 +15,20 @@ CSplash::~CSplash() {
 }
 
 void CSplash::Init() {
-	GetModuleHandle(TEXT("USER32.DLL"));
+	this->m_hWnd = nullptr;
+	this->m_className = TEXT("SPLASH");
+	this->m_colorRef = 0;
+	this->m_bitmapH = 0;
+	this->m_bitmapW = 0;
+	strcpy_s(this->m_textStr, sizeof(this->m_textStr), "Initializing....");
+	this->m_textX = 10;
+	this->m_textY = 100;
+	HMODULE user32 = GetModuleHandle(TEXT("USER32.DLL"));
+	if (user32) {
+		this->m_setLayeredWindowAttributesProc = reinterpret_cast<SetLayeredWindowAttributesProc>(GetProcAddress(user32, "SetLayeredWindowAttributes"));
+	} else {
+		this->m_setLayeredWindowAttributesProc = nullptr;
+	}
 }
 
 void CSplash::OnPaint(HWND hWnd) const {
@@ -128,7 +141,7 @@ LRESULT CALLBACK CSplash::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 }
 
 HWND CSplash::RegAndCreateWindow() {
-	WNDCLASSEX wndClass;
+	WNDCLASSEX wndClass{};
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = 0x3000;
 	wndClass.lpfnWndProc = WndProc;
@@ -136,7 +149,7 @@ HWND CSplash::RegAndCreateWindow() {
 	wndClass.cbWndExtra = 30;
 	wndClass.hInstance = GetModuleHandle(nullptr);
 	wndClass.hIcon = nullptr;
-	wndClass.hCursor = LoadCursorA(0, (LPCSTR)0x7F02);
+	wndClass.hCursor = LoadCursor(nullptr, IDC_WAIT);
 	wndClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(1));
 	wndClass.lpszMenuName = nullptr;
 	wndClass.lpszClassName = this->m_className;
@@ -158,8 +171,8 @@ HWND CSplash::RegAndCreateWindow() {
 		this->m_className,
 		nullptr,
 		WS_POPUP,
-		static_cast<unsigned int>(screenWidth - this->m_bitmapW) / 2,
-		static_cast<unsigned int>(screenHeight - this->m_bitmapH) / 2,
+		static_cast<int>(screenWidth - this->m_bitmapW) / 2,
+		static_cast<int>(screenHeight - this->m_bitmapH) / 2,
 		this->m_bitmapW,
 		this->m_bitmapH,
 		nullptr,
@@ -169,7 +182,7 @@ HWND CSplash::RegAndCreateWindow() {
 	this->m_hWnd = hWnd;
 	if (hWnd) {
 		MakeTransparent();
-		ShowWindow(this->m_hWnd, 5);
+		ShowWindow(this->m_hWnd, SW_SHOW);
 		UpdateWindow(this->m_hWnd);
 	}
 	return this->m_hWnd;
@@ -186,7 +199,7 @@ void CSplash::ShowSplash() {
 	strcpy_s(this->m_textStr, sizeof(this->m_textStr), "");
 	OnPaint(this->m_hWnd);
 	InvalidateRect(this->m_hWnd, nullptr, 0);
-	ShowWindow(this->m_hWnd, 5);
+	ShowWindow(this->m_hWnd, SW_SHOW);
 }
 
 unsigned int CSplash::SetBitmap(LPCTSTR name) {

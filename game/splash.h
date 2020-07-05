@@ -34,7 +34,7 @@ private:
 	int m_bitmapW;
 	int m_bitmapH;
 	HBITMAP m_bitmap;
-	HWND m_hWnd;
+	HWND m_hWnd{};
 	const TCHAR* m_className;
 	char m_textStr[128];
 	int m_textX;
