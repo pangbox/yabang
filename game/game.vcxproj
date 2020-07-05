@@ -20,32 +20,33 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{31C7CDE1-F3FD-4E1A-8A1D-8EC8CF42265F}</ProjectGuid>
-    <RootNamespace>device</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{0011f29b-325f-4e70-9f05-557575f94c08}</ProjectGuid>
+    <RootNamespace>game</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -71,63 +72,44 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)obj\wangreal\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>wangreal</TargetName>
     <IncludePath>$(SolutionDir)third_party\dxsdk\include;$(SolutionDir)engine\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)third_party\dxsdk\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)obj\wangreal\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>wangreal</TargetName>
-    <IncludePath>$(SolutionDir)third_party\dxsdk\include;$(SolutionDir)engine\include;$(IncludePath)</IncludePath>
+    <IntDir>$(SolutionDir)obj\projectg\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>projectg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)obj\wangreal\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>wangreal</TargetName>
     <IncludePath>$(SolutionDir)third_party\dxsdk\include;$(SolutionDir)engine\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)third_party\dxsdk\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\projectg\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>projectg</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)third_party\dxsdk\include;$(SolutionDir)engine\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\projectg\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>projectg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)obj\wangreal\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>wangreal</TargetName>
     <IncludePath>$(SolutionDir)third_party\dxsdk\include;$(SolutionDir)engine\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)out\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\projectg\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>projectg</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;ENABLE_TRACE;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;DIRECTINPUT_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DINPUT8.LIB;D3D9.LIB;D3DX9.LIB;DXGUID.LIB;GDI32.LIB;IMM32.LIB;KERNEL32.LIB;WINMM.LIB;PSAPI.LIB;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>device.def</ModuleDefinitionFile>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;ENABLE_TRACE;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;DIRECTINPUT_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <DisableSpecificWarnings>26812</DisableSpecificWarnings>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DINPUT8.LIB;D3D9.LIB;D3DX9.LIB;DXGUID.LIB;GDI32.LIB;IMM32.LIB;KERNEL32.LIB;WINMM.LIB;PSAPI.LIB;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>device.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,19 +117,27 @@
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;DIRECTINPUT_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DINPUT8.LIB;D3D9.LIB;D3DX9.LIB;DXGUID.LIB;GDI32.LIB;IMM32.LIB;KERNEL32.LIB;WINMM.LIB;PSAPI.LIB;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>device.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,55 +145,19 @@
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;DIRECTINPUT_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>DINPUT8.LIB;D3D9.LIB;D3DX9.LIB;DXGUID.LIB;GDI32.LIB;IMM32.LIB;KERNEL32.LIB;WINMM.LIB;PSAPI.LIB;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>device.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\engine\source\bitmap.cpp" />
-    <ClCompile Include="..\engine\source\wdxtc.cpp" />
-    <ClCompile Include="device.cpp" />
-    <ClCompile Include="dikeyboard.cpp" />
-    <ClCompile Include="dimouse.cpp" />
-    <ClCompile Include="directinput.cpp" />
-    <ClCompile Include="pangyaver.cpp" />
-    <ClCompile Include="wd3d.cpp" />
-    <ClCompile Include="wd3d8.cpp" />
-    <ClCompile Include="wime.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\engine\include\bitmap.h" />
-    <ClInclude Include="..\engine\include\wdevice.h" />
-    <ClInclude Include="..\engine\include\wdxtc.h" />
-    <ClInclude Include="..\engine\include\winput.h" />
-    <ClInclude Include="..\engine\include\wlist.h" />
-    <ClInclude Include="..\engine\include\wmath.h" />
-    <ClInclude Include="..\engine\include\wproc.h" />
-    <ClInclude Include="..\engine\include\wscene.h" />
-    <ClInclude Include="..\engine\include\wutil.h" />
-    <ClInclude Include="..\engine\include\wvideo.h" />
-    <ClInclude Include="dikeyboard.h" />
-    <ClInclude Include="dimouse.h" />
-    <ClInclude Include="directinput.h" />
-    <ClInclude Include="interop.h" />
-    <ClInclude Include="pangyaver.h" />
-    <ClInclude Include="screencape.h" />
-    <ClInclude Include="wd3d.h" />
-    <ClInclude Include="wd3d8.h" />
-    <ClInclude Include="wime.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="device.def" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
