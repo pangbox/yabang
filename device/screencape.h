@@ -41,7 +41,7 @@ namespace Nv {
 				}
 			}
 
-			IScreenCape *CreateScreenCapeLayer() const {
+			[[nodiscard]] IScreenCape *CreateScreenCapeLayer() const {
 				IScreenCape *pInterface = nullptr;
 
 				if (!this->m_pProc) {
