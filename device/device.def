@@ -1,0 +1,6 @@
+LIBRARY	wangreal
+EXPORTS
+   WDeviceName	@1
+   WEnumInputDevices	@2
+   WEnumVideoDevices	@3
+   WVersion	@4

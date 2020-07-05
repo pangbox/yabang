@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="device.cpp" />
+    <ClCompile Include="dikeyboard.cpp" />
+    <ClCompile Include="dimouse.cpp" />
+    <ClCompile Include="directinput.cpp" />
+    <ClCompile Include="wd3d.cpp" />
+    <ClCompile Include="wd3d8.cpp" />
+    <ClCompile Include="wime.cpp" />
+    <ClCompile Include="..\engine\source\bitmap.cpp" />
+    <ClCompile Include="..\engine\source\wdxtc.cpp" />
+    <ClCompile Include="pangyaver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dikeyboard.h" />
+    <ClInclude Include="dimouse.h" />
+    <ClInclude Include="directinput.h" />
+    <ClInclude Include="screencape.h" />
+    <ClInclude Include="wd3d.h" />
+    <ClInclude Include="wd3d8.h" />
+    <ClInclude Include="wime.h" />
+    <ClInclude Include="..\engine\include\bitmap.h" />
+    <ClInclude Include="..\engine\include\wdevice.h" />
+    <ClInclude Include="..\engine\include\winput.h" />
+    <ClInclude Include="..\engine\include\wlist.h" />
+    <ClInclude Include="..\engine\include\wmath.h" />
+    <ClInclude Include="..\engine\include\wproc.h" />
+    <ClInclude Include="..\engine\include\wscene.h" />
+    <ClInclude Include="..\engine\include\wutil.h" />
+    <ClInclude Include="..\engine\include\wvideo.h" />
+    <ClInclude Include="..\engine\include\wdxtc.h" />
+    <ClInclude Include="pangyaver.h" />
+    <ClInclude Include="interop.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="device.def" />
+  </ItemGroup>
+</Project>
