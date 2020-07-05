@@ -31,7 +31,7 @@ namespace Nv {
 				if (this->m_hModule) {
 					this->m_pProc = reinterpret_cast<CreateScreenCapeLayerProc>(GetProcAddress(this->m_hModule, "CreateScreenCape"));
 				} else {
-					MessageBoxW(nullptr, L"Load failed 'ScreenCape.dll'", L"Warning!", 0);
+					MessageBox(nullptr, TEXT("Failed to load ScreenCape.dll"), TEXT("Warning!"), 0);
 				}
 			}
 
