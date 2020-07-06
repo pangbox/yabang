@@ -110,7 +110,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -126,7 +126,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -142,7 +142,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -158,7 +158,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -172,15 +172,69 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="baseobject.cpp" />
+    <ClCompile Include="cchatmsg.cpp" />
+    <ClCompile Include="coordinates.cpp" />
+    <ClCompile Include="frcmdtarget.cpp" />
+    <ClCompile Include="frcombobox.cpp" />
+    <ClCompile Include="fredit.cpp" />
+    <ClCompile Include="frguiitem.cpp" />
+    <ClCompile Include="frinputstate.cpp" />
+    <ClCompile Include="frline.cpp" />
+    <ClCompile Include="frscrollbar.cpp" />
+    <ClCompile Include="frwnd.cpp" />
+    <ClCompile Include="frwndmanager.cpp" />
+    <ClCompile Include="iff.cpp" />
+    <ClCompile Include="iobject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="singleton.cpp" />
     <ClCompile Include="splash.cpp" />
+    <ClCompile Include="tikimagicboxdoc.cpp" />
+    <ClCompile Include="wflags.cpp" />
+    <ClCompile Include="wlock.cpp" />
+    <ClCompile Include="woverlay.cpp" />
+    <ClCompile Include="wrecvview.cpp" />
+    <ClCompile Include="wresource.cpp" />
+    <ClCompile Include="wresourcemanager.cpp" />
+    <ClCompile Include="wresrccache.cpp" />
+    <ClCompile Include="wshadowview.cpp" />
+    <ClCompile Include="wshadowviewhw.cpp" />
+    <ClCompile Include="wtextureview.cpp" />
+    <ClCompile Include="wview.cpp" />
+    <ClCompile Include="wvieworth.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
+    <ClInclude Include="cchatmsg.h" />
+    <ClInclude Include="coordinates.h" />
+    <ClInclude Include="frcmdtarget.h" />
+    <ClInclude Include="frcombobox.h" />
+    <ClInclude Include="fredit.h" />
+    <ClInclude Include="frguiitem.h" />
+    <ClInclude Include="frinputstate.h" />
+    <ClInclude Include="frline.h" />
+    <ClInclude Include="frscrollbar.h" />
+    <ClInclude Include="frwnd.h" />
+    <ClInclude Include="frwndmanager.h" />
+    <ClInclude Include="iff.h" />
+    <ClInclude Include="iobject.h" />
+    <ClInclude Include="rectangle.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="splash.h" />
+    <ClInclude Include="tikimagicboxdoc.h" />
+    <ClInclude Include="wflags.h" />
+    <ClInclude Include="wlock.h" />
+    <ClInclude Include="woverlay.h" />
+    <ClInclude Include="wrecvview.h" />
+    <ClInclude Include="wresource.h" />
+    <ClInclude Include="wresourcemanager.h" />
+    <ClInclude Include="wresrccache.h" />
+    <ClInclude Include="wshadowview.h" />
+    <ClInclude Include="wshadowviewhw.h" />
+    <ClInclude Include="wtextureview.h" />
+    <ClInclude Include="wview.h" />
+    <ClInclude Include="wvieworth.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
