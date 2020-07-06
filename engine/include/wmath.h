@@ -1,4 +1,5 @@
 #pragma once
+#include <cstring>
 
 enum Axis {
 	XAxis = 0,
