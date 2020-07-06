@@ -4,6 +4,21 @@
 
 #include "rectangle.h"
 
+enum BGTYPE {
+	BT_IMAGEFILE,
+	BT_BORDERFILL,
+	BT_NONE,
+};
+
+enum BUTTONPARTS {
+	BUTTONPartFiller0,
+	BP_PUSHBUTTON,
+	BP_RADIOBUTTON,
+	BP_CHECKBOX,
+	BP_GROUPBOX,
+	BP_USERBUTTON,
+};
+
 enum enumGuiType {
 	GI_NONE,
 	GI_FORM,
