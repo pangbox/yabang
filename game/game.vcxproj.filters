@@ -32,6 +32,14 @@
     <ClCompile Include="frguiitem.cpp" />
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="coordinates.cpp" />
+    <ClCompile Include="frbutton.cpp" />
+    <ClCompile Include="frcursor.cpp" />
+    <ClCompile Include="frform.cpp" />
+    <ClCompile Include="frlistbox.cpp" />
+    <ClCompile Include="wpuppet.cpp" />
+    <ClCompile Include="wbone.cpp" />
+    <ClCompile Include="wmesh.cpp" />
+    <ClCompile Include="waabb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -65,6 +73,14 @@
     <ClInclude Include="frguiitem.h" />
     <ClInclude Include="rectangle.h" />
     <ClInclude Include="coordinates.h" />
+    <ClInclude Include="frbutton.h" />
+    <ClInclude Include="frcursor.h" />
+    <ClInclude Include="frform.h" />
+    <ClInclude Include="frlistbox.h" />
+    <ClInclude Include="wpuppet.h" />
+    <ClInclude Include="wbone.h" />
+    <ClInclude Include="wmesh.h" />
+    <ClInclude Include="waabb.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
