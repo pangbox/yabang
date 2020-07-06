@@ -39,18 +39,10 @@ HANDLE WINAPI GetPangYaMutex() {
 	return nullptr;
 }
 
-bool CheckWndVersion() {
-	OSVERSIONINFO versionInfo;
-	versionInfo.dwOSVersionInfoSize = sizeof(versionInfo);
-	// ReSharper disable once CppDeprecatedEntity
-	GetVersionEx(&versionInfo);
-	return versionInfo.dwPlatformId && (versionInfo.dwMajorVersion > 4 || versionInfo.dwMajorVersion == 4 && versionInfo.dwMinorVersion);
-}
-
 bool CheckRelatedDll(HWND hWnd) {
 	HMODULE directInput = LoadLibrary(TEXT("dinput8.dll"));
 	if (!directInput) {
-		MessageBox(hWnd, TEXT("DirectX 관련 파일을 찾을 수 없습니다."), TEXT("팡야"), 0);
+		MessageBox(hWnd, TEXT("A DirectX library is missing. Please re-install DirectX 9."), TEXT("YaBang"), MB_OK | MB_ICONERROR);
 		return false;
 	}
 	FreeLibrary(directInput);
@@ -89,7 +81,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
 
-	CoInitialize(nullptr);
+	if (FAILED(CoInitialize(nullptr))) {
+		MessageBox(nullptr, TEXT("Failed to initialize COM apartment."), TEXT("YaBang"), MB_OK | MB_ICONERROR);
+	}
 
 	INITCOMMONCONTROLSEX initCommonControlsEx{};
 	initCommonControlsEx.dwSize = sizeof(initCommonControlsEx);
@@ -113,34 +107,33 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 		wndClass.lpszMenuName = nullptr;
 		wndClass.lpszClassName = g_className;
 		if (RegisterClass(&wndClass)) {
-			if (CheckWndVersion()) {
-				RECT rect;
-				AdjustWindowRectEx(&rect, 0xC40000u, 0, 0);
-				OffsetRect(
-					&rect,
-					(rect.left - rect.right + GetSystemMetrics(SM_CXSCREEN)) / 2,
-					(rect.top - rect.bottom + GetSystemMetrics(SM_CYSCREEN)) / 2);
-				HWND hWnd = CreateWindowEx(
-					0,
-					g_className,
-					TEXT("YaBang"),
-					WS_CAPTION | WS_SIZEBOX,
-					(rect.left - rect.right + GetSystemMetrics(SM_CXSCREEN)) / 2,
-					(rect.top - rect.bottom + GetSystemMetrics(SM_CYSCREEN)) / 2,
-					rect.right - rect.left,
-					rect.bottom - rect.top,
-					nullptr,
-					nullptr,
-					hInstance,
-					nullptr);
-				ShowWindow(hWnd, SW_HIDE);
-				if (CheckRelatedDll(hWnd))
-				{
-					g_hWnd = hWnd;
-					MessageBox(nullptr, TEXT("Unimplemented."), TEXT("YaBang"), MB_OK);
-				}
-			} else {
-				MessageBox(nullptr, TEXT("Windows 98 or Windows 2000 or newer operating system required."), TEXT("YaBang"), MB_OK);
+			RECT rect;
+			rect.left = SM_CXSCREEN;
+			rect.top = SM_CXSCREEN;
+			rect.right = 800;
+			rect.bottom = 600;
+			AdjustWindowRectEx(&rect, 0xC40000u, 0, 0);
+			OffsetRect(
+				&rect,
+				(rect.left - rect.right + GetSystemMetrics(SM_CXSCREEN)) / 2,
+				(rect.top - rect.bottom + GetSystemMetrics(SM_CYSCREEN)) / 2);
+			HWND hWnd = CreateWindowEx(
+				0,
+				g_className,
+				TEXT("YaBang"),
+				WS_CAPTION | WS_SIZEBOX,
+				(rect.left - rect.right + GetSystemMetrics(SM_CXSCREEN)) / 2,
+				(rect.top - rect.bottom + GetSystemMetrics(SM_CYSCREEN)) / 2,
+				rect.right - rect.left,
+				rect.bottom - rect.top,
+				nullptr,
+				nullptr,
+				hInstance,
+				nullptr);
+			ShowWindow(hWnd, SW_HIDE);
+			if (CheckRelatedDll(hWnd)) {
+				g_hWnd = hWnd;
+				MessageBox(nullptr, TEXT("Unimplemented."), TEXT("YaBang"), MB_OK | MB_ICONERROR);
 			}
 		}
 	}
