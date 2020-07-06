@@ -137,3 +137,15 @@ typedef struct _WRECT {
 
 class WRect : public WRECT {
 };
+
+struct WQuat {
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
+struct WSphere {
+	WVector pos;
+	float radius;
+};
