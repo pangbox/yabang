@@ -9,17 +9,20 @@ class WPuppet;
 class WSoundFx;
 class WFont;
 class WResource;
+class WAudioDev;
 
 class WResourceManager {
 public:
-
-private:
 	struct w_match_filename {
 		char fullname[1];
 	};
-	
+
+	void StrcpyLower(char* out, const char* src);
+	const char* FindMatchFile(const char* filename);
+
+private:
 	WVideoDev* video;
-	struct WAudioDev* audio;
+	WAudioDev* audio;
 	unsigned int m_nByteUsedTexture;
 	int m_blankTexture;
 	bool m_savemem[3];
