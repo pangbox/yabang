@@ -173,6 +173,12 @@
   <ItemGroup>
     <ClCompile Include="baseobject.cpp" />
     <ClCompile Include="cchatmsg.cpp" />
+    <ClCompile Include="cfiledefault.cpp" />
+    <ClCompile Include="cfile.cpp" />
+    <ClCompile Include="cfilelz.cpp" />
+    <ClCompile Include="cfilemap.cpp" />
+    <ClCompile Include="cfilepacked.cpp" />
+    <ClCompile Include="cfileraw.cpp" />
     <ClCompile Include="coordinates.cpp" />
     <ClCompile Include="frbutton.cpp" />
     <ClCompile Include="frcmdtarget.cpp" />
@@ -192,6 +198,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="singleton.cpp" />
+    <ClCompile Include="spak.cpp" />
+    <ClCompile Include="spakinfo.cpp" />
     <ClCompile Include="splash.cpp" />
     <ClCompile Include="tikimagicboxdoc.cpp" />
     <ClCompile Include="waabb.cpp" />
@@ -200,6 +208,7 @@
     <ClCompile Include="wlock.cpp" />
     <ClCompile Include="wmesh.cpp" />
     <ClCompile Include="woverlay.cpp" />
+    <ClCompile Include="wpolysoup.cpp" />
     <ClCompile Include="wpuppet.cpp" />
     <ClCompile Include="wrecvview.cpp" />
     <ClCompile Include="wresource.cpp" />
@@ -214,6 +223,12 @@
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
     <ClInclude Include="cchatmsg.h" />
+    <ClInclude Include="cfiledefault.h" />
+    <ClInclude Include="cfile.h" />
+    <ClInclude Include="cfilelz.h" />
+    <ClInclude Include="cfilemap.h" />
+    <ClInclude Include="cfilepacked.h" />
+    <ClInclude Include="cfileraw.h" />
     <ClInclude Include="coordinates.h" />
     <ClInclude Include="frbutton.h" />
     <ClInclude Include="frcmdtarget.h" />
@@ -233,6 +248,8 @@
     <ClInclude Include="rectangle.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="singleton.h" />
+    <ClInclude Include="spak.h" />
+    <ClInclude Include="spakinfo.h" />
     <ClInclude Include="splash.h" />
     <ClInclude Include="tikimagicboxdoc.h" />
     <ClInclude Include="waabb.h" />
@@ -241,6 +258,7 @@
     <ClInclude Include="wlock.h" />
     <ClInclude Include="wmesh.h" />
     <ClInclude Include="woverlay.h" />
+    <ClInclude Include="wpolysoup.h" />
     <ClInclude Include="wpuppet.h" />
     <ClInclude Include="wrecvview.h" />
     <ClInclude Include="wresource.h" />

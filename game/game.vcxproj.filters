@@ -40,6 +40,15 @@
     <ClCompile Include="wbone.cpp" />
     <ClCompile Include="wmesh.cpp" />
     <ClCompile Include="waabb.cpp" />
+    <ClCompile Include="wpolysoup.cpp" />
+    <ClCompile Include="cfile.cpp" />
+    <ClCompile Include="cfilemap.cpp" />
+    <ClCompile Include="cfiledefault.cpp" />
+    <ClCompile Include="spakinfo.cpp" />
+    <ClCompile Include="spak.cpp" />
+    <ClCompile Include="cfilepacked.cpp" />
+    <ClCompile Include="cfilelz.cpp" />
+    <ClCompile Include="cfileraw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -81,6 +90,15 @@
     <ClInclude Include="wbone.h" />
     <ClInclude Include="wmesh.h" />
     <ClInclude Include="waabb.h" />
+    <ClInclude Include="wpolysoup.h" />
+    <ClInclude Include="cfile.h" />
+    <ClInclude Include="cfilemap.h" />
+    <ClInclude Include="cfiledefault.h" />
+    <ClInclude Include="spakinfo.h" />
+    <ClInclude Include="spak.h" />
+    <ClInclude Include="cfilepacked.h" />
+    <ClInclude Include="cfilelz.h" />
+    <ClInclude Include="cfileraw.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
