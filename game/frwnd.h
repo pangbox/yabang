@@ -3,13 +3,14 @@
 #include <string>
 
 #include "frcmdtarget.h"
+#include "iobject.h"
 #include "wflags.h"
 #include "wmath.h"
 
 class FrWndManager;
 class FrScrollBar;
 
-class FrWnd {
+class FrWnd : public IObject, public FrCmdTarget {
 private:
 	struct sToolTipData {
 		int bFixWnd;
