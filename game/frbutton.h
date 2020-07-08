@@ -11,6 +11,7 @@ public:
 	typedef FrCursor::eCursor eButMode;
 	typedef BGTYPE eButStyle;
 	typedef BUTTONPARTS eButPushStyle;
+
 	enum eButDrawStyle {
 		BD_NONE = 0x0,
 		BD_OWNERDRAW = 0x1,

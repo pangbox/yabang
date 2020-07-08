@@ -76,8 +76,7 @@ struct w_motion_addition {
 	char name[1];
 };
 
-struct w_face_animation
-{
+struct w_face_animation {
 	w_mesh** mesh;
 	int meshNum;
 	int group;
@@ -98,7 +97,7 @@ struct w_share_pet_data {
 		int check;
 		char* data;
 	};
-	
+
 	char* petName;
 	WBone* rootbone;
 	float length;
@@ -132,8 +131,8 @@ struct w_mesh {
 	float originalScaleu;
 	float originalScalev;
 	unsigned int diffuse;
-	float(*uvBackup)[2];
-	float(*uvData)[2];
+	float (*uvBackup)[2];
+	float (*uvData)[2];
 	bool bEnv;
 	bool bSpec;
 	int group;

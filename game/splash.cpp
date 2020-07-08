@@ -25,7 +25,8 @@ void CSplash::Init() {
 	this->m_textY = 100;
 	HMODULE user32 = GetModuleHandle(TEXT("USER32.DLL"));
 	if (user32) {
-		this->m_setLayeredWindowAttributesProc = reinterpret_cast<SetLayeredWindowAttributesProc>(GetProcAddress(user32, "SetLayeredWindowAttributes"));
+		this->m_setLayeredWindowAttributesProc = reinterpret_cast<SetLayeredWindowAttributesProc>(GetProcAddress(
+			user32, "SetLayeredWindowAttributes"));
 	} else {
 		this->m_setLayeredWindowAttributesProc = nullptr;
 	}

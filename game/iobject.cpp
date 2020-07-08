@@ -18,38 +18,37 @@ IObject::IObject() = default;
 IObject::~IObject() = default;
 
 bool IObject::IsKindOf(const WRTTI* pOther) {
-    WRTTI* pSelf = GetRTTI();
-    if (!pSelf) {
-        return false;
-    }
-    while (pSelf != pOther) {
-        pSelf = pSelf->m_pBaseRTTI;
-        if (!pSelf) {
-            return false;
-        }
-    }
-    return true;
+	WRTTI* pSelf = GetRTTI();
+	if (!pSelf) {
+		return false;
+	}
+	while (pSelf != pOther) {
+		pSelf = pSelf->m_pBaseRTTI;
+		if (!pSelf) {
+			return false;
+		}
+	}
+	return true;
 }
 
 bool IObject::IsExactKindOf(const WRTTI* pOther) {
-    return GetRTTI() == pOther;
+	return GetRTTI() == pOther;
 }
 
 IObject* IObject::DynamicCast(const WRTTI* pOther) {
-    WRTTI* pSelf = GetRTTI();
-    if (!pSelf) {
-        return nullptr;
-    }
-    while (pSelf != pOther)
-    {
-        pSelf = pSelf->m_pBaseRTTI;
-        if (!pSelf) {
-            return nullptr;
-        }
-    }
-    return this;
+	WRTTI* pSelf = GetRTTI();
+	if (!pSelf) {
+		return nullptr;
+	}
+	while (pSelf != pOther) {
+		pSelf = pSelf->m_pBaseRTTI;
+		if (!pSelf) {
+			return nullptr;
+		}
+	}
+	return this;
 }
 
 WRTTI* IObject::GetRTTI() {
-    return &m_RTTI;
+	return &m_RTTI;
 }

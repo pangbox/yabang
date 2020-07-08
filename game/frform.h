@@ -6,11 +6,11 @@ class FrStatic;
 class FrEdit;
 
 enum eFormRet {
-	FrNONE = 0x0,
-	FrOK = 0x1,
-	FrCANCEL = 0x2,
-	FrYES = 0x3,
-	FrNO = 0x4,
+	FrNONE,
+	FrOK,
+	FrCANCEL,
+	FrYES,
+	FrNO,
 };
 
 class FrForm : public FrWnd {

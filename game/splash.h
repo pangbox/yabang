@@ -4,7 +4,7 @@
 #include "baseobject.h"
 #include "singleton.h"
 
-typedef BOOL(__stdcall* SetLayeredWindowAttributesProc)(HWND, COLORREF, BYTE, DWORD);
+typedef BOOL (__stdcall* SetLayeredWindowAttributesProc)(HWND, COLORREF, BYTE, DWORD);
 
 class CSplash : public BaseObject, public WSingleton<CSplash> {
 public:
@@ -25,7 +25,7 @@ public:
 	void ShowSplash();
 	unsigned int SetBitmap(LPCTSTR name);
 	WPARAM DoLoop();
-	
+
 private:
 	void Init();
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

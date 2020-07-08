@@ -25,7 +25,7 @@ private:
 		RtTexInfo m_rtTexInfo[2];
 		DepthSurfInfo m_depthSurfInfo;
 	};
-	
+
 	TextureParam m_texParam;
 	WRenderToTextureParam m_r2tParam;
 	bool m_r2tBegun;

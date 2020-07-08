@@ -39,6 +39,6 @@ private:
 	bool m_hoverOn;
 	float m_hoverTime;
 	float m_accHoverTime;
-	std::basic_string<char, std::char_traits<char>, std::allocator<char> > m_wndToolTip;
+	std::string m_wndToolTip;
 	sToolTipData* m_pToolTipData;
 };

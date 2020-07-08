@@ -42,7 +42,8 @@ HANDLE WINAPI GetPangYaMutex() {
 bool CheckRelatedDll(HWND hWnd) {
 	HMODULE directInput = LoadLibrary(TEXT("dinput8.dll"));
 	if (!directInput) {
-		MessageBox(hWnd, TEXT("A DirectX library is missing. Please re-install DirectX 9."), TEXT("YaBang"), MB_OK | MB_ICONERROR);
+		MessageBox(hWnd, TEXT("A DirectX library is missing. Please re-install DirectX 9."), TEXT("YaBang"),
+		           MB_OK | MB_ICONERROR);
 		return false;
 	}
 	FreeLibrary(directInput);
@@ -51,24 +52,24 @@ bool CheckRelatedDll(HWND hWnd) {
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 1;
-	case WM_SIZE:
-		g_showTime = wParam != SIZE_MAXHIDE && wParam != SIZE_MINIMIZED;
-		break;
-	case WM_ERASEBKGND:
-		return 0;
-	case WM_SYSCOMMAND:
-		if (wParam != SC_RESTORE && wParam != SC_CLOSE) {
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			return 1;
+		case WM_SIZE:
+			g_showTime = wParam != SIZE_MAXHIDE && wParam != SIZE_MINIMIZED;
+			break;
+		case WM_ERASEBKGND:
 			return 0;
-		}
-		break;
-	case WM_USER:
-		DestroyWindow(hWnd);
-		break;
-	default:
-		break;
+		case WM_SYSCOMMAND:
+			if (wParam != SC_RESTORE && wParam != SC_CLOSE) {
+				return 0;
+			}
+			break;
+		case WM_USER:
+			DestroyWindow(hWnd);
+			break;
+		default:
+			break;
 	}
 
 	// TODO: forward to CProjectG WndProc.

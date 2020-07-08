@@ -66,7 +66,7 @@ public:
 	virtual ~FrCmdTarget();
 
 	FrCmdTarget(const FrCmdTarget&) = default;
-	FrCmdTarget &operator =(const FrCmdTarget&) = default;
+	FrCmdTarget& operator =(const FrCmdTarget&) = default;
 
 	FrCmdTarget(FrCmdTarget&&) = default;
 	FrCmdTarget& operator =(FrCmdTarget&&) = default;

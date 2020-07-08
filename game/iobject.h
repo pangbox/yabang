@@ -2,7 +2,7 @@
 
 class WRTTI {
 	friend class IObject;
-	
+
 public:
 	WRTTI(const char* pName, WRTTI* pBaseRtti);
 	WRTTI* GetBaseRTTI() const;
@@ -12,7 +12,6 @@ private:
 	const char* m_pName;
 	WRTTI* m_pBaseRTTI;
 };
-
 
 class IObject {
 public:

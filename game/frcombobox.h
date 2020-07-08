@@ -10,8 +10,8 @@ public:
 
 private:
 	int m_maxListNum;
-	std::list<FrLine*, std::allocator<FrLine*> > m_comboList;
-	std::list<FrLine*, std::allocator<FrLine*> >::iterator m_selected;
+	std::list<FrLine*> m_comboList;
+	std::list<FrLine*>::iterator m_selected;
 	FrButton* m_pButton;
 	FrGuiItem m_buttonInfo;
 	FrListBox* m_pListBox;

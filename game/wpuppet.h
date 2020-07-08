@@ -50,5 +50,5 @@ private:
 	float m_aniLen;
 	int m_iPetType;
 	WBone* m_rootbone;
-	std::vector<WMatrix const*, std::allocator<WMatrix const*> > m_xTransfMatPtrList;
+	std::vector<WMatrix const*> m_xTransfMatPtrList;
 };

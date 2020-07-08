@@ -13,7 +13,7 @@ private:
 		const Bitmap* n_img;
 		const Bitmap* o_img;
 	};
-	
+
 	float m_barH;
 	float m_barY;
 	int m_itemNum;

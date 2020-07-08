@@ -53,15 +53,17 @@ public:
 			WVector m_n;
 			std::vector<int> m_idxList;
 		};
+
 		struct P {
 			WVector m_p;
 			std::map<w_mesh*, std::vector<N>> m_meshList;
 		};
-		std::map<float, std::vector<WBone::w_normalmerge::P>> m_wlist;
+
+		std::map<float, std::vector<P>> m_wlist;
 	};
 
 private:
-	WBone::w_bone_physic_link* m_physic;
+	w_bone_physic_link* m_physic;
 	w_mesh* m_mesh;
 	char m_name[64];
 	unsigned int m_hashCode;
