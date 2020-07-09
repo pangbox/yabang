@@ -14,6 +14,39 @@ class FrWndManager;
 class FrScrollBar;
 class FrToolTip;
 
+enum eFrFlags {
+	FWF_NONE = 0x0,
+	FWF_TOOLTIPS = 0x1,
+	FWF_VIEWFOCUS = 0x8,
+	FWF_KEYFOCUS = 0x10,
+	FWF_DESTROY = 0x20,
+	FWF_FADEOUT = 0x40,
+	FWF_INITED = 0x80,
+	FWF_FADING = 0x100,
+	FWF_TOPFOCUS = 0x200,
+	FWF_FADING_EX = 0x400,
+	FWF_FADEOUT_EX = 0x800,
+	FWF_PRIVACY = 0x1000,
+	FWF_FADEELEMENT = 0x2000,
+};
+
+enum eFrStyle : __int32 {
+	FWS_NONE = 0x0,
+	FWS_VISIBLE = 0x1,
+	FWS_DISABLED = 0x2,
+	FWS_HASTITLE = 0x4,
+	FWS_CHILD = 0x8,
+	FWS_TOPMOST = 0x10,
+	FWS_MOVEFRAME = 0x20,
+	FWS_NOMOUSEEVENT = 0x40,
+	FWS_KEYEVENT = 0x80,
+	FWS_FIXED = 0x100,
+	FWS_NODBLCLICK = 0x200,
+	FWS_HOVER = 0x400,
+	FWS_NOWHEELEVENT = 0x800,
+};
+
+
 class FrWnd : public IObject, public FrCmdTarget {
 public:
 	virtual ~FrWnd();
@@ -44,7 +77,7 @@ public:
 	virtual void EnableKeyFocus(FrInputState&);
 	virtual void SetIconRect(const WRect&);
 	bool SendCmdToOwnerTarget(eFrCmd cmd, int var1, sFRESH_HANDLER* pHandler);
-	void GetClientRect(WRect& rect);
+	void GetClientRect(WRect& rect) const;
 	void SetToolTipText(const std::string& text);
 	void CheckHover(float deltaTime, bool bInClient, bool& hoverChecked);
 	void EnableHover(bool enable, float time);

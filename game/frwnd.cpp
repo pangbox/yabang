@@ -28,19 +28,19 @@ WRect* FrWnd::GetRect() {
 }
 
 void FrWnd::Enable(bool bEnable) {
-	this->m_dwStyle.Turn(0x02, !bEnable);
+	this->m_dwStyle.Turn(FWS_DISABLED, !bEnable);
 }
 
 bool FrWnd::IsEnabled() const {
-	return !this->m_dwStyle.GetFlag(0x02);
+	return !this->m_dwStyle.GetFlag(FWS_DISABLED);
 }
 
 bool FrWnd::IsVisible() const {
-	return this->m_dwStyle.GetFlag(0x01);
+	return this->m_dwStyle.GetFlag(FWS_VISIBLE);
 }
 
 void FrWnd::SetFixed(bool bFixed) {
-	this->m_dwStyle.Turn(0x100, bFixed);
+	this->m_dwStyle.Turn(FWS_FIXED, bFixed);
 }
 
 void FrWnd::OnResize() {
@@ -68,7 +68,7 @@ void FrWnd::OnKeyFocus(CChatMsg*) {
 }
 
 void FrWnd::EnableKeyFocus(FrInputState& inputState) {
-	this->m_nFlags.Enable(0x10);
+	this->m_nFlags.Enable(FWF_KEYFOCUS);
 }
 
 void FrWnd::SetAlpha(float alpha) {
@@ -76,11 +76,11 @@ void FrWnd::SetAlpha(float alpha) {
 }
 
 void FrWnd::HidePrivacy(bool bPrivacy) {
-	this->m_nFlags.Turn(0x1000, bPrivacy);
+	this->m_nFlags.Turn(FWF_PRIVACY, bPrivacy);
 }
 
 bool FrWnd::HasKeyFocus() const {
-	return this->m_nFlags.GetFlag(0x10);
+	return this->m_nFlags.GetFlag(FWF_KEYFOCUS);
 }
 
 FrScrollBar* FrWnd::GetScrollBar() const {
@@ -88,11 +88,11 @@ FrScrollBar* FrWnd::GetScrollBar() const {
 }
 
 void FrWnd::SetKeyEvent(bool bEnabled) {
-	this->m_dwStyle.Turn(0x80, bEnabled);
+	this->m_dwStyle.Turn(FWS_KEYEVENT, bEnabled);
 }
 
 void FrWnd::UseDblClick(bool bEnabled) {
-	this->m_dwStyle.Turn(0x200, !bEnabled);
+	this->m_dwStyle.Turn(FWS_NODBLCLICK, !bEnabled);
 }
 
 FrWndManager* FrWnd::WndManager() const {
@@ -373,10 +373,10 @@ void FrWnd::PreCreateWindow(FrWndManager* pManager, unsigned int dwStyle, const 
 }
 
 bool FrWnd::SendCmdToOwnerTarget(eFrCmd cmd, int var1, sFRESH_HANDLER* pHandler) {
-	return this->m_nFlags.GetFlag(0x20) ? false : this->SendCmdToOwnerTarget(this->m_pOwner, cmd, var1, pHandler);
+	return this->m_nFlags.GetFlag(FWF_DESTROY) ? false : this->SendCmdToOwnerTarget(this->m_pOwner, cmd, var1, pHandler);
 }
 
-void FrWnd::GetClientRect(WRect& rect) {
+void FrWnd::GetClientRect(WRect& rect) const {
 	rect = this->m_rect;
 	for (FrWnd* i = this->m_pParentWnd; i; i = i->m_pParentWnd) {
 		rect.x -= i->m_rect.x;
@@ -386,7 +386,7 @@ void FrWnd::GetClientRect(WRect& rect) {
 
 void FrWnd::SetToolTipText(const std::string &text) {
 	this->m_wndToolTip = text;
-	this->m_nFlags.Enable(0x01);
+	this->m_nFlags.Enable(FWF_TOOLTIPS);
 	if (!this->m_pToolTipData) {
 		this->m_pToolTipData = new sToolTipData();
 		this->m_pToolTipData->style = 0;
@@ -414,7 +414,7 @@ void FrWnd::CheckHover(float deltaTime, bool bInClient, bool& hoverChecked) {
 		this->m_accHoverTime = 0.0;
 		if (this->m_hoverOn) {
 			this->m_hoverOn = false;
-			if (!this->m_nFlags.GetFlag(0x20)) {
+			if (!this->m_nFlags.GetFlag(FWF_DESTROY)) {
 				this->SendCmdToOwnerTarget(this->m_pOwner, FRCMD_HOVEROFF, reinterpret_cast<int>(this), nullptr);
 			}
 		}
@@ -429,24 +429,24 @@ void FrWnd::SetVisible(bool visible) {
 		}
 	}
 
-	this->m_dwStyle.Turn(0x01, visible);
+	this->m_dwStyle.Turn(FWS_VISIBLE, visible);
 }
 
 void FrWnd::EnableHover(bool enable, float time) {
-	this->m_dwStyle.Turn(0x400, enable);
+	this->m_dwStyle.Turn(FWS_HOVER, enable);
 	this->m_hoverTime = time;
 	this->m_accHoverTime = 0.0;
 }
 
 void FrWnd::SetWheelEvent(bool enable) {
 	for (auto *i = this; i != nullptr; i = i->m_pScrBar) {
-		i->m_dwStyle.Turn(0x800, !enable);
+		i->m_dwStyle.Turn(FWS_NOWHEELEVENT, !enable);
 	}
 }
 
 bool FrWnd::IsViewFocused() {
 	for (auto* i = this; i != nullptr; i = i->m_pParentWnd) {
-		if (i->m_nFlags.GetFlag(0x8) || i->m_dwStyle.GetFlag(0x100)) {
+		if (i->m_nFlags.GetFlag(FWF_VIEWFOCUS) || i->m_dwStyle.GetFlag(FWS_FIXED)) {
 			return true;
 		}
 
@@ -460,31 +460,31 @@ bool FrWnd::IsViewFocused() {
 }
 
 bool FrWnd::IsTopFocus() const {
-	return this->m_nFlags.GetFlag(0x200) && this->m_dwStyle.GetFlag(0x10);
+	return this->m_nFlags.GetFlag(FWF_TOPFOCUS) && this->m_dwStyle.GetFlag(FWS_TOPMOST);
 }
 
 void FrWnd::SetElementFadeOut(bool bOut) {
-	if (this->m_nFlags.GetFlag(0x400)) {
-		this->m_nFlags.Enable(0x2000 | 0x400);
+	if (this->m_nFlags.GetFlag(FWF_FADING_EX)) {
+		this->m_nFlags.Enable(FWF_FADING_EX | FWF_FADEELEMENT);
 		if (bOut) {
-			this->m_nFlags.Enable(0x0800);
+			this->m_nFlags.Enable(FWF_FADEOUT_EX);
 			this->m_fadeTime = 1.0;
 		} else {
-			this->m_nFlags.Disable(0x0800);
+			this->m_nFlags.Disable(FWF_FADEOUT_EX);
 			this->m_fadeTime = 0.0;
 		}
 	}
 }
 
 void FrWnd::SetFadeout(bool bOut) {
-	if (this->m_nFlags.GetFlag(0x400)) {
-		this->m_nFlags.Enable(0x400);
+	if (this->m_nFlags.GetFlag(FWF_FADING_EX)) {
+		this->m_nFlags.Enable(FWF_FADING_EX);
 		if (bOut) {
-			this->m_nFlags.Enable(0x0800);
+			this->m_nFlags.Enable(FWF_FADEOUT_EX);
 			this->m_fadeTime = 1.0;
 		}
 		else {
-			this->m_nFlags.Disable(0x0800);
+			this->m_nFlags.Disable(FWF_FADEOUT_EX);
 			this->m_fadeTime = 0.0;
 		}
 	}
@@ -561,7 +561,7 @@ void FrWnd::EnumerateChildWindow(bool(*callback)(FrWnd*, void*), void* param) {
 void FrWnd::CloseChild(FrWnd* pChildWnd, int bFade, bool force) {
 	for (auto& i : this->m_childList) {
 		if (pChildWnd == nullptr || i == pChildWnd) {
-			if (force || !i->m_dwStyle.GetFlag(0x100)) {
+			if (force || !i->m_dwStyle.GetFlag(FWS_FIXED)) {
 				i->Close(bFade);
 			}
 		}
@@ -571,7 +571,7 @@ void FrWnd::CloseChild(FrWnd* pChildWnd, int bFade, bool force) {
 void FrWnd::CloseChildForm(int bFade, bool force) {
 	for (auto& i : this->m_childList) {
 		if (dynamic_cast<FrForm*>(i)) {
-			if (force || !i->m_dwStyle.GetFlag(0x100)) {
+			if (force || !i->m_dwStyle.GetFlag(FWS_FIXED)) {
 				i->Close(bFade);
 			}
 		}
@@ -579,20 +579,20 @@ void FrWnd::CloseChildForm(int bFade, bool force) {
 }
 
 void FrWnd::OnDisplay(bool checkTopmost, bool drawChild, bool drawOneself) {
-	if (checkTopmost && this->m_dwStyle.GetFlag(0x10)) {
+	if (checkTopmost && this->m_dwStyle.GetFlag(FWS_TOPMOST)) {
 		return;
 	}
-	if (!this->m_nFlags.GetFlag(0x80) || !this->m_dwStyle.GetFlag(0x01) && !this->m_nFlags.GetFlag(0x400) && !this->m_nFlags.GetFlag(0x20)) {
+	if (!this->m_nFlags.GetFlag(FWF_INITED) || !this->m_dwStyle.GetFlag(FWF_TOOLTIPS) && !this->m_nFlags.GetFlag(FWF_FADING_EX) && !this->m_nFlags.GetFlag(FWF_DESTROY)) {
 		return;
 	}
-	if (this->m_nFlags.GetFlag(0x100)) {
+	if (this->m_nFlags.GetFlag(FWF_FADING)) {
 		this->DoFadeDisplay();
 	} else {
 		if (drawOneself) {
 			this->OnDraw();
 		} if (drawChild) {
 			for (auto *i : this->m_childList) {
-				if (this->m_nFlags.GetFlag(0x100)) {
+				if (this->m_nFlags.GetFlag(FWF_FADING)) {
 					i->m_wndAlpha = this->m_wndAlpha;
 				}
 				i->OnDisplay(true, true, true);
@@ -603,11 +603,11 @@ void FrWnd::OnDisplay(bool checkTopmost, bool drawChild, bool drawOneself) {
 
 void FrWnd::SetTopmost(bool topmost) {
 	if (topmost) {
-		this->m_dwStyle.Enable(0x10);
+		this->m_dwStyle.Enable(FWS_TOPMOST);
 		// TODO: Call AddTopmostWindow
 		//this->m_pWndManager->AddTopmostWindow(this);
 	} else {
-		this->m_dwStyle.Disable(0x10);
+		this->m_dwStyle.Disable(FWS_TOPMOST);
 		// TODO: Call DeleteTopmostWindow
 		//this->m_pWndManager->DeleteTopmostWindow(this);
 		for (auto *i : this->m_childList) {
@@ -623,17 +623,17 @@ void FrWnd::ResetViewFocus(FrWnd* pWndStop) {
 			// TODO: Call ReleaseCapture
 			//i->m_pWndManager->ReleaseCapture(i);
 		}
-		this->m_nFlags.Disable(0x08);
+		this->m_nFlags.Disable(FWF_VIEWFOCUS);
 	}
 }
 
 FrWnd* FrWnd::FindViewFocused(bool enabled_visible) {
 	for (auto *i : this->m_childList) {
-		if (!i->m_dwStyle.GetFlag(0x10)) {
-			if (i->m_nFlags.GetFlag(0x08) && (!enabled_visible || !i->m_nFlags.GetFlag(0x02) && i->m_nFlags.GetFlag(0x01))) {
+		if (!i->m_dwStyle.GetFlag(FWS_TOPMOST)) {
+			if (i->m_nFlags.GetFlag(FWF_VIEWFOCUS) && (!enabled_visible || !i->m_dwStyle.GetFlag(FWS_DISABLED) && i->m_dwStyle.GetFlag(FWS_VISIBLE))) {
 				return i;
 			}
-		} else if (i->m_dwStyle.GetFlag(0x200)) {
+		} else if (i->m_dwStyle.GetFlag(FWF_TOPFOCUS)) {
 			return i;
 		}
 	}
@@ -678,11 +678,11 @@ void FrWnd::SetAlpha2ToChild(float a) {
 }
 
 void FrWnd::FindNextTopFocus(bool bForce) {
-	if (this->m_dwStyle.GetFlag(0x10)) {
+	if (this->m_dwStyle.GetFlag(FWS_TOPMOST)) {
 		// TODO: call ResetTopFocus
 		//this->m_pWndManager->ResetTopFocus();
-		this->m_nFlags.Enable(0x200);
-		if (!this->m_nFlags.GetFlag(0x400) || bForce) {
+		this->m_nFlags.Enable(FWF_TOPFOCUS);
+		if (!this->m_nFlags.GetFlag(FWF_FADING_EX) || bForce) {
 			auto* form = dynamic_cast<FrForm*>(this);
 			if (form) {
 				// TODO: call SetFrameCaptionFocus
@@ -694,22 +694,22 @@ void FrWnd::FindNextTopFocus(bool bForce) {
 }
 
 bool FrWnd::Close(bool bFade) {
-	if (!this->m_nFlags.GetFlag(0x20)) {
+	if (!this->m_nFlags.GetFlag(FWF_DESTROY)) {
 		if (bFade) {
-			this->m_nFlags.Enable(0x140);
+			this->m_nFlags.Enable(FWF_FADEOUT | FWF_FADING);
 		} else {
-			this->m_nFlags.Disable(0x100);
-			this->m_nFlags.Enable(0x20u);
+			this->m_nFlags.Disable(FWF_FADING);
+			this->m_nFlags.Enable(FWF_DESTROY);
 		}
 		if (this->m_pWndManager) {
 			// TODO: Call ResetKeyFocus
 			//this->m_pWndManager->ResetKeyFocus(this);
 		}
 	}
-	if (!this->m_nFlags.GetFlag(0x10)) {
+	if (!this->m_nFlags.GetFlag(FWF_KEYFOCUS)) {
 		return true;
 	}
-	this->m_dwStyle.Disable(0x10);
+	this->m_dwStyle.Disable(FWS_TOPMOST);
 	// TODO: Call DeleteTopmostWindow
 	//this->m_pWndManager->DeleteTopmostWindow(this);
 	for (auto *i : this->m_childList) {
@@ -733,28 +733,28 @@ void FrWnd::SetClientRect(const WRect& rect) {
 
 void FrWnd::DoFadeProcess(float deltaTime, bool bExtend) {
 	if (bExtend) {
-		if (this->m_nFlags.GetFlag(0x800)) {
+		if (this->m_nFlags.GetFlag(FWF_FADEOUT_EX)) {
 			this->m_fadeTime -= deltaTime * 5.0f;
 			if (this->m_fadeTime < 0.0) {
 				this->m_fadeTime = 0.0;
-				this->m_nFlags.Disable(0x400);
-				if (this->m_nFlags.GetFlag(0x2000)) {
-					this->m_nFlags.Disable(0x2000);
-					this->m_dwStyle.Disable(0x1);
+				this->m_nFlags.Disable(FWF_FADING_EX);
+				if (this->m_nFlags.GetFlag(FWF_FADEELEMENT)) {
+					this->m_nFlags.Disable(FWF_FADEELEMENT);
+					this->m_dwStyle.Disable(FWS_VISIBLE);
 				} else {
 					this->Close(false);
 				}
 			}
 		} else {
-			if (this->m_nFlags.GetFlag(0x2000)) {
-				this->m_dwStyle.Enable(0x1);
+			if (this->m_nFlags.GetFlag(FWF_FADEELEMENT)) {
+				this->m_dwStyle.Enable(FWS_VISIBLE);
 			}
 			this->m_fadeTime += deltaTime * 5.0f;
 			if (this->m_fadeTime > 0.9f) {
 				this->m_fadeTime = 1.0;
-				this->m_nFlags.Disable(0x400);
-				if (this->m_nFlags.GetFlag(0x2000)) {
-					this->m_nFlags.Disable(0x2000);
+				this->m_nFlags.Disable(FWF_FADING_EX);
+				if (this->m_nFlags.GetFlag(FWF_FADEELEMENT)) {
+					this->m_nFlags.Disable(FWF_FADEELEMENT);
 				}
 			}
 		}
@@ -762,27 +762,27 @@ void FrWnd::DoFadeProcess(float deltaTime, bool bExtend) {
 			i->SetAlpha2ToChild(this->m_wndAlpha2);
 		}
 	} else {
-		if (this->m_nFlags.GetFlag(0x40)) {
+		if (this->m_nFlags.GetFlag(FWF_FADEOUT)) {
 			this->m_fadeTime -= deltaTime * 5.0f;
 			if (this->m_fadeTime < 0.0) {
 				this->m_fadeTime = 0.0;
-				if (this->m_nFlags.GetFlag(0x2000)) {
-					this->m_nFlags.Disable(0x2000);
-					this->m_dwStyle.Disable(0x1);
+				if (this->m_nFlags.GetFlag(FWF_FADEELEMENT)) {
+					this->m_nFlags.Disable(FWF_FADEELEMENT);
+					this->m_dwStyle.Disable(FWS_VISIBLE);
 				} else {
-					this->m_nFlags.Enable(0x20);
+					this->m_nFlags.Enable(FWF_DESTROY);
 				}
 			}
 		} else {
-			if (this->m_nFlags.GetFlag(0x2000)) {
-				this->m_dwStyle.Enable(0x1);
+			if (this->m_nFlags.GetFlag(FWF_FADEELEMENT)) {
+				this->m_dwStyle.Enable(FWS_VISIBLE);
 			}
 			this->m_fadeTime += deltaTime * 5.0f;
 			if (this->m_fadeTime > 0.9f) {
 				this->m_fadeTime = 1.0;
-				this->m_nFlags.Disable(0x100);
-				if (this->m_nFlags.GetFlag(0x2000)) {
-					this->m_nFlags.Disable(0x2000);
+				this->m_nFlags.Disable(FWF_FADING);
+				if (this->m_nFlags.GetFlag(FWF_FADEELEMENT)) {
+					this->m_nFlags.Disable(FWF_FADEELEMENT);
 				}
 			}
 		}
@@ -793,9 +793,9 @@ bool FrWnd::Create(const char* lpszWindowText, const char* lpszWindowName, FrWnd
 	this->SetWinText(lpszWindowText);
 	this->SetWindowName(lpszWindowName);
 	this->PreCreateWindow(pManager, dwStyle, rect, pParentWnd);
-	this->m_dwStyle.Enable(0x800);
+	this->m_dwStyle.Enable(FWS_NOWHEELEVENT);
 	this->m_nRefID = pManager->m_nRefIndex++;
-	if (this->m_dwStyle.GetFlag(0x10)) {
+	if (this->m_dwStyle.GetFlag(FWS_TOPMOST)) {
 		// TODO: Call AddTopmostWindow
 		//pManager->AddTopmostWindow(this);
 	}
