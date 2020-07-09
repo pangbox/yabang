@@ -10,7 +10,7 @@ public:
 	void Reset();
 	void Disable(uint32_t flag);
 	void Turn(uint32_t flag, bool on);
-	bool GetFlag(uint32_t flag);
+	[[nodiscard]] bool GetFlag(uint32_t flag) const;
 	void Enable(uint32_t flag);
 
 	operator uint32_t() const;

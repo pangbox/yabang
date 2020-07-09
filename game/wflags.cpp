@@ -25,7 +25,7 @@ void WFlags::Turn(uint32_t flag, bool on) {
 	}
 }
 
-bool WFlags::GetFlag(uint32_t flag) {
+bool WFlags::GetFlag(uint32_t flag) const {
 	return (flag & this->m_flag) != 0;
 }
 
