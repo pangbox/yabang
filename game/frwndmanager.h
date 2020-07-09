@@ -14,6 +14,7 @@ class FrEmoticon;
 class FrEdit;
 
 class FrWndManager {
+	friend class FrWnd;
 public:
 
 private:
