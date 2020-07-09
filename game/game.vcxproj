@@ -184,6 +184,7 @@
     <ClCompile Include="frcmdtarget.cpp" />
     <ClCompile Include="frcombobox.cpp" />
     <ClCompile Include="frcursor.cpp" />
+    <ClCompile Include="frdesktop.cpp" />
     <ClCompile Include="fredit.cpp" />
     <ClCompile Include="frform.cpp" />
     <ClCompile Include="frguiitem.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="frline.cpp" />
     <ClCompile Include="frlistbox.cpp" />
     <ClCompile Include="frscrollbar.cpp" />
+    <ClCompile Include="frtooltip.cpp" />
     <ClCompile Include="frwnd.cpp" />
     <ClCompile Include="frwndmanager.cpp" />
     <ClCompile Include="iff.cpp" />
@@ -234,6 +236,7 @@
     <ClInclude Include="frcmdtarget.h" />
     <ClInclude Include="frcombobox.h" />
     <ClInclude Include="frcursor.h" />
+    <ClInclude Include="frdesktop.h" />
     <ClInclude Include="fredit.h" />
     <ClInclude Include="frform.h" />
     <ClInclude Include="frguiitem.h" />
@@ -241,6 +244,7 @@
     <ClInclude Include="frline.h" />
     <ClInclude Include="frlistbox.h" />
     <ClInclude Include="frscrollbar.h" />
+    <ClInclude Include="frtooltip.h" />
     <ClInclude Include="frwnd.h" />
     <ClInclude Include="frwndmanager.h" />
     <ClInclude Include="iff.h" />

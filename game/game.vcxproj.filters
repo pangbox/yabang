@@ -49,6 +49,8 @@
     <ClCompile Include="cfilepacked.cpp" />
     <ClCompile Include="cfilelz.cpp" />
     <ClCompile Include="cfileraw.cpp" />
+    <ClCompile Include="frtooltip.cpp" />
+    <ClCompile Include="frdesktop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -99,6 +101,8 @@
     <ClInclude Include="cfilepacked.h" />
     <ClInclude Include="cfilelz.h" />
     <ClInclude Include="cfileraw.h" />
+    <ClInclude Include="frtooltip.h" />
+    <ClInclude Include="frdesktop.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
