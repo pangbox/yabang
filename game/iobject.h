@@ -23,6 +23,5 @@ public:
 	IObject* DynamicCast(const WRTTI* pOther);
 	virtual WRTTI* GetRTTI();
 
-private:
 	static WRTTI m_RTTI;
 };
