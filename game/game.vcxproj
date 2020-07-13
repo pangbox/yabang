@@ -171,6 +171,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\engine\source\bitmap.cpp" />
     <ClCompile Include="baseobject.cpp" />
     <ClCompile Include="cchatmsg.cpp" />
     <ClCompile Include="cfiledefault.cpp" />
@@ -186,7 +187,11 @@
     <ClCompile Include="frcursor.cpp" />
     <ClCompile Include="frdesktop.cpp" />
     <ClCompile Include="fredit.cpp" />
+    <ClCompile Include="frelement.cpp" />
+    <ClCompile Include="frelementdoc.cpp" />
+    <ClCompile Include="frelementlayout.cpp" />
     <ClCompile Include="frform.cpp" />
+    <ClCompile Include="frgraphicinterface.cpp" />
     <ClCompile Include="frguiitem.cpp" />
     <ClCompile Include="frinputstate.cpp" />
     <ClCompile Include="frline.cpp" />
@@ -199,14 +204,20 @@
     <ClCompile Include="iobject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rectangle.cpp" />
+    <ClCompile Include="rectcache.cpp" />
     <ClCompile Include="singleton.cpp" />
     <ClCompile Include="spak.cpp" />
     <ClCompile Include="spakinfo.cpp" />
     <ClCompile Include="splash.cpp" />
+    <ClCompile Include="texcachemanager.cpp" />
     <ClCompile Include="tikimagicboxdoc.cpp" />
+    <ClCompile Include="w3danispr.cpp" />
+    <ClCompile Include="w3dspr.cpp" />
     <ClCompile Include="waabb.cpp" />
     <ClCompile Include="wbone.cpp" />
+    <ClCompile Include="wfixedfont.cpp" />
     <ClCompile Include="wflags.cpp" />
+    <ClCompile Include="wfont.cpp" />
     <ClCompile Include="wlock.cpp" />
     <ClCompile Include="wmesh.cpp" />
     <ClCompile Include="woverlay.cpp" />
@@ -219,6 +230,7 @@
     <ClCompile Include="wshadowview.cpp" />
     <ClCompile Include="wshadowviewhw.cpp" />
     <ClCompile Include="wtextureview.cpp" />
+    <ClCompile Include="wtitlefont.cpp" />
     <ClCompile Include="wview.cpp" />
     <ClCompile Include="wvieworth.cpp" />
   </ItemGroup>
@@ -238,7 +250,11 @@
     <ClInclude Include="frcursor.h" />
     <ClInclude Include="frdesktop.h" />
     <ClInclude Include="fredit.h" />
+    <ClInclude Include="frelement.h" />
+    <ClInclude Include="frelementdoc.h" />
+    <ClInclude Include="frelementlayout.h" />
     <ClInclude Include="frform.h" />
+    <ClInclude Include="frgraphicinterface.h" />
     <ClInclude Include="frguiitem.h" />
     <ClInclude Include="frinputstate.h" />
     <ClInclude Include="frline.h" />
@@ -250,15 +266,21 @@
     <ClInclude Include="iff.h" />
     <ClInclude Include="iobject.h" />
     <ClInclude Include="rectangle.h" />
+    <ClInclude Include="rectcache.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="spak.h" />
     <ClInclude Include="spakinfo.h" />
     <ClInclude Include="splash.h" />
+    <ClInclude Include="texcachemanager.h" />
     <ClInclude Include="tikimagicboxdoc.h" />
+    <ClInclude Include="w3danispr.h" />
+    <ClInclude Include="w3dspr.h" />
     <ClInclude Include="waabb.h" />
     <ClInclude Include="wbone.h" />
+    <ClInclude Include="wfixedfont.h" />
     <ClInclude Include="wflags.h" />
+    <ClInclude Include="wfont.h" />
     <ClInclude Include="wlock.h" />
     <ClInclude Include="wmesh.h" />
     <ClInclude Include="woverlay.h" />
@@ -271,6 +293,7 @@
     <ClInclude Include="wshadowview.h" />
     <ClInclude Include="wshadowviewhw.h" />
     <ClInclude Include="wtextureview.h" />
+    <ClInclude Include="wtitlefont.h" />
     <ClInclude Include="wview.h" />
     <ClInclude Include="wvieworth.h" />
   </ItemGroup>

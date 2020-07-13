@@ -30,7 +30,6 @@
     <ClCompile Include="frline.cpp" />
     <ClCompile Include="frcombobox.cpp" />
     <ClCompile Include="frguiitem.cpp" />
-    <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="coordinates.cpp" />
     <ClCompile Include="frbutton.cpp" />
     <ClCompile Include="frcursor.cpp" />
@@ -51,6 +50,19 @@
     <ClCompile Include="cfileraw.cpp" />
     <ClCompile Include="frtooltip.cpp" />
     <ClCompile Include="frdesktop.cpp" />
+    <ClCompile Include="frelementlayout.cpp" />
+    <ClCompile Include="frelement.cpp" />
+    <ClCompile Include="frelementdoc.cpp" />
+    <ClCompile Include="frgraphicinterface.cpp" />
+    <ClCompile Include="texcachemanager.cpp" />
+    <ClCompile Include="rectcache.cpp" />
+    <ClCompile Include="rectangle.cpp" />
+    <ClCompile Include="wtitlefont.cpp" />
+    <ClCompile Include="wfont.cpp" />
+    <ClCompile Include="w3dspr.cpp" />
+    <ClCompile Include="w3danispr.cpp" />
+    <ClCompile Include="wfixedfont.cpp" />
+    <ClCompile Include="..\engine\source\bitmap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -82,7 +94,6 @@
     <ClInclude Include="frline.h" />
     <ClInclude Include="frcombobox.h" />
     <ClInclude Include="frguiitem.h" />
-    <ClInclude Include="rectangle.h" />
     <ClInclude Include="coordinates.h" />
     <ClInclude Include="frbutton.h" />
     <ClInclude Include="frcursor.h" />
@@ -103,6 +114,18 @@
     <ClInclude Include="cfileraw.h" />
     <ClInclude Include="frtooltip.h" />
     <ClInclude Include="frdesktop.h" />
+    <ClInclude Include="frelementlayout.h" />
+    <ClInclude Include="frelement.h" />
+    <ClInclude Include="frelementdoc.h" />
+    <ClInclude Include="frgraphicinterface.h" />
+    <ClInclude Include="texcachemanager.h" />
+    <ClInclude Include="rectcache.h" />
+    <ClInclude Include="rectangle.h" />
+    <ClInclude Include="wtitlefont.h" />
+    <ClInclude Include="wfont.h" />
+    <ClInclude Include="w3dspr.h" />
+    <ClInclude Include="w3danispr.h" />
+    <ClInclude Include="wfixedfont.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
