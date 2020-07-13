@@ -4,8 +4,10 @@
 class WResourceManager;
 
 class WResource : public BaseObject {
+	friend WResourceManager;
 public:
+	WResource();
 
-private:
-	WResourceManager* m_resrcMng;
+protected:
+	WResourceManager* m_resrcMng = nullptr;
 };
