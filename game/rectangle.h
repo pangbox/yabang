@@ -2,7 +2,7 @@
 #include "coordinates.h"
 
 template <typename T>
-struct Rectangle {
+struct Rectangle_ {
 	union {
 		Coordinates<T> tl;
 
