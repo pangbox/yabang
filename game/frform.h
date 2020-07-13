@@ -17,6 +17,8 @@ class FrForm : public FrWnd {
 public:
 
 private:
+	static bool m_bHasTail;
+	
 	bool m_canDrag;
 	bool m_bCaptionDown;
 	bool m_bResizeBtnDown;

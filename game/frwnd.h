@@ -46,8 +46,8 @@ enum eFrStyle : __int32 {
 	FWS_NOWHEELEVENT = 0x800,
 };
 
-
 class FrWnd : public IObject, public FrCmdTarget {
+	friend class FrWndManager;
 public:
 	virtual ~FrWnd();
 	virtual bool Close(bool bFade);

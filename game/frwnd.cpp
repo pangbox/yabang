@@ -12,9 +12,8 @@ FrToolTip* FrWnd::m_pToolTip = nullptr;
 
 FrWnd::~FrWnd() {
 	if (this->m_pWndManager) {
-		// TODO: Call DeleteTopmostWindow, ReleaseCapture
-		//this->m_pWndManager->DeleteTopmostWindow(this);
-		//this->m_pWndManager->ReleaseCapture(this);
+		this->m_pWndManager->DeleteTopmostWindow(this);
+		this->m_pWndManager->ReleaseCapture(this);
 	}
 	this->DestroyChild();
 	if (this->m_pToolTipData) {
@@ -308,21 +307,15 @@ void FrWnd::DoFadeDisplay() {
 }
 
 bool FrWnd::SetKeyFocus(bool resetPrevImeData) {
-	// TODO: Call SetKeyFocus when it is implemented.
-	//return this->m_pWndManager->SetKeyFocus(this, resetPrevImeData);
-	return false;
+	return this->m_pWndManager->SetKeyFocus(this, resetPrevImeData);
 }
 
 bool FrWnd::ResetKeyFocus() {
-	// TODO: Call ResetKeyFocus
-	//return this->m_pWndManager->ResetKeyFocus(this);
-	return false;
+	return this->m_pWndManager->ResetKeyFocus(this);
 }
 
 bool FrWnd::SetCapture() {
-	// TODO: Call SetCapture
-	//return FrWndManager::SetCapture(this->m_pWndManager, this);
-	return false;
+	return this->m_pWndManager->SetCapture(this);
 }
 
 FrWnd* FrWnd::GetCapture() const {
@@ -330,9 +323,7 @@ FrWnd* FrWnd::GetCapture() const {
 }
 
 bool FrWnd::ReleaseCapture() {
-	// TODO: Call ReleaseCapture
-	//return this->m_pWndManager->ReleaseCapture(this);
-	return false;
+	return this->m_pWndManager->ReleaseCapture(this);
 }
 
 void FrWnd::SetCursor(int hCursor) {
@@ -344,11 +335,10 @@ int FrWnd::GetCursor() const {
 }
 
 void FrWnd::MoveCursor(const char* name) {
-	// TODO: Call GetModlaForm, MoveCursor
-	/*auto form = this->m_pWndManager->GetModalForm();
+	auto form = this->m_pWndManager->GetModalForm();
 	if (!form || this == form) {
 		this->m_pWndManager->MoveCursor(this, name);
-	}*/
+	}
 }
 
 void FrWnd::SetPushSound(const char* name) {
@@ -360,9 +350,8 @@ char FrWnd::PlayPushSound() {
 }
 
 void FrWnd::SetWheelFocus() {
-	// TODO: Call SetWheelFocus
-	//auto *scrollBarThis = dynamic_cast<FrScrollBar*>(this);
-	//this->m_pWndManager->SetWheelFocus(scrollBarThis? scrollBarThis : this->m_pScrBar);
+	auto *scrollBarThis = dynamic_cast<FrScrollBar*>(this);
+	this->m_pWndManager->SetWheelFocus(scrollBarThis? scrollBarThis : this->m_pScrBar);
 }
 
 void FrWnd::PreCreateWindow(FrWndManager* pManager, unsigned int dwStyle, const WRect& rect, FrWnd* pParentWnd) {
@@ -424,8 +413,7 @@ void FrWnd::CheckHover(float deltaTime, bool bInClient, bool& hoverChecked) {
 void FrWnd::SetVisible(bool visible) {
 	if (!visible) {
 		if (this->m_pWndManager) {
-			// TODO: Call ReleaseCapture
-			//this->m_pWndManager->ReleaseCapture(this);
+			this->m_pWndManager->ReleaseCapture(this);
 		}
 	}
 
@@ -604,12 +592,10 @@ void FrWnd::OnDisplay(bool checkTopmost, bool drawChild, bool drawOneself) {
 void FrWnd::SetTopmost(bool topmost) {
 	if (topmost) {
 		this->m_dwStyle.Enable(FWS_TOPMOST);
-		// TODO: Call AddTopmostWindow
-		//this->m_pWndManager->AddTopmostWindow(this);
+		this->m_pWndManager->AddTopmostWindow(this);
 	} else {
 		this->m_dwStyle.Disable(FWS_TOPMOST);
-		// TODO: Call DeleteTopmostWindow
-		//this->m_pWndManager->DeleteTopmostWindow(this);
+		this->m_pWndManager->DeleteTopmostWindow(this);
 		for (auto *i : this->m_childList) {
 			i->SetTopmost(false);
 		}
@@ -620,8 +606,7 @@ void FrWnd::ResetViewFocus(FrWnd* pWndStop) {
 	if (this != pWndStop) {
 		for (auto *i : this->m_childList) {
 			i->ResetViewFocus(pWndStop);
-			// TODO: Call ReleaseCapture
-			//i->m_pWndManager->ReleaseCapture(i);
+			i->m_pWndManager->ReleaseCapture(i);
 		}
 		this->m_nFlags.Disable(FWF_VIEWFOCUS);
 	}
@@ -679,8 +664,7 @@ void FrWnd::SetAlpha2ToChild(float a) {
 
 void FrWnd::FindNextTopFocus(bool bForce) {
 	if (this->m_dwStyle.GetFlag(FWS_TOPMOST)) {
-		// TODO: call ResetTopFocus
-		//this->m_pWndManager->ResetTopFocus();
+		this->m_pWndManager->ResetTopFocus();
 		this->m_nFlags.Enable(FWF_TOPFOCUS);
 		if (!this->m_nFlags.GetFlag(FWF_FADING_EX) || bForce) {
 			auto* form = dynamic_cast<FrForm*>(this);
@@ -702,16 +686,14 @@ bool FrWnd::Close(bool bFade) {
 			this->m_nFlags.Enable(FWF_DESTROY);
 		}
 		if (this->m_pWndManager) {
-			// TODO: Call ResetKeyFocus
-			//this->m_pWndManager->ResetKeyFocus(this);
+			this->m_pWndManager->ResetKeyFocus(this);
 		}
 	}
 	if (!this->m_nFlags.GetFlag(FWF_KEYFOCUS)) {
 		return true;
 	}
 	this->m_dwStyle.Disable(FWS_TOPMOST);
-	// TODO: Call DeleteTopmostWindow
-	//this->m_pWndManager->DeleteTopmostWindow(this);
+	this->m_pWndManager->DeleteTopmostWindow(this);
 	for (auto *i : this->m_childList) {
 		i->SetTopmost(false);
 	}
@@ -796,8 +778,7 @@ bool FrWnd::Create(const char* lpszWindowText, const char* lpszWindowName, FrWnd
 	this->m_dwStyle.Enable(FWS_NOWHEELEVENT);
 	this->m_nRefID = pManager->m_nRefIndex++;
 	if (this->m_dwStyle.GetFlag(FWS_TOPMOST)) {
-		// TODO: Call AddTopmostWindow
-		//pManager->AddTopmostWindow(this);
+		pManager->AddTopmostWindow(this);
 	}
 	if (pParentWnd) {
 		pParentWnd->m_childList.push_back(this);

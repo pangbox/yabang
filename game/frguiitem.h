@@ -44,6 +44,10 @@ enum enumGuiType {
 	GI_LAST,
 };
 
+class FrWndManager;
+class FrWnd;
+class FrCmdTarget;
+
 class FrGuiItem {
 public:
 	enumGuiType m_type;
@@ -52,5 +56,13 @@ public:
 	std::string m_name;
 	std::map<std::string, std::string> m_param;
 	unsigned int m_flag;
-	Rectangle<short> m_rect;
+	Rectangle_<short> m_rect;
+};
+
+struct sFrCreateSub
+{
+	FrGuiItem* pItem;
+	FrWndManager* pManager;
+	FrWnd* pParent;
+	FrCmdTarget* pOwner;
 };
