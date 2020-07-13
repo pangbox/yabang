@@ -12,6 +12,8 @@
 WList<WVideoDev*> g_vidList(10, 10);
 WList<WInputDev*> g_inpList(10, 10);
 
+WMemFillBlock g_mem{0x4800, 5};
+
 const char* const g_msgD3DInitFailed = "Direct3D 9";
 const char* g_error;
 bool g_formatChanged = false;
