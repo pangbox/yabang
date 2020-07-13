@@ -3,8 +3,20 @@
 #include "wresource.h"
 #include "wscene.h"
 
+struct WtVertex;
+
 class WView : public WResource {
 public:
+	float GetClipNearValue() const;
+	float GetClipFarValue() const;
+	float GetFOV() const;
+	float GetWidth() const;
+	float GetHeight() const;
+	float GetRatio() const;
+	const WMatrix& GetCamera() const;
+	float xGetProjScale() const;
+	void xConvScreenRectByProjScale(WRect* rc) const;
+	void DrawPolygonFan(WtVertex** vl, int drawoption, int drawoption2, bool projected);
 
 private:
 	enum UPDATE_MODE {
