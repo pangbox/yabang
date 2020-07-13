@@ -8,6 +8,7 @@ typedef void (__fastcall* ConstructFn)(BaseObject*);
 class BaseObject {
 public:
 	BaseObject();
+	void SetLeakHint(const char* hint);
 
 protected:
 	static int m_nextId;

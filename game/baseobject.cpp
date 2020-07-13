@@ -12,3 +12,7 @@ BaseObject::BaseObject() {
 		m_constructFn(this);
 	}
 }
+
+void BaseObject::SetLeakHint(const char* hint) {
+	this->m_leakHint = hint;
+}
