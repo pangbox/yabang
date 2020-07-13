@@ -341,16 +341,23 @@ struct WRenderToTextureParam {
 
 
 struct WtVertex {
-	float x;
-	float y;
-	float z;
-	float rhw;
-	unsigned int diffuse;
-	float tu;
-	float tv;
-	float lu;
-	float lv;
-	float vz;
+	WtVertex() {};
+
+	union {
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+		WVector pos{};
+	};
+	float rhw{};
+	unsigned int diffuse{};
+	float tu{};
+	float tv{};
+	float lu{};
+	float lv{};
+	float vz{};
 };
 
 class WVideoDev : public WDevice {
@@ -390,11 +397,7 @@ public:
 	virtual int Command(WDeviceMessage message, int param1, int param2) = 0;
 	virtual int CreateTexture(LPBITMAPINFO src, int type) = 0;
 	virtual void UpdateTexture(int texHandle, LPBITMAPINFO src, LPVOID data, uint32_t type) = 0;
-
-protected:
 	virtual void DestroyTexture(int texHandle) = 0;
-
-public:
 	virtual int UploadCompressedTexture(void *pSrc, unsigned int srcSize, int type) = 0;
 	virtual void UpdateCompressedTexture(int texHandle, void *pSrcData, unsigned int srcDataSize, int type) = 0;
 	virtual void FixTexturePart(int texHandle, const RECT &rc, BITMAPINFO *src, void *data, int type) = 0;

@@ -31,6 +31,7 @@ public:
 	WDeviceState GetDeviceState() override;
 	int GetBackBufferBpp() const override;
 	int GetBufferingMeshNum() const override;
+	void DestroyTexture(int) override;
 
 	virtual void DrawPrimitive(uint32_t iType, int iNum, uint32_t dwVertexTypeDesc, void* lpvVertices,
 	                           D3DPRIMITIVETYPE dptPrimitiveType, int iType2) = 0;
@@ -55,7 +56,6 @@ public:
 	virtual void XDrawIndexedPrimitive(const WxViewState& viewState, const WxBatchState& batchState) = 0;
 
 protected:
-	void DestroyTexture(int) override;
 
 	virtual void Release();
 	int GetTextureNum(int stage);
