@@ -302,8 +302,7 @@ void FrWnd::DoFadeDisplay() {
 	box.y = a * this->m_iconRect.y + this->m_rect.y * this->m_fadeTime;
 	box.w = a * this->m_iconRect.w + this->m_rect.w * this->m_fadeTime;
 	box.h = a * this->m_iconRect.h + this->m_rect.h * this->m_fadeTime;
-	// TODO: Call DrawLineBox when it is implemented.
-	//WOverlay::DrawLineBox(g_view, &box, 0, 0xFFFFFFFF);
+	WOverlay::DrawLineBox(g_view, box, 0, 0xFFFFFFFF);
 }
 
 bool FrWnd::SetKeyFocus(bool resetPrevImeData) {
