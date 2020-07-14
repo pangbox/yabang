@@ -1057,10 +1057,10 @@ void WOverlay::DrawTextureWithAxis(WView* view, int texHandle, const WRect& src,
 			m_vtx[i].x = ((i & 1) != 0 ? dest.w + dest.x : dest.x) - 0.5f;
 			m_vtx[i].y = ((i & 2) != 0 ? dest.h + dest.y : dest.y) - 0.5f;
 		}
-		m_vtx[i].z = 0.001;
+		m_vtx[i].z = 0.001f;
 		m_vtx[i].tu = (i & 1) == !flipFlag ? src.w + src.x : src.x;
 		m_vtx[i].tv = (i & 2) == (flipFlag & 2) == 0 ? src.h + src.y : src.y;
-		m_vtx[i].rhw = 1.0;
+		m_vtx[i].rhw = 1.0f;
 		m_vtx[i].diffuse = diffuse;
 	}
 	float w = view->GetWidth(), h = view->GetHeight();
