@@ -40,7 +40,8 @@ Bitmap& Bitmap::operator=(const Bitmap& other) {
 	if (this == &other) {
 		return *this;
 	}
-	if (!this->m_bi || this->m_bi->bmiHeader.biWidth != other.m_bi->bmiHeader.biWidth || this->m_bi->bmiHeader.biHeight != other.m_bi->bmiHeader.biHeight || this->m_bi->bmiHeader.biBitCount != other.m_bi->bmiHeader.biBitCount) {
+	if (!this->m_bi || this->m_bi->bmiHeader.biWidth != other.m_bi->bmiHeader.biWidth || this->m_bi->bmiHeader.biHeight
+		!= other.m_bi->bmiHeader.biHeight || this->m_bi->bmiHeader.biBitCount != other.m_bi->bmiHeader.biBitCount) {
 		this->Create(other.m_bi->bmiHeader.biWidth, other.m_bi->bmiHeader.biHeight, other.m_bi->bmiHeader.biBitCount);
 	}
 	const_cast<Bitmap&>(other).Update();
@@ -63,7 +64,7 @@ Bitmap& Bitmap::operator=(Bitmap&& other) noexcept {
 	return *this;
 }
 
-uint8_t *Bitmap::VMem(BITMAPINFO *bi) {
+uint8_t* Bitmap::VMem(BITMAPINFO* bi) {
 	if (bi->bmiHeader.biBitCount > 8) {
 		return reinterpret_cast<uint8_t*>(bi) + sizeof(BITMAPINFOHEADER);
 	}
@@ -106,11 +107,9 @@ void Bitmap::Create(int32_t w, int32_t h, int32_t bpp) {
 	}
 }
 
-void Bitmap::Update() {
-	return;
-}
+void Bitmap::Update() {}
 
-void Bitmap::GetPixel(int32_t x, int32_t y, uint8_t &r, uint8_t &g, uint8_t &b, uint8_t &a) const {
+void Bitmap::GetPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a) const {
 	if (x < 0 || y < 0) {
 		return;
 	}
@@ -136,7 +135,7 @@ void Bitmap::GetPixel(int32_t x, int32_t y, uint8_t &r, uint8_t &g, uint8_t &b, 
 	b = this->m_vram[xb + y * this->m_pitch + 0];
 }
 
-void Bitmap::GetPixel(int32_t x, int32_t y, uint8_t &r, uint8_t &g, uint8_t &b) const {
+void Bitmap::GetPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const {
 	if (x < 0 || y < 0) {
 		return;
 	}
@@ -153,15 +152,15 @@ void Bitmap::GetPixel(int32_t x, int32_t y, uint8_t &r, uint8_t &g, uint8_t &b) 
 	}
 
 	if (this->m_bi->bmiHeader.biBitCount == 24) {
-        r = this->m_vram[3 * x + 2 + y * this->m_pitch];
-        g = this->m_vram[3 * x + 1 + y * this->m_pitch];
-        b = this->m_vram[3 * x + 0 + y * this->m_pitch];
+		r = this->m_vram[3 * x + 2 + y * this->m_pitch];
+		g = this->m_vram[3 * x + 1 + y * this->m_pitch];
+		b = this->m_vram[3 * x + 0 + y * this->m_pitch];
 	}
 
 	if (this->m_bi->bmiHeader.biBitCount == 32) {
-        r = this->m_vram[4 * x + 2 + y * this->m_pitch];
-        g = this->m_vram[4 * x + 1 + y * this->m_pitch];
-        b = this->m_vram[4 * x + 0 + y * this->m_pitch];
+		r = this->m_vram[4 * x + 2 + y * this->m_pitch];
+		g = this->m_vram[4 * x + 1 + y * this->m_pitch];
+		b = this->m_vram[4 * x + 0 + y * this->m_pitch];
 	}
 }
 
@@ -171,44 +170,49 @@ void Bitmap::SetPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b, uin
 	}
 
 	int index;
-	switch(this->m_bi->bmiHeader.biBitCount) {
-	case 8:
-		index = this->m_vram[y * this->m_pitch + x];
-		this->m_bi->bmiColors[index].rgbRed = r;
-		this->m_bi->bmiColors[index].rgbGreen = g;
-		this->m_bi->bmiColors[index].rgbBlue = b;
-		break;
-	case 24:
-        this->m_vram[3 * x + 2 + y * this->m_pitch] = r;
-        this->m_vram[3 * x + 1 + y * this->m_pitch] = g;
-        this->m_vram[3 * x + 0 + y * this->m_pitch] = b;
-		break;
-	case 32:
-        this->m_vram[4 * x + 3 + y * this->m_pitch] = a;
-        this->m_vram[4 * x + 2 + y * this->m_pitch] = r;
-        this->m_vram[4 * x + 1 + y * this->m_pitch] = g;
-        this->m_vram[4 * x + 0 + y * this->m_pitch] = b;
-		break;
-	default:
-		break;
+	switch (this->m_bi->bmiHeader.biBitCount) {
+		case 8:
+			index = this->m_vram[y * this->m_pitch + x];
+			this->m_bi->bmiColors[index].rgbRed = r;
+			this->m_bi->bmiColors[index].rgbGreen = g;
+			this->m_bi->bmiColors[index].rgbBlue = b;
+			break;
+		case 24:
+			this->m_vram[3 * x + 2 + y * this->m_pitch] = r;
+			this->m_vram[3 * x + 1 + y * this->m_pitch] = g;
+			this->m_vram[3 * x + 0 + y * this->m_pitch] = b;
+			break;
+		case 32:
+			this->m_vram[4 * x + 3 + y * this->m_pitch] = a;
+			this->m_vram[4 * x + 2 + y * this->m_pitch] = r;
+			this->m_vram[4 * x + 1 + y * this->m_pitch] = g;
+			this->m_vram[4 * x + 0 + y * this->m_pitch] = b;
+			break;
+		default:
+			break;
 	}
 }
 
 char Bitmap::GetAlpha(int32_t x, int32_t y) const {
-	if (x >= 0 && y >= 0 && x < this->m_bi->bmiHeader.biWidth && y < this->m_bi->bmiHeader.biHeight && this->m_bi->bmiHeader.biBitCount == 32) {
+	if (x >= 0 && y >= 0 && x < this->m_bi->bmiHeader.biWidth && y < this->m_bi->bmiHeader.biHeight && this
+	                                                                                                   ->m_bi->bmiHeader
+	                                                                                                   .biBitCount == 32
+	) {
 		return this->m_vram[4 * x + 3 + y * this->m_pitch];
-	} else {
-		return -1;
 	}
+	return -1;
 }
 
 void Bitmap::SetAlpha(int32_t x, int32_t y, uint8_t a) const {
-	if (x >= 0 && y >= 0 && x < this->m_bi->bmiHeader.biWidth && y < this->m_bi->bmiHeader.biHeight && this->m_bi->bmiHeader.biBitCount == 32) {
+	if (x >= 0 && y >= 0 && x < this->m_bi->bmiHeader.biWidth && y < this->m_bi->bmiHeader.biHeight && this
+	                                                                                                   ->m_bi->bmiHeader
+	                                                                                                   .biBitCount == 32
+	) {
 		this->m_vram[4 * x + 3 + y * this->m_pitch] = a;
 	}
 }
 
-void Bitmap::SetPalette(const uint8_t *palette) const {
+void Bitmap::SetPalette(const uint8_t* palette) const {
 	for (int i = 0; i < 256; i++) {
 		this->m_bi->bmiColors[i].rgbRed = palette[2];
 		this->m_bi->bmiColors[i].rgbGreen = palette[1];
@@ -217,7 +221,7 @@ void Bitmap::SetPalette(const uint8_t *palette) const {
 	}
 }
 
-void Bitmap::SetGrayPalette(const uint8_t *palette) const {
+void Bitmap::SetGrayPalette(const uint8_t* palette) const {
 	if (palette) {
 		for (int i = 0; i < 256; i++) {
 			this->m_bi->bmiColors[i].rgbRed = palette[2] + i >= 255 ? 255 : palette[2] + i;
@@ -233,14 +237,14 @@ void Bitmap::SetGrayPalette(const uint8_t *palette) const {
 	}
 }
 
-void Bitmap::SetBitmapinfo(BITMAPINFO *bi, uint8_t *vram) {
+void Bitmap::SetBitmapinfo(BITMAPINFO* bi, uint8_t* vram) {
 	this->m_vram = vram;
 	this->m_bi = bi;
 	this->m_lock = true;
 	this->m_pitch = (bi->bmiHeader.biWidth * bi->bmiHeader.biBitCount / 8 + 3) & ~3;
 }
 
-void Bitmap::Save(char *filename) const {
+void Bitmap::Save(char* filename) const {
 	#pragma pack(push, 1)
 
 	struct BmpInfo {
@@ -267,7 +271,7 @@ void Bitmap::Save(char *filename) const {
 
 	#pragma pack(pop)
 
-	FILE *f;
+	FILE* f;
 	BmpInfo info{};
 	BmpHead header{};
 
@@ -298,7 +302,7 @@ void Bitmap::Save(char *filename) const {
 	int gutter = pitch - 3 * info.width;
 	do {
 		int i = 0;
-		if ( info.width > 0 ) {
+		if (info.width > 0) {
 			int scan = 0;
 			do {
 				uint8_t* ptr = &this->m_vram[scan + y * this->m_pitch];
@@ -307,23 +311,22 @@ void Bitmap::Save(char *filename) const {
 				fputc(ptr[2], f);
 				scan += 3;
 				++i;
-			} while ( i < info.width );
+			} while (i < info.width);
 		}
-		if ( gutter > 0 ) {
+		if (gutter > 0) {
 			i = gutter;
 			do {
 				fputc(0, f);
 				--i;
-			} while ( i );
+			} while (i);
 		}
 		--y;
-	}
-	while ( y >= 0 );
+	} while (y >= 0);
 
 	fclose(f);
 }
 
-void Bitmap::PaintStretch(HWND hWnd, RECT *rect) const {
+void Bitmap::PaintStretch(HWND hWnd, RECT* rect) const {
 	HDC dc = GetDC(hWnd);
 	StretchDIBits(
 		dc,
@@ -343,7 +346,7 @@ void Bitmap::PaintStretch(HWND hWnd, RECT *rect) const {
 	ReleaseDC(hWnd, dc);
 }
 
-void Bitmap::Paint(HWND hWnd, POINT *p) const {
+void Bitmap::Paint(HWND hWnd, POINT* p) const {
 	HDC dc = GetDC(hWnd);
 	DWORD w = this->m_bi->bmiHeader.biWidth;
 	DWORD h = this->m_bi->bmiHeader.biHeight;
@@ -354,7 +357,7 @@ void Bitmap::Paint(HWND hWnd, POINT *p) const {
 	ReleaseDC(hWnd, dc);
 }
 
-uint8_t *Bitmap::GetVram(int32_t i) const {
+uint8_t* Bitmap::GetVram(int32_t i) const {
 	return &this->m_vram[i * this->m_pitch];
 }
 

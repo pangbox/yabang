@@ -1,7 +1,6 @@
 ﻿#include "wresourcemanager.h"
 
 
-
 #include "bitmap.h"
 #include "w3dspr.h"
 #include "woverlay.h"
@@ -32,7 +31,7 @@ void WResourceManager::Unlock(rmlType_t type) {
 }
 
 void WResourceManager::UnlockAllByThread(unsigned int threadID) {
-	for (auto &lock : this->m_lock) {
+	for (auto& lock : this->m_lock) {
 		lock.UnlockInThread(threadID);
 	}
 }
@@ -179,7 +178,7 @@ int WResourceManager::LoadTexture(const char* filename, unsigned int type, int l
 }
 
 int WResourceManager::GetTextureWidth(int texHandle) {
-	for (auto *it = this->texList.Start(); it != nullptr; it = this->texList.Next()) {
+	for (auto* it = this->texList.Start(); it != nullptr; it = this->texList.Next()) {
 		if (it->texhandle == texHandle) {
 			return it->width;
 		}
@@ -188,11 +187,10 @@ int WResourceManager::GetTextureWidth(int texHandle) {
 }
 
 int WResourceManager::GetTextureHeight(int texHandle) {
-	for (auto *it = this->texList.Start(); it != nullptr; it = this->texList.Next()) {
+	for (auto* it = this->texList.Start(); it != nullptr; it = this->texList.Next()) {
 		if (it->texhandle == texHandle) {
 			return it->height;
 		}
 	}
 	return 0;
 }
-

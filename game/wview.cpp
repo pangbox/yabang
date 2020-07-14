@@ -1,6 +1,6 @@
 ﻿#include "wview.h"
 
-WView *g_view = nullptr;
+WView* g_view = nullptr;
 
 float WView::GetClipNearValue() const {
 	return this->clip_near;

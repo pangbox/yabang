@@ -15,7 +15,7 @@ typedef struct tagWTITLEFONT {
 class WTitleFont : public WFont {
 public:
 	WTitleFont();
-	
+
 private:
 	WTITLEFONT m_info{};
 	int* m_iTexIndex{};

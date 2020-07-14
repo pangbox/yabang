@@ -138,8 +138,8 @@ void FrWndManager::CloseForm(bool bFade) {
 }
 
 void FrWndManager::CloseLayout() {
-	this->m_pDesktop->SendCmdToOwnerTarget(FRCMD_DESTROY, 0, 0);
-	this->m_pDesktop->CloseChild(0, 0, 1);
+	this->m_pDesktop->SendCmdToOwnerTarget(FRCMD_DESTROY, 0, nullptr);
+	this->m_pDesktop->CloseChild(nullptr, 0, true);
 	this->m_pDesktop->SetOwner(nullptr);
 	this->m_layoutID = "";
 }
@@ -160,9 +160,8 @@ const Bitmap* FrWndManager::GetBitmap(const char* resource, const char* id) {
 bool FrWndManager::IsValidWindow(FrWnd* pWnd) {
 	if (this->m_pDesktop == pWnd) {
 		return true;
-	} else {
-		return this->m_pDesktop->FindChild(pWnd) != nullptr;
 	}
+	return this->m_pDesktop->FindChild(pWnd) != nullptr;
 }
 
 void FrWndManager::SetWheelFocus(FrScrollBar* pScrBar) {
@@ -213,12 +212,14 @@ void FrWndManager::ConfineRect(WRect& dr) {
 	}
 }
 
-float FrWndManager::PrintText(const WPoint* pos, unsigned int align, const char* text, float limit, unsigned int emoDiffuse) {
+float FrWndManager::PrintText(const WPoint* pos, unsigned int align, const char* text, float limit,
+                              unsigned int emoDiffuse) {
 	// TODO: Need to implement FrEmoticon, CChatMsg, FrGraphicInterface.
 	abort();
 }
 
-float FrWndManager::PrintText11(const WPoint* pos, unsigned int align, const char* text, float limit, unsigned int emoDiffuse) {
+float FrWndManager::PrintText11(const WPoint* pos, unsigned int align, const char* text, float limit,
+                                unsigned int emoDiffuse) {
 	// TODO: Need to implement FrEmoticon, CChatMsg, FrGraphicInterface.
 	abort();
 }
@@ -252,82 +253,81 @@ FrWnd* FrWndManager::DoCreate(FrGuiItem* item, FrWndManager* pManager, FrWnd* pP
 	m.pManager = this;
 	m.pOwner = pOwner;
 	m.pParent = pParent;
-	switch (item->m_type)
-	{
-	case GI_FORM:
-		// TODO: Call DoCreateItem
-		//wnd = DoCreateItem<FrForm>(&m);
-		break;
-	case GI_STATIC:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrStatic>(&m);
-		break;
-	case GI_TEXTBUTTON:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrTextButton>(&m);
-		break;
-	case GI_EDIT:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrEdit>(&m);
-		break;
-	case GI_COMBOBOX:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrComboBox>(&m);
-		break;
-	case GI_COMBOCTLEX:
-		// TODO: Call DoCreateItem
-		//wnd = DoCreateItem<FrComboCtlEx>(&m);
-		break;
-	case GI_BUTTON:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrButton>(&m);
-		break;
-	case GI_FRAME:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrFrame>(&m);
-		break;
-	case GI_AREA:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrArea>(&m);
-		break;
-	case GI_LISTBOX:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrListBox>(&m);
-		break;
-	case GI_GAUGEBAR:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrGaugeBar>(&m);
-		break;
-	case GI_GAUGEBAREX:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrGaugeBarEx>(&m);
-		break;
-	case GI_GAUGEBARIMAGE:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrGaugeBarImage>(&m);
-		break;
-	case GI_VIEWER:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrViewer>(&m);
-		break;
-	case GI_CONTEXTMENU:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrContextMenuCtrl>(&m);
-		break;
-	case GI_TABBUTTON:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrTabButton>(&m);
-		break;
-	case GI_GROUPBOX:
-		// TODO: Call DoCreateItem
-		//wnd = (FrComboCtlEx*)DoCreateItem<FrGroupBox>(&m);
-		break;
-	case GI_MACROITEM:
-		// TODO: Call DoCreateMacroItem
-		//DoCreateMacroItem(&m);
-		return nullptr;
-	default:
-		return nullptr;
+	switch (item->m_type) {
+		case GI_FORM:
+			// TODO: Call DoCreateItem
+			//wnd = DoCreateItem<FrForm>(&m);
+			break;
+		case GI_STATIC:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrStatic>(&m);
+			break;
+		case GI_TEXTBUTTON:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrTextButton>(&m);
+			break;
+		case GI_EDIT:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrEdit>(&m);
+			break;
+		case GI_COMBOBOX:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrComboBox>(&m);
+			break;
+		case GI_COMBOCTLEX:
+			// TODO: Call DoCreateItem
+			//wnd = DoCreateItem<FrComboCtlEx>(&m);
+			break;
+		case GI_BUTTON:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrButton>(&m);
+			break;
+		case GI_FRAME:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrFrame>(&m);
+			break;
+		case GI_AREA:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrArea>(&m);
+			break;
+		case GI_LISTBOX:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrListBox>(&m);
+			break;
+		case GI_GAUGEBAR:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrGaugeBar>(&m);
+			break;
+		case GI_GAUGEBAREX:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrGaugeBarEx>(&m);
+			break;
+		case GI_GAUGEBARIMAGE:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrGaugeBarImage>(&m);
+			break;
+		case GI_VIEWER:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrViewer>(&m);
+			break;
+		case GI_CONTEXTMENU:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrContextMenuCtrl>(&m);
+			break;
+		case GI_TABBUTTON:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrTabButton>(&m);
+			break;
+		case GI_GROUPBOX:
+			// TODO: Call DoCreateItem
+			//wnd = (FrComboCtlEx*)DoCreateItem<FrGroupBox>(&m);
+			break;
+		case GI_MACROITEM:
+			// TODO: Call DoCreateMacroItem
+			//DoCreateMacroItem(&m);
+			return nullptr;
+		default:
+			return nullptr;
 	}
 	if (wnd) {
 		wnd->SendCmdToOwnerTarget(FRCMD_INIT, reinterpret_cast<int>(wnd), nullptr);
@@ -337,13 +337,16 @@ FrWnd* FrWndManager::DoCreate(FrGuiItem* item, FrWndManager* pManager, FrWnd* pP
 
 bool FrWndManager::SetKeyFocus(FrWnd* pWnd, bool resetPrevImeData) {
 	if (pWnd) {
-		if (!pWnd->m_dwStyle.GetFlag(FWS_KEYEVENT) || !pWnd->m_dwStyle.GetFlag(FWS_VISIBLE) || pWnd->m_dwStyle.GetFlag(FWS_DISABLED)) {
+		if (!pWnd->m_dwStyle.GetFlag(FWS_KEYEVENT) || !pWnd->m_dwStyle.GetFlag(FWS_VISIBLE) || pWnd
+		                                                                                       ->m_dwStyle.GetFlag(
+			                                                                                       FWS_DISABLED)) {
 			return false;
 		}
 	}
 	if (this->m_istate.keyFocused) {
 		this->m_istate.keyFocused->m_nFlags.Disable(FWF_KEYFOCUS);
-		this->m_istate.keyFocused->SendCmdToOwnerTarget(FRCMD_LOSTKEYFOCUS, reinterpret_cast<int>(&this->m_istate), nullptr);
+		this->m_istate.keyFocused->SendCmdToOwnerTarget(FRCMD_LOSTKEYFOCUS, reinterpret_cast<int>(&this->m_istate),
+		                                                nullptr);
 	}
 	if (pWnd) {
 		pWnd->EnableKeyFocus(this->m_istate);
@@ -361,7 +364,9 @@ bool FrWndManager::SetKeyFocus(FrWnd* pWnd, bool resetPrevImeData) {
 
 bool FrWndManager::CanGetKeyFocus(FrWnd* pWnd) {
 	if (pWnd) {
-		if (!pWnd->m_dwStyle.GetFlag(FWS_KEYEVENT) || !pWnd->m_dwStyle.GetFlag(FWS_VISIBLE) || pWnd->m_dwStyle.GetFlag(FWS_DISABLED)) {
+		if (!pWnd->m_dwStyle.GetFlag(FWS_KEYEVENT) || !pWnd->m_dwStyle.GetFlag(FWS_VISIBLE) || pWnd
+		                                                                                       ->m_dwStyle.GetFlag(
+			                                                                                       FWS_DISABLED)) {
 			return false;
 		}
 	}
@@ -370,8 +375,12 @@ bool FrWndManager::CanGetKeyFocus(FrWnd* pWnd) {
 
 WPoint FrWndManager::GetCreatePosition(const WSize& rectSize) {
 	WRect dr;
-	dr.x = static_cast<float>(static_cast<int>((this->m_pDesktop->m_rect.w - rectSize.w + 1.0) * 0.5)) + this->m_pDesktop->m_rect.x;
-	dr.y = static_cast<float>(static_cast<int>((this->m_pDesktop->m_rect.h - rectSize.h + 1.0) * 0.5)) + this->m_pDesktop->m_rect.y;
+	dr.x = static_cast<float>(static_cast<int>((this->m_pDesktop->m_rect.w - rectSize.w + 1.0) * 0.5)) + this
+	                                                                                                     ->m_pDesktop->
+	                                                                                                     m_rect.x;
+	dr.y = static_cast<float>(static_cast<int>((this->m_pDesktop->m_rect.h - rectSize.h + 1.0) * 0.5)) + this
+	                                                                                                     ->m_pDesktop->
+	                                                                                                     m_rect.y;
 	dr.w = rectSize.w;
 	dr.h = rectSize.h;
 	this->ConfineRect(dr);
@@ -436,7 +445,7 @@ bool FrWndManager::Init(const char* wallPaper, bool exclusiveKey) {
 void FrWndManager::Display(bool drawDesktop) {
 	this->m_pFocusedEdit = nullptr;
 	this->m_pDesktop->OnDisplay(true, true, drawDesktop);
-	for(auto *i : this->m_topmostList) {
+	for (auto* i : this->m_topmostList) {
 		if (!i->m_pParentWnd || i->m_pParentWnd->m_dwStyle.GetFlag(1)) {
 			i->OnDisplay(false, true, true);
 		}
@@ -448,7 +457,7 @@ void FrWndManager::Display(bool drawDesktop) {
 }
 
 void FrWndManager::ResetTopFocus() {
-	for (auto *i : this->m_topmostList) {
+	for (auto* i : this->m_topmostList) {
 		i->m_nFlags.Disable(0x200);
 		if (i->m_wndName == "messenger_chat" && !i->m_nFlags.GetFlag(0x20)) {
 			auto* form = dynamic_cast<FrForm*>(i);
@@ -503,7 +512,7 @@ bool FrWndManager::ResetKeyFocus(FrWnd* pWnd) {
 		pWnd->SendCmdToOwnerTarget(FRCMD_LOSTKEYFOCUS, reinterpret_cast<int>(&this->m_istate), nullptr);
 		return true;
 	}
-	for (auto *i : pWnd->m_childList) {
+	for (auto* i : pWnd->m_childList) {
 		if (this->ResetKeyFocus(i)) {
 			return true;
 		}
@@ -512,7 +521,7 @@ bool FrWndManager::ResetKeyFocus(FrWnd* pWnd) {
 }
 
 void FrWndManager::RemoveFade() {
-	for (auto *i : this->m_pDesktop->m_childList) {
+	for (auto* i : this->m_pDesktop->m_childList) {
 		i->m_fadeTime = -1.0;
 	}
 }

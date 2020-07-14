@@ -75,7 +75,7 @@ private:
 	WxViewState m_xViewState;
 	bool m_xNeedToUpdateViewTransfToVideo;
 	bool m_xNeedToUpdateProjTransfToVideo;
-	WView::PROJECTION_MODE m_projMode;
+	PROJECTION_MODE m_projMode;
 	float m_scale;
 	WPlane frustumByCam[6];
 };

@@ -1,7 +1,6 @@
 ﻿#include "rectcache.h"
 
-RectCache::RectCache() {
-}
+RectCache::RectCache() {}
 
 RectCache::~RectCache() {
 	if (this->m_ppTable) {
@@ -26,13 +25,14 @@ int RectCache::BlockToPixel_Y(int y) {
 	return y * this->m_BlockHeight;
 }
 
-RectCache::eCRRes RectCache::CheckRect(int xInBlock, int yInBlock, int wInBlock, int hInBlock, const RectInfo*& pResInfo, const RectInfo*& pMinHeightInfo) const {
-    if (xInBlock < xInBlock + wInBlock) {
-	    const RectInfo** pp = &this->m_ppTable[yInBlock * this->m_BlockCountW + xInBlock];
-	    int x = xInBlock;
-	    while (true) {
-		    const RectInfo* p = *pp;
-		    if (p != nullptr) {
+RectCache::eCRRes RectCache::CheckRect(int xInBlock, int yInBlock, int wInBlock, int hInBlock,
+                                       const RectInfo*& pResInfo, const RectInfo*& pMinHeightInfo) const {
+	if (xInBlock < xInBlock + wInBlock) {
+		const RectInfo** pp = &this->m_ppTable[yInBlock * this->m_BlockCountW + xInBlock];
+		int x = xInBlock;
+		while (true) {
+			const RectInfo* p = *pp;
+			if (p != nullptr) {
 				if ((p->rcBlock.tl.x < 0 || p->rcBlock.tl.x > this->m_BlockCountW) ||
 					(p->rcBlock.br.x < 0 || p->rcBlock.br.x > this->m_BlockCountW) ||
 					(p->rcBlock.tl.y < 0 || p->rcBlock.tl.y > this->m_BlockCountH) ||
@@ -45,49 +45,49 @@ RectCache::eCRRes RectCache::CheckRect(int xInBlock, int yInBlock, int wInBlock,
 				}
 				pResInfo = p;
 				return eCRRes_RectOnX;
-		    }
-		    ++pp;
-		    if (++x >= xInBlock + wInBlock) {
+			}
+			++pp;
+			if (++x >= xInBlock + wInBlock) {
 				break;
-		    }
-	    }
-    }
-    if (hInBlock > 1) {
+			}
+		}
+	}
+	if (hInBlock > 1) {
 		int y = 1;
-	    const RectInfo** pp = &this->m_ppTable[xInBlock + (yInBlock + 1) * this->m_BlockCountW];
-	    while(true) {
-		    if (*pp) {
-			    pResInfo = *pp;
-			    return eCRRes_RectOnY;
-		    }
-		    pp += this->m_BlockCountW;
+		const RectInfo** pp = &this->m_ppTable[xInBlock + (yInBlock + 1) * this->m_BlockCountW];
+		while (true) {
+			if (*pp) {
+				pResInfo = *pp;
+				return eCRRes_RectOnY;
+			}
+			pp += this->m_BlockCountW;
 			if (++y >= hInBlock) {
 				break;
 			}
-	    }
-    }
-    if (hInBlock <= 1) {
-	    pResInfo = nullptr;
-	    return eCRRes_Empty;
-    }
+		}
+	}
+	if (hInBlock <= 1) {
+		pResInfo = nullptr;
+		return eCRRes_Empty;
+	}
 	int y = 1;
-    const RectInfo** pp = &this->m_ppTable[(xInBlock - 1) + wInBlock + (yInBlock + 1) * this->m_BlockCountW];
-    while (true) {
-	    const RectInfo* p = *pp;
-	    if (*pp) {
+	const RectInfo** pp = &this->m_ppTable[(xInBlock - 1) + wInBlock + (yInBlock + 1) * this->m_BlockCountW];
+	while (true) {
+		const RectInfo* p = *pp;
+		if (*pp) {
 			if (!pMinHeightInfo || p->rcBlock.br.y < pMinHeightInfo->rcBlock.br.y) {
 				pMinHeightInfo = p;
 			}
 			pResInfo = p;
 			return eCRRes_RectOnX;
-	    }
-	    ++y;
-	    pp += this->m_BlockCountW;
-	    if (y >= hInBlock) {
-		    pResInfo = nullptr;
-		    return eCRRes_Empty;
-	    }
-    }
+		}
+		++y;
+		pp += this->m_BlockCountW;
+		if (y >= hInBlock) {
+			pResInfo = nullptr;
+			return eCRRes_Empty;
+		}
+	}
 }
 
 int RectCache::SkipX(int xInBlock, int yInBlock, int xDest, const RectInfo*& pMinHeightInfo) const {
@@ -117,7 +117,7 @@ void RectCache::FillRect(const RectInfo& info) const {
 	for (int x = info.rcBlock.tl.x; x < info.rcBlock.br.x; x++) {
 		this->m_ppTable[n++] = &info;
 	}
-	
+
 	n = info.rcBlock.tl.x + this->m_BlockCountW * (info.rcBlock.tl.y + 1);
 	for (int y = info.rcBlock.br.y - info.rcBlock.tl.y - 1; y > 0; --y) {
 		this->m_ppTable[n] = &info;
@@ -181,7 +181,8 @@ bool RectCache::Add(RectInfo& info, int width, int height) {
 					x = pInfo->rcBlock.br.x;
 					break;
 				case eCRRes_RectOnY:
-					x = this->SkipX(wInBlock + x, y, pInfo->rcBlock.br.x > xMax ? xMax : pInfo->rcBlock.br.x, pMinHeightInfo);
+					x = this->SkipX(wInBlock + x, y, pInfo->rcBlock.br.x > xMax ? xMax : pInfo->rcBlock.br.x,
+					                pMinHeightInfo);
 					break;
 				case eCRRes_Error:
 					return false;

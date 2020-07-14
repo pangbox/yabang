@@ -42,7 +42,7 @@ private:
 	WSphere m_boundSphere;
 	w_bound_box m_BBox;
 	WList<int>* m_storeTexList;
-	WList<WPuppet::w_tex_piece*> m_use_tex_piece;
+	WList<w_tex_piece*> m_use_tex_piece;
 	WList<w_bound_box*> m_bbList;
 	WList<w_motion_data*>* m_mdList;
 	WList<w_face_animation*> m_fanimList;

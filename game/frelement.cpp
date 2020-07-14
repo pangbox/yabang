@@ -1,8 +1,6 @@
 ﻿#include "frelement.h"
 
 FrElement::FrElement(enumElement type)
-	: m_type(type) {
-}
+	: m_type(type) {}
 
-FrElement::~FrElement() {
-}
+FrElement::~FrElement() {}

@@ -42,8 +42,7 @@ void FrWnd::SetFixed(bool bFixed) {
 	this->m_dwStyle.Turn(FWS_FIXED, bFixed);
 }
 
-void FrWnd::OnResize() {
-}
+void FrWnd::OnResize() {}
 
 bool FrWnd::OnRButtonUp(const WPoint& mousePos) {
 	return false;
@@ -53,18 +52,15 @@ bool FrWnd::OnRButtonDown(const WPoint& mousePos) {
 	return false;
 }
 
-void FrWnd::OnDblClick(const WPoint& mousePos) {
-}
+void FrWnd::OnDblClick(const WPoint& mousePos) {}
 
-void FrWnd::OnWheel(FrInputState& inputState) {
-}
+void FrWnd::OnWheel(FrInputState& inputState) {}
 
 const char* FrWnd::OnSelectText(const FrInputState* inputState) {
 	return nullptr;
 }
 
-void FrWnd::OnKeyFocus(CChatMsg*) {
-}
+void FrWnd::OnKeyFocus(CChatMsg*) {}
 
 void FrWnd::EnableKeyFocus(FrInputState& inputState) {
 	this->m_nFlags.Enable(FWF_KEYFOCUS);
@@ -106,8 +102,7 @@ const WFlags& FrWnd::GetStyle() const {
 	return this->m_dwStyle;
 }
 
-void FrWnd::OnMouseMove(const WPoint& mousePos) {
-}
+void FrWnd::OnMouseMove(const WPoint& mousePos) {}
 
 bool FrWnd::OnLButtonUp(const WPoint& mousePos) {
 	return false;
@@ -117,11 +112,9 @@ bool FrWnd::OnLButtonDown(const WPoint& mousePos) {
 	return false;
 }
 
-void FrWnd::OnSetCursor(bool bInClient, const WPoint &mousePos) {
-}
+void FrWnd::OnSetCursor(bool bInClient, const WPoint& mousePos) {}
 
-void FrWnd::SetIconRect(const WRect& rect) {
-}
+void FrWnd::SetIconRect(const WRect& rect) {}
 
 void FrWnd::CreateToolTip(FrWndManager* pManager) {
 	if (!m_pToolTip) {
@@ -276,7 +269,9 @@ int FrWnd::IsFixedToolTip() const {
 }
 
 const WPoint& FrWnd::GetToolTipWndPos() const {
-	return this->m_pToolTipData && this->m_pToolTipData->bFixWnd ? this->m_pToolTipData->posFixWnd : this->m_pWndManager->m_istate.mousePos;
+	return this->m_pToolTipData && this->m_pToolTipData->bFixWnd
+		? this->m_pToolTipData->posFixWnd
+		: this->m_pWndManager->m_istate.mousePos;
 }
 
 void FrWnd::SetToolTipFrameStyle(unsigned int style) {
@@ -289,11 +284,9 @@ unsigned int FrWnd::GetToolTipFrameStyle() const {
 	return this->m_pToolTipData ? this->m_pToolTipData->style : 0;
 }
 
-void FrWnd::OnDraw() {
-}
+void FrWnd::OnDraw() {}
 
-void FrWnd::OnProc(float deltaTime) {
-}
+void FrWnd::OnProc(float deltaTime) {}
 
 void FrWnd::DoFadeDisplay() {
 	float a = 1.0f - this->m_fadeTime;
@@ -349,8 +342,8 @@ char FrWnd::PlayPushSound() {
 }
 
 void FrWnd::SetWheelFocus() {
-	auto *scrollBarThis = dynamic_cast<FrScrollBar*>(this);
-	this->m_pWndManager->SetWheelFocus(scrollBarThis? scrollBarThis : this->m_pScrBar);
+	auto* scrollBarThis = dynamic_cast<FrScrollBar*>(this);
+	this->m_pWndManager->SetWheelFocus(scrollBarThis ? scrollBarThis : this->m_pScrBar);
 }
 
 void FrWnd::PreCreateWindow(FrWndManager* pManager, unsigned int dwStyle, const WRect& rect, FrWnd* pParentWnd) {
@@ -361,7 +354,9 @@ void FrWnd::PreCreateWindow(FrWndManager* pManager, unsigned int dwStyle, const 
 }
 
 bool FrWnd::SendCmdToOwnerTarget(eFrCmd cmd, int var1, sFRESH_HANDLER* pHandler) {
-	return this->m_nFlags.GetFlag(FWF_DESTROY) ? false : this->SendCmdToOwnerTarget(this->m_pOwner, cmd, var1, pHandler);
+	return this->m_nFlags.GetFlag(FWF_DESTROY)
+		? false
+		: this->SendCmdToOwnerTarget(this->m_pOwner, cmd, var1, pHandler);
 }
 
 void FrWnd::GetClientRect(WRect& rect) const {
@@ -372,7 +367,7 @@ void FrWnd::GetClientRect(WRect& rect) const {
 	}
 }
 
-void FrWnd::SetToolTipText(const std::string &text) {
+void FrWnd::SetToolTipText(const std::string& text) {
 	this->m_wndToolTip = text;
 	this->m_nFlags.Enable(FWF_TOOLTIPS);
 	if (!this->m_pToolTipData) {
@@ -390,8 +385,7 @@ void FrWnd::CheckHover(float deltaTime, bool bInClient, bool& hoverChecked) {
 			hoverChecked = true;
 			if (!this->m_hoverOn) {
 				this->m_accHoverTime = deltaTime + this->m_accHoverTime;
-				if (this->m_accHoverTime > this->m_hoverTime)
-				{
+				if (this->m_accHoverTime > this->m_hoverTime) {
 					this->m_accHoverTime = 0.0;
 					this->m_hoverOn = true;
 					this->SendCmdToOwnerTarget(FRCMD_HOVERON, reinterpret_cast<int>(this), nullptr);
@@ -426,7 +420,7 @@ void FrWnd::EnableHover(bool enable, float time) {
 }
 
 void FrWnd::SetWheelEvent(bool enable) {
-	for (auto *i = this; i != nullptr; i = i->m_pScrBar) {
+	for (auto* i = this; i != nullptr; i = i->m_pScrBar) {
 		i->m_dwStyle.Turn(FWS_NOWHEELEVENT, !enable);
 	}
 }
@@ -469,8 +463,7 @@ void FrWnd::SetFadeout(bool bOut) {
 		if (bOut) {
 			this->m_nFlags.Enable(FWF_FADEOUT_EX);
 			this->m_fadeTime = 1.0;
-		}
-		else {
+		} else {
 			this->m_nFlags.Disable(FWF_FADEOUT_EX);
 			this->m_fadeTime = 0.0;
 		}
@@ -490,7 +483,7 @@ FrWnd* FrWnd::FindChild(const FrWnd* pWnd) {
 		if (i == pWnd) {
 			return i;
 		}
-		auto *result = i->FindChild(pWnd);
+		auto* result = i->FindChild(pWnd);
 		if (result != nullptr) {
 			return result;
 		}
@@ -537,7 +530,7 @@ FrWnd* FrWnd::FindChildForm(const char* lpszWindowName) {
 	return nullptr;
 }
 
-void FrWnd::EnumerateChildWindow(bool(*callback)(FrWnd*, void*), void* param) {
+void FrWnd::EnumerateChildWindow(bool (*callback)(FrWnd*, void*), void* param) {
 	for (auto& i : this->m_childList) {
 		if (!callback(i, param)) {
 			break;
@@ -577,8 +570,9 @@ void FrWnd::OnDisplay(bool checkTopmost, bool drawChild, bool drawOneself) {
 	} else {
 		if (drawOneself) {
 			this->OnDraw();
-		} if (drawChild) {
-			for (auto *i : this->m_childList) {
+		}
+		if (drawChild) {
+			for (auto* i : this->m_childList) {
 				if (this->m_nFlags.GetFlag(FWF_FADING)) {
 					i->m_wndAlpha = this->m_wndAlpha;
 				}
@@ -595,7 +589,7 @@ void FrWnd::SetTopmost(bool topmost) {
 	} else {
 		this->m_dwStyle.Disable(FWS_TOPMOST);
 		this->m_pWndManager->DeleteTopmostWindow(this);
-		for (auto *i : this->m_childList) {
+		for (auto* i : this->m_childList) {
 			i->SetTopmost(false);
 		}
 	}
@@ -603,7 +597,7 @@ void FrWnd::SetTopmost(bool topmost) {
 
 void FrWnd::ResetViewFocus(FrWnd* pWndStop) {
 	if (this != pWndStop) {
-		for (auto *i : this->m_childList) {
+		for (auto* i : this->m_childList) {
 			i->ResetViewFocus(pWndStop);
 			i->m_pWndManager->ReleaseCapture(i);
 		}
@@ -612,7 +606,7 @@ void FrWnd::ResetViewFocus(FrWnd* pWndStop) {
 }
 
 FrWnd* FrWnd::FindViewFocused(bool enabled_visible) {
-	for (auto *i : this->m_childList) {
+	for (auto* i : this->m_childList) {
 		if (!i->m_dwStyle.GetFlag(FWS_TOPMOST)) {
 			if (i->m_nFlags.GetFlag(FWF_VIEWFOCUS) && (!enabled_visible || !i->m_dwStyle.GetFlag(FWS_DISABLED) && i->m_dwStyle.GetFlag(FWS_VISIBLE))) {
 				return i;
@@ -630,7 +624,7 @@ void FrWnd::MoveWindow(const WPoint& pos) {
 	step.y = pos.y - this->m_rect.y;
 	this->m_rect.x = pos.x;
 	this->m_rect.y = pos.y;
-	for (auto *i : this->m_childList) {
+	for (auto* i : this->m_childList) {
 		// Skip forms.
 		if (dynamic_cast<FrForm*>(i)) {
 			continue;
@@ -649,14 +643,14 @@ void FrWnd::SetRect(const WRect& rect) {
 	this->m_rect.w = rect.w;
 	this->m_rect.h = rect.h;
 	this->OnResize();
-	for (auto *i : this->m_childList) {
+	for (auto* i : this->m_childList) {
 		i->OnResize();
 	}
 }
 
 void FrWnd::SetAlpha2ToChild(float a) {
 	this->m_wndAlpha2 = a;
-	for (auto *i : this->m_childList) {
+	for (auto* i : this->m_childList) {
 		i->SetAlpha2ToChild(a);
 	}
 }
@@ -693,7 +687,7 @@ bool FrWnd::Close(bool bFade) {
 	}
 	this->m_dwStyle.Disable(FWS_TOPMOST);
 	this->m_pWndManager->DeleteTopmostWindow(this);
-	for (auto *i : this->m_childList) {
+	for (auto* i : this->m_childList) {
 		i->SetTopmost(false);
 	}
 	return true;
@@ -705,7 +699,7 @@ void FrWnd::SetClientRect(const WRect& rect) {
 		for (FrWnd* i = this->m_pParentWnd; i != nullptr; i = i->m_pParentWnd) {
 			r.x += i->m_rect.x;
 			r.y += i->m_rect.y;
-		};
+		}
 		this->SetRect(r);
 	} else {
 		this->SetRect(rect);
@@ -739,7 +733,7 @@ void FrWnd::DoFadeProcess(float deltaTime, bool bExtend) {
 				}
 			}
 		}
-		for (auto *i : this->m_childList) {
+		for (auto* i : this->m_childList) {
 			i->SetAlpha2ToChild(this->m_wndAlpha2);
 		}
 	} else {
@@ -770,7 +764,8 @@ void FrWnd::DoFadeProcess(float deltaTime, bool bExtend) {
 	}
 }
 
-bool FrWnd::Create(const char* lpszWindowText, const char* lpszWindowName, FrWndManager* pManager, unsigned int dwStyle, const WRect& rect, FrWnd* pParentWnd) {
+bool FrWnd::Create(const char* lpszWindowText, const char* lpszWindowName, FrWndManager* pManager, unsigned int dwStyle,
+                   const WRect& rect, FrWnd* pParentWnd) {
 	this->SetWinText(lpszWindowText);
 	this->SetWindowName(lpszWindowName);
 	this->PreCreateWindow(pManager, dwStyle, rect, pParentWnd);

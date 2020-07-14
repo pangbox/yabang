@@ -49,7 +49,7 @@ bool WOverlay::Load(const char* filename, unsigned int flag) {
 	if (this->m_texHandle) {
 		this->m_resrcMng->Release(this->m_texHandle);
 	}
-	this->m_texHandle = this->m_resrcMng->LoadTexture(filename, flag | 0x80000, 0, 0);
+	this->m_texHandle = this->m_resrcMng->LoadTexture(filename, flag | 0x80000, 0, nullptr);
 	if (this->m_texHandle) {
 		this->m_texWidth = this->m_resrcMng->GetTextureWidth(this->m_texHandle);
 		this->m_texHeight = this->m_resrcMng->GetTextureHeight(this->m_texHandle);
@@ -66,7 +66,7 @@ bool WOverlay::Load(const char* filename, Bitmap* bitmap, unsigned int flag) {
 	if (this->m_texHandle) {
 		this->m_resrcMng->Release(this->m_texHandle);
 	}
-	this->m_texHandle = this->m_resrcMng->UploadTexture(filename, bitmap, flag | 0x80000, 0);
+	this->m_texHandle = this->m_resrcMng->UploadTexture(filename, bitmap, flag | 0x80000, nullptr);
 	if (this->m_texHandle) {
 		this->m_texWidth = this->m_resrcMng->GetTextureWidth(this->m_texHandle);
 		this->m_texHeight = this->m_resrcMng->GetTextureHeight(this->m_texHandle);
@@ -98,8 +98,8 @@ void WOverlay::DrawTexture(WView* view, int texHandle, const WRect& src, const W
 		m_vtx[i].diffuse = diffuse;
 		m_vtx[i].tu = (i & 1) != 0 ? src.w + src.x : src.x;
 		m_vtx[i].tv = (i & 2) != 0 ? src.h + src.y : src.y;
-	};
-	view->DrawPolygonFan(m_vl, type | (texHandle & 0x7FF) | 0x20300000, 0, 1);
+	}
+	view->DrawPolygonFan(m_vl, type | (texHandle & 0x7FF) | 0x20300000, 0, true);
 }
 
 int WOverlay::GetSection(WtVertex* out, float snapang, float ang) const {
@@ -246,7 +246,7 @@ void WOverlay::DrawBox(WView* view, const WRect& rect, int type, unsigned int di
 			m_vtx[i].tv = (i & 2) != 0 ? 0 : 1.0f;
 		}
 	}
-	view->DrawPolygonFan(m_vl, type | 0x20300000, 0, 1);
+	view->DrawPolygonFan(m_vl, type | 0x20300000, 0, true);
 }
 
 void WOverlay::DrawRainbowBox(WView* view, const WRect& rect, unsigned int* aDiffuse, int type, float depth) {
@@ -276,7 +276,7 @@ void WOverlay::DrawRainbowBox(WView* view, const WRect& rect, unsigned int* aDif
 			m_vtx[i].tv = (i & 2) != 0 ? 0.0f : 1.0f;
 		}
 	}
-	view->DrawPolygonFan(m_vl, type | 0x20300000, 0, 1);
+	view->DrawPolygonFan(m_vl, type | 0x20300000, 0, true);
 }
 
 void WOverlay::DrawLineBox(WView* view, const WRect& rect, int type, unsigned int diffuse) {
@@ -1135,5 +1135,6 @@ void WOverlay::RenderWithAxis(WView* view, const WRect& src, const WRect& dest, 
 	rect.w = dest.w;
 	rect.h = dest.h;
 
-	this->DrawTextureWithAxis(view, this->m_texHandle, convSrc, ConvertRect(view, rect, this->m_coordMode), axisX, axisY, angle, type, diffuse, flipFlag);
+	this->DrawTextureWithAxis(view, this->m_texHandle, convSrc, ConvertRect(view, rect, this->m_coordMode), axisX,
+	                          axisY, angle, type, diffuse, flipFlag);
 }

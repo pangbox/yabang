@@ -49,4 +49,3 @@ private:
 	WtVertex vtx[4]{};
 	WtVertex* vl[5]{};
 };
-

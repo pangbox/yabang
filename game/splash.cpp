@@ -64,7 +64,7 @@ int CSplash::CloseSplash() {
 	}
 	DestroyWindow(this->m_hWnd);
 	this->m_hWnd = nullptr;
-	UnregisterClass(this->m_className, GetModuleHandleA(0));
+	UnregisterClass(this->m_className, GetModuleHandleA(nullptr));
 	return 1;
 }
 

@@ -9,21 +9,20 @@ bool __fastcall FreshDispatchMsg(FrCmdTarget* pTarget, int var1, sFRESH_ENTRY* p
 		pHandler->eFt = pEntry->eFt;
 		pHandler->pFresh = pTarget;
 		return true;
-	} else {
-		switch (pEntry->eFt) {
-			case FrFuncVV:
-				(pTarget->*pEntry->pFn.vv)();
-				return true;
-			case FrFuncBV:
-				return (pTarget->*pEntry->pFn.bv)();
-			case FrFuncBI:
-				return (pTarget->*pEntry->pFn.bi)(var1);
-			case FrFuncVI:
-				(pTarget->*pEntry->pFn.vi)(var1);
-				return true;
-			default:
-				return true;
-		}
+	}
+	switch (pEntry->eFt) {
+		case FrFuncVV:
+			(pTarget->*pEntry->pFn.vv)();
+			return true;
+		case FrFuncBV:
+			return (pTarget->*pEntry->pFn.bv)();
+		case FrFuncBI:
+			return (pTarget->*pEntry->pFn.bi)(var1);
+		case FrFuncVI:
+			(pTarget->*pEntry->pFn.vi)(var1);
+			return true;
+		default:
+			return true;
 	}
 }
 

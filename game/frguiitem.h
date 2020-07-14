@@ -59,8 +59,7 @@ public:
 	Rectangle_<short> m_rect;
 };
 
-struct sFrCreateSub
-{
+struct sFrCreateSub {
 	FrGuiItem* pItem;
 	FrWndManager* pManager;
 	FrWnd* pParent;

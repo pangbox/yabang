@@ -10,7 +10,7 @@
 constexpr TCHAR g_className[] = TEXT("PangYa");
 HWND g_hWnd = nullptr;
 bool g_showTime = false;
-WMemFillBlock g_mem{ 0x4800, 5 };
+WMemFillBlock g_mem{0x4800, 5};
 
 void ShowSplash(bool bShow) {
 	if (bShow) {

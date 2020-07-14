@@ -53,7 +53,8 @@ public:
 	virtual bool Close(bool bFade);
 	void SetClientRect(const WRect& rect);
 	void DoFadeProcess(float deltaTime, bool bExtend);
-	virtual bool Create(const char* lpszWindowText, const char* lpszWindowName, FrWndManager* pManager, unsigned int dwStyle, const WRect& rect, FrWnd* pParentWnd);
+	virtual bool Create(const char* lpszWindowText, const char* lpszWindowName, FrWndManager* pManager,
+	                    unsigned int dwStyle, const WRect& rect, FrWnd* pParentWnd);
 	virtual void PreCreateWindow(FrWndManager* pManager, unsigned dwStyle, const WRect& rect, FrWnd* pParentWnd);
 	virtual void MoveWindow(const WPoint& pos);
 	void SetRect(const WRect& rect);
