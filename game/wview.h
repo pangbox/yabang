@@ -3,7 +3,10 @@
 #include "wresource.h"
 #include "wscene.h"
 
+class WView;
 struct WtVertex;
+
+extern WView* g_view;
 
 class WView : public WResource {
 public:
