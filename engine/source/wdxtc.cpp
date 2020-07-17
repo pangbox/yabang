@@ -29,7 +29,7 @@ uint8_t* WDXTC::GetDecompData() const {
 	return this->m_pDecompData;
 }
 
-void WDXTC::GetColorFromBlock(Color32 *aClr32, const DxtcColorBlock *pBlock) {
+void WDXTC::GetColorFromBlock(Color32* aClr32, const DxtcColorBlock* pBlock) {
 	aClr32[0].a = -1;
 	aClr32[0].r = 8 * (pBlock->color0 >> 11);
 	aClr32[0].g = 4 * (pBlock->color0 >> 5);
@@ -62,38 +62,38 @@ void WDXTC::GetColorFromBlock(Color32 *aClr32, const DxtcColorBlock *pBlock) {
 	}
 }
 
-void WDXTC::DecodeColor(Color32 *pDecomp, const DxtcColorBlock *pBlock, Color32 *aClr32) const {
+void WDXTC::DecodeColor(Color32* pDecomp, const DxtcColorBlock* pBlock, Color32* aClr32) const {
 	BYTE uiMasks[4] = {0x03, 0x0C, 0x30, 0xC0};
-	Color32 *pOut = pDecomp;
-	const uint8_t *pIn = pBlock->row;
+	Color32* pOut = pDecomp;
+	const uint8_t* pIn = pBlock->row;
 
 	for (int i = 0; i < 4; i++, pIn++) {
 		for (int shift = 0, mask = 0; shift < 8; shift += 2, mask++, pOut++) {
 			switch ((*pIn & uiMasks[mask]) >> shift) {
-			case 0:
-				pOut->clr = aClr32[0].clr;
-				break;
-			case 1:
-				pOut->clr = aClr32[1].clr;
-				break;
-			case 2:
-				pOut->clr = aClr32[2].clr;
-				break;
-			case 3:
-				pOut->clr = aClr32[3].clr;
-				break;
-			default:
-				break;
+				case 0:
+					pOut->clr = aClr32[0].clr;
+					break;
+				case 1:
+					pOut->clr = aClr32[1].clr;
+					break;
+				case 2:
+					pOut->clr = aClr32[2].clr;
+					break;
+				case 3:
+					pOut->clr = aClr32[3].clr;
+					break;
+				default:
+					break;
 			}
 		}
 		pOut += this->m_ddsd2.dwWidth - 4;
 	}
 }
 
-void WDXTC::DecodeExpAlphaBlock(Color32 *pDecomp, const DxtcExpAlphaBlock *pAlpha) const {
+void WDXTC::DecodeExpAlphaBlock(Color32* pDecomp, const DxtcExpAlphaBlock* pAlpha) const {
 
-	Color32 *pOut = pDecomp;
-	const DxtcExpAlphaBlock *pIn = pAlpha;
+	Color32* pOut = pDecomp;
+	const DxtcExpAlphaBlock* pIn = pAlpha;
 
 	for (unsigned short i : pIn->row) {
 		WORD usAlpha = i >> 8;
@@ -105,12 +105,12 @@ void WDXTC::DecodeExpAlphaBlock(Color32 *pDecomp, const DxtcExpAlphaBlock *pAlph
 	}
 }
 
-void WDXTC::DecodeLinearAlphaBlock3Bit(Color32 *pDecomp, const DxtcLinearAlphaBlock3Bit *pAlpha) const {
+void WDXTC::DecodeLinearAlphaBlock3Bit(Color32* pDecomp, const DxtcLinearAlphaBlock3Bit* pAlpha) const {
 	Color32 tmp[16];
 	WORD gAlphas[8];
 	BYTE gBits[16];
 
-	Color32 *pOut = pDecomp;
+	Color32* pOut = pDecomp;
 	WORD a1 = pAlpha->a1;
 	WORD a0 = pAlpha->a0;
 
@@ -126,14 +126,18 @@ void WDXTC::DecodeLinearAlphaBlock3Bit(Color32 *pDecomp, const DxtcLinearAlphaBl
 		gAlphas[7] = 255;
 	} else {
 		gAlphas[2] = ((a1 + 6 * a0 + (a1 + 6 * a0) * 3 / 7) >> 2) + ((a1 + 6 * a0 + (a1 + 6 * a0) * 3 / 7) >> 31);
-		gAlphas[3] = ((5 * a0 + 2 * a1 + (5 * a0 + 2 * a1) * 3 / 7) >> 2) + ((5 * a0 + 2 * a1 + (5 * a0 + 2 * a1) * 3 / 7) >> 31);
-		gAlphas[4] = ((3 * a1 + 4 * a0 + (3 * a1 + 4 * a0) * 3 / 7) >> 2) + ((3 * a1 + 4 * a0 + (3 * a1 + 4 * a0) * 3 / 7) >> 31);
-		gAlphas[5] = ((3 * a0 + 4 * a1 + (3 * a0 + 4 * a1) * 3 / 7) >> 2) + ((3 * a0 + 4 * a1 + (3 * a0 + 4 * a1) * 3 / 7) >> 31);
-		gAlphas[6] = ((5 * a1 + 2 * a0 + (5 * a1 + 2 * a0) * 3 / 7) >> 2) + ((5 * a1 + 2 * a0 + (5 * a1 + 2 * a0) * 3 / 7) >> 31);
+		gAlphas[3] = ((5 * a0 + 2 * a1 + (5 * a0 + 2 * a1) * 3 / 7) >> 2) + ((5 * a0 + 2 * a1 + (5 * a0 + 2 * a1) * 3 /
+			7) >> 31);
+		gAlphas[4] = ((3 * a1 + 4 * a0 + (3 * a1 + 4 * a0) * 3 / 7) >> 2) + ((3 * a1 + 4 * a0 + (3 * a1 + 4 * a0) * 3 /
+			7) >> 31);
+		gAlphas[5] = ((3 * a0 + 4 * a1 + (3 * a0 + 4 * a1) * 3 / 7) >> 2) + ((3 * a0 + 4 * a1 + (3 * a0 + 4 * a1) * 3 /
+			7) >> 31);
+		gAlphas[6] = ((5 * a1 + 2 * a0 + (5 * a1 + 2 * a0) * 3 / 7) >> 2) + ((5 * a1 + 2 * a0 + (5 * a1 + 2 * a0) * 3 /
+			7) >> 31);
 		gAlphas[7] = (a0 + 6 * a1) / 7;
 	}
 
-	DWORD stuff = *reinterpret_cast<const DWORD *>(&pAlpha->stuff[0]);
+	DWORD stuff = *reinterpret_cast<const DWORD*>(&pAlpha->stuff[0]);
 	gBits[0] = BYTE(stuff >> 0 & 7);
 	gBits[1] = BYTE(stuff >> 3 & 7);
 	gBits[2] = BYTE(stuff >> 6 & 7);
@@ -169,29 +173,30 @@ void WDXTC::DecodeLinearAlphaBlock3Bit(Color32 *pDecomp, const DxtcLinearAlphaBl
 	}
 }
 
-void WDXTC::DecompressBlockDxt1(uint8_t* pDecomp, const DxtcColorBlock *pBlock) const {
+void WDXTC::DecompressBlockDxt1(uint8_t* pDecomp, const DxtcColorBlock* pBlock) const {
 	Color32 aClr[4];
 	this->GetColorFromBlock(aClr, pBlock);
 	this->DecodeColor(reinterpret_cast<Color32*>(pDecomp), pBlock, aClr);
 }
 
-void WDXTC::DecompressBlockDxt3(uint8_t* pDecomp, const DxtcColorBlock *pBlock) const {
+void WDXTC::DecompressBlockDxt3(uint8_t* pDecomp, const DxtcColorBlock* pBlock) const {
 	Color32 aClr[4];
 	this->GetColorFromBlock(aClr, pBlock + 1);
 	this->DecodeColor(reinterpret_cast<Color32*>(pDecomp), pBlock + 1, aClr);
 	this->DecodeExpAlphaBlock(reinterpret_cast<Color32*>(pDecomp), reinterpret_cast<const DxtcExpAlphaBlock*>(pBlock));
 }
 
-void WDXTC::DecompressBlockDxt5(uint8_t* pDecomp, const DxtcColorBlock *pBlock) const {
+void WDXTC::DecompressBlockDxt5(uint8_t* pDecomp, const DxtcColorBlock* pBlock) const {
 	Color32 aClr[4];
 	this->GetColorFromBlock(aClr, pBlock + 1);
 	this->DecodeColor(reinterpret_cast<Color32*>(pDecomp), pBlock + 1, aClr);
-	this->DecodeLinearAlphaBlock3Bit(reinterpret_cast<Color32*>(pDecomp), reinterpret_cast<const DxtcLinearAlphaBlock3Bit*>(pBlock));
+	this->DecodeLinearAlphaBlock3Bit(reinterpret_cast<Color32*>(pDecomp),
+	                                 reinterpret_cast<const DxtcLinearAlphaBlock3Bit*>(pBlock));
 }
 
-void WDXTC::SaveAsBmp(char *filename) const {
-	FILE *pfRgb;
-	FILE *pfAlpha;
+void WDXTC::SaveAsBmp(char* filename) const {
+	FILE* pfRgb;
+	FILE* pfAlpha;
 	RGBQUAD bgr;
 	RGBQUAD alpha;
 	char strBuf[64];
@@ -251,8 +256,8 @@ void WDXTC::DecompressDxt1() const {
 	int nXBlocks = this->m_ddsd2.dwWidth >> 2;
 	int nYBlocks = this->m_ddsd2.dwHeight >> 2;
 	for (int y = 0; y < nYBlocks; y++) {
-		const auto*pIn = reinterpret_cast<const DxtcColorBlock*>(&this->m_pCompData[8 * nXBlocks * y]);
-		auto*pOut = reinterpret_cast<Color32*>(&this->m_pDecompData[16 * y * this->m_ddsd2.dwWidth]);
+		const auto* pIn = reinterpret_cast<const DxtcColorBlock*>(&this->m_pCompData[8 * nXBlocks * y]);
+		auto* pOut = reinterpret_cast<Color32*>(&this->m_pDecompData[16 * y * this->m_ddsd2.dwWidth]);
 		for (int x = 0; x < nXBlocks; x++) {
 			Color32 aClr32{};
 			this->GetColorFromBlock(&aClr32, pIn);
@@ -269,8 +274,8 @@ void WDXTC::DecompressDxt3() const {
 
 	for (int y = 0; y < nYBlocks; y++) {
 		auto* pIn = static_cast<uint8_t*>(&this->m_pCompData[16 * y * nXBlocks]);
-		auto*pOut = reinterpret_cast<Color32*>(&this->m_pDecompData[16 * y * this->m_ddsd2.dwWidth]);
-		auto*pBlock = reinterpret_cast<DxtcColorBlock*>(pIn + 8);
+		auto* pOut = reinterpret_cast<Color32*>(&this->m_pDecompData[16 * y * this->m_ddsd2.dwWidth]);
+		auto* pBlock = reinterpret_cast<DxtcColorBlock*>(pIn + 8);
 		for (int x = 0; x < nXBlocks; x++) {
 			Color32 aClr32{};
 			this->GetColorFromBlock(&aClr32, pBlock);
@@ -288,9 +293,9 @@ void WDXTC::DecompressDxt5() const {
 	int nYBlocks = this->m_ddsd2.dwHeight >> 2;
 
 	for (int y = 0; y < nYBlocks; y++) {
-		auto *pIn = &this->m_pCompData[16 * y * nXBlocks];
-		auto *pOut = reinterpret_cast<Color32*>(&this->m_pDecompData[16 * y * this->m_ddsd2.dwWidth]);
-		auto *pBlock = reinterpret_cast<DxtcColorBlock*>(pIn + 8);
+		auto* pIn = &this->m_pCompData[16 * y * nXBlocks];
+		auto* pOut = reinterpret_cast<Color32*>(&this->m_pDecompData[16 * y * this->m_ddsd2.dwWidth]);
+		auto* pBlock = reinterpret_cast<DxtcColorBlock*>(pIn + 8);
 		for (int x = 0; x < nXBlocks; x++) {
 			Color32 aClr32{};
 			this->GetColorFromBlock(&aClr32, pBlock);
@@ -309,8 +314,7 @@ bool WDXTC::DecompressDxtc() {
 		this->m_pDecompData = nullptr;
 	}
 	this->m_pDecompData = new BYTE[4 * this->m_ddsd2.dwHeight * this->m_ddsd2.dwWidth];
-	switch (this->m_ddsd2.ddpfPixelFormat.dwFourCC)
-	{
+	switch (this->m_ddsd2.ddpfPixelFormat.dwFourCC) {
 		case g_dxt1FourCc:
 			this->DecompressDxt1();
 			return true;

@@ -55,7 +55,7 @@ bool TexCacheManager::Init(int nMaxCache, int w, int h, int bw, int bh) {
 bool TexCacheManager::CreateTexture(unsigned int texIdx) const {
 	Bitmap temp{int32_t(this->m_texWidth), int32_t(this->m_texHeight), 32};
 	memset(temp.m_vram, 0, temp.m_pitch * temp.m_bi->bmiHeader.biHeight);
-	this->m_aTexture[texIdx] = g_resourceManager->UploadTexture(nullptr, &temp, 0x80000000, 0);
+	this->m_aTexture[texIdx] = g_resourceManager->UploadTexture(nullptr, &temp, 0x80000000, nullptr);
 	return this->m_aTexture[texIdx] > 0;
 }
 

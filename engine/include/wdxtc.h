@@ -5,6 +5,7 @@
 struct Color32 {
 	union {
 		uint32_t clr;
+
 		struct {
 			uint8_t b, g, r, a;
 		};
@@ -42,18 +43,18 @@ public:
 	bool Load(uint8_t* pData, int iSize);
 
 private:
-	void DecodeColor(Color32 *pDecomp, const DxtcColorBlock *pBlock, Color32 *aClr32) const;
-	void DecodeExpAlphaBlock(Color32 *pDecomp, const DxtcExpAlphaBlock *pAlpha) const;
-	void DecodeLinearAlphaBlock3Bit(Color32 *pDecomp, const DxtcLinearAlphaBlock3Bit *pAlpha) const;
-	void DecompressBlockDxt1(uint8_t* pDecomp, const DxtcColorBlock *pBlock) const;
-	void DecompressBlockDxt3(uint8_t* pDecomp, const DxtcColorBlock *pBlock) const;
-	void DecompressBlockDxt5(uint8_t* pDecomp, const DxtcColorBlock *pBlock) const;
+	void DecodeColor(Color32* pDecomp, const DxtcColorBlock* pBlock, Color32* aClr32) const;
+	void DecodeExpAlphaBlock(Color32* pDecomp, const DxtcExpAlphaBlock* pAlpha) const;
+	void DecodeLinearAlphaBlock3Bit(Color32* pDecomp, const DxtcLinearAlphaBlock3Bit* pAlpha) const;
+	void DecompressBlockDxt1(uint8_t* pDecomp, const DxtcColorBlock* pBlock) const;
+	void DecompressBlockDxt3(uint8_t* pDecomp, const DxtcColorBlock* pBlock) const;
+	void DecompressBlockDxt5(uint8_t* pDecomp, const DxtcColorBlock* pBlock) const;
 	bool DecompressDxtc();
 	void DecompressDxt1() const;
 	void DecompressDxt3() const;
 	void DecompressDxt5() const;
-	static void GetColorFromBlock(Color32 *aClr32, const DxtcColorBlock *pBlock);
-	void SaveAsBmp(char *filename) const;
+	static void GetColorFromBlock(Color32* aClr32, const DxtcColorBlock* pBlock);
+	void SaveAsBmp(char* filename) const;
 
 	DDSURFACEDESC2 m_ddsd2;
 	uint8_t* m_pCompData;

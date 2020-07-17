@@ -35,12 +35,13 @@ std::string_view ScanPangYaVersion() {
 	const auto* memEnd = memBegin;
 
 	// Find length of contiguous region.
-	for (; VirtualQuery(memEnd, &memoryRegion, sizeof memoryRegion) && memoryRegion.State != MEM_FREE; memEnd += memoryRegion.RegionSize) {}
+	for (; VirtualQuery(memEnd, &memoryRegion, sizeof memoryRegion) && memoryRegion.State != MEM_FREE; memEnd +=
+	       memoryRegion.RegionSize) {}
 
 	// Find stack print pattern.
-	const auto *it = std::search(memBegin, memEnd,
-	                      std::boyer_moore_searcher(
-							  g_stackFormatString.begin(), g_stackFormatString.end()));
+	const auto* it = std::search(memBegin, memEnd,
+	                             std::boyer_moore_searcher(
+		                             g_stackFormatString.begin(), g_stackFormatString.end()));
 	if (it == memEnd) {
 		return "";
 	}
@@ -49,8 +50,8 @@ std::string_view ScanPangYaVersion() {
 	std::string pushStackFormatString = {0x68, 0x00, 0x00, 0x00, 0x00};
 	memcpy(&pushStackFormatString[1], &it, sizeof&it);
 	it = std::search(memBegin, memEnd,
-		std::boyer_moore_searcher(
-			pushStackFormatString.begin(), pushStackFormatString.end()));
+	                 std::boyer_moore_searcher(
+		                 pushStackFormatString.begin(), pushStackFormatString.end()));
 	if (it == memEnd) {
 		return "";
 	}

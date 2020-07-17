@@ -117,17 +117,16 @@ void DirectInputKeyboard::ClearBuffer() {
 
 void DirectInputKeyboard::FlushBuffer(DWORD timeStamp) {
 	this->Reset();
-	for (; this->m_passCur < this->m_bufCur; ++this->m_passCur)
-	{
+	for (; this->m_passCur < this->m_bufCur; ++this->m_passCur) {
 		if (timeStamp < this->m_keyBuf[this->m_passCur & 0xFF].dwTimeStamp) {
 			break;
 		}
-		DIDEVICEOBJECTDATA &buf = this->m_keyBuf[this->m_passCur & 0xFF];
+		DIDEVICEOBJECTDATA& buf = this->m_keyBuf[this->m_passCur & 0xFF];
 		int shiftedScanCode =
-			this->m_keyState[DIK_LSHIFT] || this->m_keyState[DIK_RSHIFT] ?
-			DirectInputKeyboard::m_scan2AsciiWithShift[buf.dwOfs] :
-			DirectInputKeyboard::m_scan2AsciiWithoutShift[buf.dwOfs];
-		if (shiftedScanCode && this->m_keyState[DirectInputKeyboard::m_ascii2Scan[shiftedScanCode]]) {
+			this->m_keyState[DIK_LSHIFT] || this->m_keyState[DIK_RSHIFT]
+			? m_scan2AsciiWithShift[buf.dwOfs]
+			: m_scan2AsciiWithoutShift[buf.dwOfs];
+		if (shiftedScanCode && this->m_keyState[m_ascii2Scan[shiftedScanCode]]) {
 			this->m_asciiBuf[this->m_asciiPos++ & 0xFF] = shiftedScanCode;
 			this->m_timeBuf[shiftedScanCode] = buf.dwTimeStamp;
 		}
@@ -146,29 +145,29 @@ int DirectInputKeyboard::GetState(int sort, int n) {
 	int asciiCur;
 	int asciiPos;
 
-	switch(sort) {
-	case 2:
-		if (n == -1 || this->m_keyState[DirectInputKeyboard::m_ascii2Scan[n]]) {
-			return 1;
-		}
-		return 0;
-	case 3:
-		if (n == -1) {
-			return 1;
-		}
-		asciiCur = this->m_asciiCur;
-		asciiPos = this->m_asciiPos;
-		if (asciiCur >= asciiPos) {
+	switch (sort) {
+		case 2:
+			if (n == -1 || this->m_keyState[m_ascii2Scan[n]]) {
+				return 1;
+			}
 			return 0;
-		}
-		while (this->m_asciiBuf[asciiCur] != n) {
-			if (++asciiCur >= asciiPos) {
+		case 3:
+			if (n == -1) {
+				return 1;
+			}
+			asciiCur = this->m_asciiCur;
+			asciiPos = this->m_asciiPos;
+			if (asciiCur >= asciiPos) {
 				return 0;
 			}
-		}
-		return 1;
-	default:
-		return 0;
+			while (this->m_asciiBuf[asciiCur] != n) {
+				if (++asciiCur >= asciiPos) {
+					return 0;
+				}
+			}
+			return 1;
+		default:
+			return 0;
 	}
 }
 
@@ -188,7 +187,7 @@ DirectInputKeyboard::~DirectInputKeyboard() {
 	}
 }
 
-WProc *DirectInputKeyboard::ExternProc() {
+WProc* DirectInputKeyboard::ExternProc() {
 	return this;
 }
 
@@ -279,7 +278,7 @@ void DirectInputKeyboard::Update(unsigned long timeStamp) {
 	}
 }
 
-DirectInputKeyboard::DirectInputKeyboard(IDirectInput8A *di, HWND hWnd) {
+DirectInputKeyboard::DirectInputKeyboard(IDirectInput8A* di, HWND hWnd) {
 	memset(this->m_keyState, 0, sizeof this->m_keyState);
 	this->m_diKey = nullptr;
 	this->m_diBackup = di;

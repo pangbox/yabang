@@ -27,7 +27,8 @@ public:
 	int XCreateIndexBuffer_(int numIndices, uint32_t dwUsage) override;
 	void XDrawIndexedTriangles(const WxViewState& viewState, const WxBatchState& batchState) override;
 	void DrawPolygonFan(WtVertex** p, int iType, int iNum, int iType2, uint32_t dwVertexTypeDesc) override;
-	void DrawIndexedTriangles(WtVertex* p, int pNum, uint16_t* fList, int fNum, uint32_t iType, uint32_t iType2) override;
+	void DrawIndexedTriangles(WtVertex* p, int pNum, uint16_t* fList, int fNum, uint32_t iType,
+	                          uint32_t iType2) override;
 	WDeviceState GetDeviceState() override;
 	int GetBackBufferBpp() const override;
 	int GetBufferingMeshNum() const override;

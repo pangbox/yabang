@@ -7,10 +7,10 @@ class WProcManager {
 public:
 	struct WHandle {
 		HWND hWnd;
-		WProc *proc;
+		WProc* proc;
 	};
 
-	void DelProc(WProc *proc)  {
+	void DelProc(WProc* proc) {
 		int n = this->m_procNum;
 		if (n <= 0) {
 			return;
@@ -40,7 +40,8 @@ public:
 	WProc() {
 		this->m_include = nullptr;
 	}
-	virtual ~WProc()  {
+
+	virtual ~WProc() {
 		if (this->m_include) {
 			this->m_include->DelProc(this);
 		}
@@ -49,6 +50,5 @@ public:
 	virtual LRESULT WinProc(UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 
 private:
-	WProcManager *m_include;
+	WProcManager* m_include;
 };
-

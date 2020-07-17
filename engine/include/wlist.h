@@ -88,7 +88,7 @@ public:
 		int p = (idx - n) >> (m + 2);
 		this->m_mask[m][p >> 5] &= ~(1 << (p & 31));
 	}
-	
+
 private:
 	uint8_t* m_mem[6]{};
 	uint32_t* m_mask[6]{};
@@ -143,7 +143,7 @@ public:
 		return result;
 	}
 
-	void AddItem(T const &item, const char *keycode, bool alloc) {
+	void AddItem(T const& item, const char* keycode, bool alloc) {
 		ListInfo* newItem = Alloc();
 		newItem->item = item;
 		newItem->alloc = alloc;
@@ -151,7 +151,7 @@ public:
 		if (alloc) {
 			newItem->keycode = _strdup(keycode);
 		} else {
-			newItem->keycode = const_cast<char *>(keycode);
+			newItem->keycode = const_cast<char*>(keycode);
 		}
 
 		if (keycode) {
@@ -161,11 +161,11 @@ public:
 		this->m_list = Link(this->m_list, newItem);
 	}
 
-	void operator+=(T const &item) {
+	void operator+=(T const& item) {
 		this->AddItem(item, nullptr, false);
 	}
 
-	T Find(const char *name) {
+	T Find(const char* name) {
 		if (!name) {
 			return 0;
 		}
@@ -178,13 +178,13 @@ public:
 		}
 		while (strcmp(it->keycode, name) != 0) {
 			it = it->hash;
-			if ( !it ) {
+			if (!it) {
 				return 0;
 			}
 		}
 		return it->item;
 	}
-	
+
 	void DelItem(T const& item) {
 		ListInfo* i = this->m_list;
 		if (this->m_list) {
@@ -222,8 +222,41 @@ public:
 		}
 	}
 
+	void Reset() {
+		if (this->m_list) {
+			if (this->m_idle) {
+				this->m_list->prev->next = this->m_idle->next;
+				this->m_idle->next->prev = this->m_list->prev;
+				this->m_idle->next = this->m_list;
+				this->m_list->prev = this->m_idle;
+				this->m_list = 0;
+			} else {
+				ListInfo* node;
+				do {
+					this->m_list->next->prev = this->m_list->prev;
+					this->m_list->prev->next = this->m_list->next;
+					node = this->m_list != this->m_list->next ? this->m_list->next : nullptr;
+					if (this->m_idle) {
+						this->m_list->next = this->m_idle;
+						this->m_list->prev = this->m_idle->prev;
+						this->m_idle->prev = this->m_list;
+						this->m_list->prev->next = this->m_list;
+					} else {
+						this->m_list->prev = this->m_list;
+						this->m_list->next = this->m_list;
+						this->m_idle = this->m_list;
+					}
+					this->m_list = node;
+				} while (node);
+			}
+		}
+		for (int i = 0; i < this->m_hashNum; ++i) {
+			this->m_hashList[i] = 0;
+		}
+	}
+
 private:
-	int Hashcode(const char *ptr) {
+	int Hashcode(const char* ptr) {
 		int len = strlen(ptr);
 		if (len <= 0) {
 			len = 0;
@@ -235,15 +268,15 @@ private:
 
 	struct ListInfo {
 		T item;
-		char *keycode;
+		char* keycode;
 		bool alloc;
-		ListInfo *prev;
-		ListInfo *next;
-		ListInfo *hash;
+		ListInfo* prev;
+		ListInfo* next;
+		ListInfo* hash;
 	};
 
-	ListInfo *Alloc() {
-		ListInfo *item;
+	ListInfo* Alloc() {
+		ListInfo* item;
 
 		if (!this->m_idle) {
 			item = new ListInfo[this->m_blkLen];
@@ -283,7 +316,7 @@ private:
 		return item;
 	}
 
-	void AddHash(int hashcode, ListInfo *node) {
+	void AddHash(int hashcode, ListInfo* node) {
 		node->hash = this->m_hashList[hashcode];
 		this->m_hashList[hashcode] = node;
 	}
@@ -303,24 +336,23 @@ private:
 		}
 	}
 
-	static ListInfo *Link(ListInfo *pivot, ListInfo *node) {
+	static ListInfo* Link(ListInfo* pivot, ListInfo* node) {
 		if (pivot) {
 			node->next = pivot;
 			node->prev = pivot->prev;
 			pivot->prev = node;
 			node->prev->next = node;
 			return pivot;
-		} else {
-			node->prev = node;
-			node->next = node;
-			return node;
 		}
+		node->prev = node;
+		node->next = node;
+		return node;
 	}
 
-	ListInfo *m_list = nullptr;
-	ListInfo *m_surf = nullptr;
-	ListInfo *m_preAlloc = nullptr;
-	ListInfo *m_idle = nullptr;
+	ListInfo* m_list = nullptr;
+	ListInfo* m_surf = nullptr;
+	ListInfo* m_preAlloc = nullptr;
+	ListInfo* m_idle = nullptr;
 	int m_blkLen{};
 	int m_hashMask{};
 	int m_hashNum{};

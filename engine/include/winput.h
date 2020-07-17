@@ -27,9 +27,7 @@ public:
 		this->bUpdated = FALSE;
 	}
 
-	~WInputDev() {
-		return;
-	}
+	~WInputDev() { }
 
 	virtual bool InitDevice(HWND hwnd, bool exclusive) {
 		return false;
@@ -39,13 +37,9 @@ public:
 		this->active = stat;
 	}
 
-	virtual void Reset() {
-		return;
-	}
+	virtual void Reset() { }
 
-	virtual void Update(unsigned long timeStamp) {
-		return;
-	}
+	virtual void Update(unsigned long timeStamp) { }
 
 	virtual int GetState(int sort, int n) {
 		return 0;
@@ -59,13 +53,9 @@ public:
 		return true;
 	}
 
-	virtual void SetAlphaNumericMode() {
-		return;
-	}
+	virtual void SetAlphaNumericMode() { }
 
-	virtual void SetAlphaNumericMode(BOOL alnum) {
-		return;
-	}
+	virtual void SetAlphaNumericMode(BOOL alnum) { }
 
 	virtual BOOL IsUpdated() {
 		return this->bUpdated;
@@ -79,16 +69,12 @@ public:
 		this->dwLastInputTime = timeGetTime();
 	}
 
-	virtual void SetState(int sort, int n) {
-		return;
-	}
+	virtual void SetState(int sort, int n) { }
 
-	virtual void SetOpenStatus(BOOL bOpen) {
-		return;
-	}
+	virtual void SetOpenStatus(BOOL bOpen) { }
 
-	virtual WInputDev *MakeClone(char *modeName, HWND hwnd) {
-		return NULL;
+	virtual WInputDev* MakeClone(char* modeName, HWND hwnd) {
+		return nullptr;
 	}
 
 protected:
@@ -97,4 +83,4 @@ protected:
 	DWORD dwLastInputTime;
 };
 
-void AddInputDevice(WInputDev *inputDev);
+void AddInputDevice(WInputDev* inputDev);

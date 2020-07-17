@@ -21,8 +21,8 @@ struct WxBatchState {
 	WMatrix xmW = {};
 	float xfDepth = std::numeric_limits<float>::max();
 	int xnmTransfs = 0;
-	const WMatrix *const *xpapmW = nullptr;
-	const WMatrix *const *xpapmO = nullptr;
+	const WMatrix* const * xpapmW = nullptr;
+	const WMatrix* const * xpapmO = nullptr;
 };
 
 struct WxViewState {

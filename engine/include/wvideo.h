@@ -29,15 +29,15 @@ enum WFxMacroFlag {
 	WFxMacroNoPixelShader = 1 << 30,
 	WFxMacroParamSharing = 1 << 31,
 	WFxMacroPsExtend =
-		WFxMacroApplySphericalHarmonics |
-		WFxMacroPostProcessingDepthOfField |
-		WFxMacroPostProcessingMotionBlur |
-		WFxMacroOverlay |
-		WFxMacroMrtVelocity,
+	WFxMacroApplySphericalHarmonics |
+	WFxMacroPostProcessingDepthOfField |
+	WFxMacroPostProcessingMotionBlur |
+	WFxMacroOverlay |
+	WFxMacroMrtVelocity,
 	WFxMacroShaderExtend =
-		WFxMacroNoLighting |
-		WFxMacroRimLighting |
-		WFxMacroPsExtend,
+	WFxMacroNoLighting |
+	WFxMacroRimLighting |
+	WFxMacroPsExtend,
 };
 
 enum WTransformStateType : uint32_t {
@@ -349,8 +349,10 @@ struct WtVertex {
 			float y;
 			float z;
 		};
+
 		WVector pos{};
 	};
+
 	float rhw{};
 	unsigned int diffuse{};
 	float tu{};
@@ -375,10 +377,11 @@ public:
 		this->m_mainThreadId = threadId;
 	}
 
-	virtual void DrawPolygonFan(WtVertex **p, int iType, int iNum, int iType2, uint32_t dwVertexTypeDesc) = 0;
+	virtual void DrawPolygonFan(WtVertex** p, int iType, int iNum, int iType2, uint32_t dwVertexTypeDesc) = 0;
 
-	virtual void DrawIndexedTriangles(WtVertex *p, int pNum, uint16_t* fList, int fNum, uint32_t iType, uint32_t iType2) {
-		static WtVertex *t[4];
+	virtual void DrawIndexedTriangles(WtVertex* p, int pNum, uint16_t* fList, int fNum, uint32_t iType,
+	                                  uint32_t iType2) {
+		static WtVertex* t[4];
 
 		if (fNum > 0) {
 			fNum = (fNum - 1) / 3 + 1;
@@ -393,18 +396,18 @@ public:
 		}
 	}
 
-	virtual void DrawLine(WtVertex **p, int type) = 0;
+	virtual void DrawLine(WtVertex** p, int type) = 0;
 	virtual int Command(WDeviceMessage message, int param1, int param2) = 0;
 	virtual int CreateTexture(LPBITMAPINFO src, int type) = 0;
 	virtual void UpdateTexture(int texHandle, LPBITMAPINFO src, LPVOID data, uint32_t type) = 0;
 	virtual void DestroyTexture(int texHandle) = 0;
-	virtual int UploadCompressedTexture(void *pSrc, unsigned int srcSize, int type) = 0;
-	virtual void UpdateCompressedTexture(int texHandle, void *pSrcData, unsigned int srcDataSize, int type) = 0;
-	virtual void FixTexturePart(int texHandle, const RECT &rc, BITMAPINFO *src, void *data, int type) = 0;
+	virtual int UploadCompressedTexture(void* pSrc, unsigned int srcSize, int type) = 0;
+	virtual void UpdateCompressedTexture(int texHandle, void* pSrcData, unsigned int srcDataSize, int type) = 0;
+	virtual void FixTexturePart(int texHandle, const RECT& rc, BITMAPINFO* src, void* data, int type) = 0;
 	virtual bool IsTextureFilled(int texHandle) = 0;
 	virtual int GetTextureWidth(int hTex) = 0;
 	virtual int GetTextureHeight(int hTex) = 0;
-	virtual void SetRenderTargetSizeInfo(int hTex, const WRenderToTextureSizeInfo &sizeInfo) = 0;
+	virtual void SetRenderTargetSizeInfo(int hTex, const WRenderToTextureSizeInfo& sizeInfo) = 0;
 	virtual bool BeginScene() = 0;
 	virtual void EndScene() = 0;
 	virtual void Paint() = 0;
@@ -422,7 +425,7 @@ public:
 	[[nodiscard]] virtual float GetMonitorSupportFps() const = 0;
 	virtual bool SetFogEnable(bool enable) = 0;
 	virtual void SetFogState(float fogStart, float fogEnd, uint32_t fogColor) = 0;
-	virtual WVideoDev *MakeClone(char *modeName, HWND hWnd, int iTnL) = 0;
+	virtual WVideoDev* MakeClone(char* modeName, HWND hWnd, int iTnL) = 0;
 	virtual bool Reset(bool bWindowed, int iWidth, int iHeight, int iColor, int lWndStyle, int fillMode) = 0;
 
 protected:
@@ -439,34 +442,34 @@ public:
 	virtual int XCreateIndexBuffer_(int numIndices, uint32_t dwUsage) = 0;
 	virtual void XReleaseVertexBuffer(int hVb) = 0;
 	virtual void XReleaseIndexBuffer(int hIb) = 0;
-	virtual char *XLockVertexBuffer(int hVb, unsigned int uiOffset, unsigned int uiSize) = 0;
-	virtual char *XLockIndexBuffer(int hIb, unsigned int uiOffset, unsigned int uiSize) = 0;
+	virtual char* XLockVertexBuffer(int hVb, unsigned int uiOffset, unsigned int uiSize) = 0;
+	virtual char* XLockIndexBuffer(int hIb, unsigned int uiOffset, unsigned int uiSize) = 0;
 	virtual void XUnlockVertexBuffer(int hVb) = 0;
 	virtual void XUnlockIndexBuffer(int hIb) = 0;
-	virtual void XDrawIndexedTriangles(const WxViewState &viewState, const WxBatchState &batchState) = 0;
-	virtual void XSetTransform(WTransformStateType state, const WMatrix4 &matrix) = 0;
-	virtual void XSetPrevViewTransform(const WMatrix4 &matrix) = 0;
-	virtual void SetShaderSource(const char *shaderSrc) = 0;
+	virtual void XDrawIndexedTriangles(const WxViewState& viewState, const WxBatchState& batchState) = 0;
+	virtual void XSetTransform(WTransformStateType state, const WMatrix4& matrix) = 0;
+	virtual void XSetPrevViewTransform(const WMatrix4& matrix) = 0;
+	virtual void SetShaderSource(const char* shaderSrc) = 0;
 	virtual void BeginUsingCustomRenderState() = 0;
 	virtual void SetCustomRenderState(WRenderStateType state, unsigned int value) = 0;
 	virtual void SetCustomTextureStageState(uint32_t stage, WTextureStageStateType type, uint32_t value) = 0;
-	virtual void SetCustomTransform(WTransformStateType state, const WMatrix4 &matrix) = 0;
+	virtual void SetCustomTransform(WTransformStateType state, const WMatrix4& matrix) = 0;
 	virtual void SetCustomTexture(unsigned int stage, int hTex) = 0;
-	virtual void SetCustomClipPlane(uint32_t index, const WPlane &value) = 0;
+	virtual void SetCustomClipPlane(uint32_t index, const WPlane& value) = 0;
 	virtual void SetCustomSamplerState(uint32_t sampler, WSamplerStateType type, uint32_t value) = 0;
 	virtual void SetCustomFxMacro(uint32_t fxMacro) = 0;
 	virtual void SetCustomFxParamInt(WFxParameterType paramType, int value) = 0;
-	virtual void SetCustomFxParamVector2(WFxParameterType paramType, const WVector2D &value) = 0;
-	virtual void SetCustomFxParamVector3(WFxParameterType paramType, const WVector &value) = 0;
-	virtual void SetCustomFxParamVector4(WFxParameterType paramType, const WVector4 &value) = 0;
-	virtual void SetCustomFxParamMatrix(WFxParameterType paramType, const WMatrix4 &value) = 0;
+	virtual void SetCustomFxParamVector2(WFxParameterType paramType, const WVector2D& value) = 0;
+	virtual void SetCustomFxParamVector3(WFxParameterType paramType, const WVector& value) = 0;
+	virtual void SetCustomFxParamVector4(WFxParameterType paramType, const WVector4& value) = 0;
+	virtual void SetCustomFxParamMatrix(WFxParameterType paramType, const WMatrix4& value) = 0;
 	virtual void SetCustomFxParamTexture(WFxParameterType paramType, int hTex) = 0;
 	virtual void EndUsingCustomRenderState() = 0;
-	virtual bool BeginRenderToTexture(const WRenderToTextureParam &param) = 0;
-	virtual void EndRenderToTexture(const WRenderToTextureParam &param) = 0;
+	virtual bool BeginRenderToTexture(const WRenderToTextureParam& param) = 0;
+	virtual void EndRenderToTexture(const WRenderToTextureParam& param) = 0;
 	virtual bool SupportRenderTargetFormat() = 0;
 	virtual bool IsSupportedDisplayMode(bool bWindowed, int iWidth, int iHeight, int iColor) = 0;
-	virtual bool GetWindowDisplayMode(int &iWidth, int &iHeight, int &iColor) = 0;
+	virtual bool GetWindowDisplayMode(int& iWidth, int& iHeight, int& iColor) = 0;
 	[[nodiscard]] virtual int GetBufferingMeshNum() const = 0;
 	virtual void SetViewPort(uint32_t x, uint32_t y, uint32_t w, uint32_t h) = 0;
 
@@ -477,8 +480,7 @@ protected:
 	float m_clipNearScale;
 };
 
-class WSplash
-{
+class WSplash {
 public:
 	WSplash() = default;
 	virtual ~WSplash() = default;
@@ -487,13 +489,12 @@ public:
 	WSplash& operator=(const WSplash&) = delete;
 	WSplash& operator=(const WSplash&&) = delete;
 
- 	virtual int InitFromScreen(bool bCopy) = 0;
+	virtual int InitFromScreen(bool bCopy) = 0;
 	virtual void Reset() = 0;
-	virtual void Draw(const WPoint *pSrc, const WRect *pDest, uint32_t color) = 0;
+	virtual void Draw(const WPoint* pSrc, const WRect* pDest, uint32_t color) = 0;
 	virtual void Draw(uint32_t color) = 0;
 	virtual void ResetScreenSize() = 0;
 	virtual int GetWidth() = 0;
 	virtual int GetHeight() = 0;
 	virtual void SetTextureCoordinateOffset(float u, float v) = 0;
 };
-

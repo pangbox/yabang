@@ -4,13 +4,13 @@
 
 class DirectInputKeyboard : public WInputDev, public WProc {
 public:
-	DirectInputKeyboard(IDirectInput8A *di, HWND hWnd);
+	DirectInputKeyboard(IDirectInput8A* di, HWND hWnd);
 	~DirectInputKeyboard();
 
 	unsigned long GetEventTime(int n) override;
 	int GetState(int sort, int n) override;
 	void Reset() override;
-	WProc *ExternProc() override;
+	WProc* ExternProc() override;
 	bool InitDevice(HWND hWnd, bool exclusive) override;
 	void Update(unsigned long timeStamp) override;
 	LRESULT WinProc(UINT message, WPARAM wParam, LPARAM lParam) override;
@@ -21,8 +21,8 @@ private:
 	[[nodiscard]] long Acquire() const;
 	void GetDeviceData();
 
-	IDirectInput8A *m_diBackup;
-	IDirectInputDevice8A *m_diKey;
+	IDirectInput8A* m_diBackup;
+	IDirectInputDevice8A* m_diKey;
 	DIDEVICEOBJECTDATA m_keyBuf[256]{};
 	unsigned int m_timeBuf[256]{};
 	int m_asciiBuf[256]{};

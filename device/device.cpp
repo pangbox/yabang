@@ -49,14 +49,14 @@ void EnumDirect3D8() {
 
 	for (UINT i = 0; i < d3d9->GetAdapterCount(); i++) {
 		memset(&identifier, 0, sizeof identifier);
-		if (d3d9->GetAdapterIdentifier(i, 0, &identifier) != S_OK || d3d9->GetDeviceCaps(i, D3DDEVTYPE_HAL, &d3dCaps9) != S_OK) {
+		if (d3d9->GetAdapterIdentifier(i, 0, &identifier) != S_OK || d3d9->GetDeviceCaps(i, D3DDEVTYPE_HAL, &d3dCaps9)
+			!= S_OK) {
 			continue;
 		}
 		auto* d3dDevice = new WDirect3D8(identifier.Description, i);
 		if (pyVer == "645.00") {
 			d3dDevice = reinterpret_cast<WDirect3D8*>(new WDirect3D8KR645(d3dDevice));
-		}
-		else if (pyVer == "852.00") {
+		} else if (pyVer == "852.00") {
 			d3dDevice = reinterpret_cast<WDirect3D8*>(new WDirect3D8US852(d3dDevice));
 		}
 		AddVideoDevice(d3dDevice);

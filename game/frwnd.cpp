@@ -562,7 +562,11 @@ void FrWnd::OnDisplay(bool checkTopmost, bool drawChild, bool drawOneself) {
 	if (checkTopmost && this->m_dwStyle.GetFlag(FWS_TOPMOST)) {
 		return;
 	}
-	if (!this->m_nFlags.GetFlag(FWF_INITED) || !this->m_dwStyle.GetFlag(FWF_TOOLTIPS) && !this->m_nFlags.GetFlag(FWF_FADING_EX) && !this->m_nFlags.GetFlag(FWF_DESTROY)) {
+	const auto inited = this->m_nFlags.GetFlag(FWF_INITED);
+	const auto tooltips = this->m_dwStyle.GetFlag(FWF_TOOLTIPS);
+	const auto fadingEx = this->m_nFlags.GetFlag(FWF_FADING_EX);
+	const auto destroy = this->m_nFlags.GetFlag(FWF_DESTROY);
+	if (!inited || !tooltips && !fadingEx && !destroy) {
 		return;
 	}
 	if (this->m_nFlags.GetFlag(FWF_FADING)) {
@@ -608,7 +612,10 @@ void FrWnd::ResetViewFocus(FrWnd* pWndStop) {
 FrWnd* FrWnd::FindViewFocused(bool enabled_visible) {
 	for (auto* i : this->m_childList) {
 		if (!i->m_dwStyle.GetFlag(FWS_TOPMOST)) {
-			if (i->m_nFlags.GetFlag(FWF_VIEWFOCUS) && (!enabled_visible || !i->m_dwStyle.GetFlag(FWS_DISABLED) && i->m_dwStyle.GetFlag(FWS_VISIBLE))) {
+			const auto viewFocus = i->m_nFlags.GetFlag(FWF_VIEWFOCUS);
+			const auto disabled = i->m_dwStyle.GetFlag(FWS_DISABLED);
+			const auto visible = i->m_dwStyle.GetFlag(FWS_VISIBLE);
+			if (viewFocus && (!enabled_visible || !disabled && visible)) {
 				return i;
 			}
 		} else if (i->m_dwStyle.GetFlag(FWF_TOPFOCUS)) {

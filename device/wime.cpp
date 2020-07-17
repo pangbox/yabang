@@ -4,7 +4,7 @@
 
 #include "wutil.h"
 
-char *WIme::GetTextComp() {
+char* WIme::GetTextComp() {
 	return this->m_TextComp;
 }
 
@@ -64,33 +64,29 @@ void WIme::OnEndComposition(DWORD dwCommand, long dwData) {
 	}
 }
 
-void WIme::OnCompositionFull(DWORD dwCommand, long dwData) {
-	return;
-}
+void WIme::OnCompositionFull(DWORD dwCommand, long dwData) {}
 
 int WIme::OnNotify(DWORD dwCommand, long dwData) {
 	switch (dwCommand) {
-	case 3:
-	case 4:
-	case 5:
-		return 1;
+		case 3:
+		case 4:
+		case 5:
+			return 1;
 
-	case 8:
-		this->IME_Enter();
-		ImmGetConversionStatus(this->m_hIMC, &this->m_dwConvMode, &dwCommand);
-		ImmReleaseContext(this->m_hWnd, this->m_hIMC);
-		return 1;
+		case 8:
+			this->IME_Enter();
+			ImmGetConversionStatus(this->m_hIMC, &this->m_dwConvMode, &dwCommand);
+			ImmReleaseContext(this->m_hWnd, this->m_hIMC);
+			return 1;
 
-	default:
-		return 0;
+		default:
+			return 0;
 	}
 }
 
-void WIme::OnControl(DWORD dwCommand, long dwData) {
-	return;
-}
+void WIme::OnControl(DWORD dwCommand, long dwData) {}
 
-void WIme::PutString(char *str) {
+void WIme::PutString(char* str) {
 	int len = strlen(str);
 	for (int i = 0; i < len; ++i) {
 		this->ringBuf[this->current++ & 0x3FF] = str[i];
@@ -122,7 +118,7 @@ int WIme::GetResultString() {
 int WIme::GetCompString(long flag) {
 	static char str[0x80];
 	static char strAttr[0x80];
-	
+
 	DWORD dwBuf;
 	DWORD dwAttr;
 
@@ -154,13 +150,13 @@ int WIme::GetCompString(long flag) {
 	return 1;
 }
 
-void WIme::ProcessCompString(char *str, char *strattr) {
+void WIme::ProcessCompString(char* str, char* strattr) {
 	if (lstrlenA(str) <= 2) {
 		strcpy_s(this->m_TextComp, 3, str);
 	}
 }
 
-void WIme::ProcessResultString(char *str) {
+void WIme::ProcessResultString(char* str) {
 	this->PutString(str);
 }
 
@@ -168,29 +164,29 @@ int WIme::GetState(int sort, int n) {
 	int result;
 
 	switch (sort) {
-	default:
-		return 0;
-	case 3:
-		switch (n) {
-		case -1:
-			return 1;
-		case -2:
-			result = 0;
-			if (!(this->m_property & IME_PROP_SPECIAL_UI) && (this->m_property & IME_PROP_AT_CARET)) {
-				strcpy_s(reinterpret_cast<char*>(&result), 4, this->m_TextComp);
-			}
-			return result;
 		default:
-			if (this->pos < this->current) {
-				result = BYTE(this->ringBuf[this->pos++ & 0x3FF]);
-				if (result < 0x80) {
-					return result;
-				}
-				result |= BYTE(this->ringBuf[this->pos++ & 0x3FF]);
-				return result;
-			}
 			return 0;
-		}
+		case 3:
+			switch (n) {
+				case -1:
+					return 1;
+				case -2:
+					result = 0;
+					if (!(this->m_property & IME_PROP_SPECIAL_UI) && (this->m_property & IME_PROP_AT_CARET)) {
+						strcpy_s(reinterpret_cast<char*>(&result), 4, this->m_TextComp);
+					}
+					return result;
+				default:
+					if (this->pos < this->current) {
+						result = BYTE(this->ringBuf[this->pos++ & 0x3FF]);
+						if (result < 0x80) {
+							return result;
+						}
+						result |= BYTE(this->ringBuf[this->pos++ & 0x3FF]);
+						return result;
+					}
+					return 0;
+			}
 	}
 }
 
@@ -268,11 +264,11 @@ WIme::WIme() {
 	return;
 }
 
-const char *WIme::GetDeviceName() {
+const char* WIme::GetDeviceName() {
 	return "Ime";
 }
 
-WProc *WIme::ExternProc() {
+WProc* WIme::ExternProc() {
 	return this;
 }
 
@@ -282,9 +278,7 @@ void WIme::SetActive(bool stat) {
 	this->current = 0;
 }
 
-WIme::~WIme() {
-	return;
-}
+WIme::~WIme() {}
 
 void WIme::InitIme(HWND hwnd_) {
 	if (hwnd_) {
@@ -319,7 +313,7 @@ void WIme::OnInputLangChange(DWORD dwCommand, long dwData) {
 					}
 				}
 				++i;
-			} while ( i < 32 );
+			} while (i < 32);
 			ImmReleaseContext(this->m_hWnd, this->m_hIMC);
 		}
 	}
@@ -336,54 +330,52 @@ void WIme::OnComposition(DWORD dwCommand, long dwData) {
 }
 
 void WIme::OnChar(unsigned int nChar) {
-	// TODO: Imperfect compilation
-
 	switch (nChar) {
-	case '\b':
-		this->ringBuf[this->current++ & 0x3FF] = '\b';
-		break;
-	case '\t':
-		this->ringBuf[this->current++ & 0x3FF] = '\t';
-		break;
-	case '\r':
-		this->ringBuf[this->current++ & 0x3FF] = '\r';
-		break;
-	case 0x1B:
-		this->ringBuf[this->current++ & 0x3FF] = 0x1B;
-		break;
-	case 0xA1:
-		this->ringBuf[this->current++ & 0x3FF] = 2;
-		break;
-	case 0xA2:
-		this->ringBuf[this->current++ & 0x3FF] = 3;
-		break;
-	case 0xA3:
-		this->ringBuf[this->current++ & 0x3FF] = 0x1A;
-		break;
-	case 0xA4:
-		this->ringBuf[this->current++ & 0x3FF] = 0x0C;
-		break;
-	case 0xA5:
-		this->ringBuf[this->current++ & 0x3FF] = 0x04;
-		break;
-	case 0xA6:
-		this->ringBuf[this->current++ & 0x3FF] = 0x06;
-		return; // ?
-	case 0xA7:
-		this->ringBuf[this->current++ & 0x3FF] = 0x05;
-		break;
-	case 0xA8u:
-		this->ringBuf[this->current++ & 0x3FF] = 0x07;
-		break;
-	case 0xAEu:
-		this->ringBuf[this->current++ & 0x3FF] = 0x01;
-		break;
-	default:
-		break;
+		case '\b':
+			this->ringBuf[this->current++ & 0x3FF] = '\b';
+			break;
+		case '\t':
+			this->ringBuf[this->current++ & 0x3FF] = '\t';
+			break;
+		case '\r':
+			this->ringBuf[this->current++ & 0x3FF] = '\r';
+			break;
+		case 0x1B:
+			this->ringBuf[this->current++ & 0x3FF] = 0x1B;
+			break;
+		case 0xA1:
+			this->ringBuf[this->current++ & 0x3FF] = 2;
+			break;
+		case 0xA2:
+			this->ringBuf[this->current++ & 0x3FF] = 3;
+			break;
+		case 0xA3:
+			this->ringBuf[this->current++ & 0x3FF] = 0x1A;
+			break;
+		case 0xA4:
+			this->ringBuf[this->current++ & 0x3FF] = 0x0C;
+			break;
+		case 0xA5:
+			this->ringBuf[this->current++ & 0x3FF] = 0x04;
+			break;
+		case 0xA6:
+			this->ringBuf[this->current++ & 0x3FF] = 0x06;
+			return; // ?
+		case 0xA7:
+			this->ringBuf[this->current++ & 0x3FF] = 0x05;
+			break;
+		case 0xA8u:
+			this->ringBuf[this->current++ & 0x3FF] = 0x07;
+			break;
+		case 0xAEu:
+			this->ringBuf[this->current++ & 0x3FF] = 0x01;
+			break;
+		default:
+			break;
 	}
 
 	if (nChar >= 0x20 && nChar <= 0x7E) {
-		char *ptr = (char *)&nChar;
+		char* ptr = (char*)&nChar;
 		ptr[2] = nChar;
 		ptr[3] = 0;
 		this->PutString(&ptr[2]);
@@ -422,44 +414,44 @@ LRESULT WIme::WinProc(UINT msg, WPARAM wparam, LPARAM lparam) {
 		return 0;
 	}
 
-	switch ( msg ) {
-	case WM_IME_SETCONTEXT:
-		this->OnSetContext(wparam, lparam);
-		return 1;
-	case WM_IME_NOTIFY:
-		return WIme::OnNotify(wparam, lparam);
-	case WM_IME_CONTROL:
-	case WM_IME_COMPOSITIONFULL:
-		return 1;
-		break;
-	case WM_INPUTLANGCHANGE:
-		this->OnInputLangChange(wparam, lparam);
-		return 0;
-	case WM_KEYDOWN:
-		unsigned int nChar;
-		nChar = (char)wparam;
-		if (wparam >= 0x21 && wparam <= 0x2E) {
-			nChar = wparam | 0x80;
-			this->OnChar(nChar);
-		}
-		return 1;
-	case WM_CHAR:
-		this->OnChar(wparam);
-		return 0;
-	case WM_IME_STARTCOMPOSITION:
-		this->OnStartComposition(wparam, lparam);
-		return 1;
-	case WM_IME_ENDCOMPOSITION:
-		this->OnEndComposition(wparam, lparam);
-		return 1;
-	case WM_IME_COMPOSITION:
-		this->OnComposition(wparam, lparam);
-		return 1;
-	default:
-		return 0;
+	switch (msg) {
+		case WM_IME_SETCONTEXT:
+			this->OnSetContext(wparam, lparam);
+			return 1;
+		case WM_IME_NOTIFY:
+			return OnNotify(wparam, lparam);
+		case WM_IME_CONTROL:
+		case WM_IME_COMPOSITIONFULL:
+			return 1;
+			break;
+		case WM_INPUTLANGCHANGE:
+			this->OnInputLangChange(wparam, lparam);
+			return 0;
+		case WM_KEYDOWN:
+			unsigned int nChar;
+			nChar = static_cast<char>(wparam);
+			if (wparam >= 0x21 && wparam <= 0x2E) {
+				nChar = wparam | 0x80;
+				this->OnChar(nChar);
+			}
+			return 1;
+		case WM_CHAR:
+			this->OnChar(wparam);
+			return 0;
+		case WM_IME_STARTCOMPOSITION:
+			this->OnStartComposition(wparam, lparam);
+			return 1;
+		case WM_IME_ENDCOMPOSITION:
+			this->OnEndComposition(wparam, lparam);
+			return 1;
+		case WM_IME_COMPOSITION:
+			this->OnComposition(wparam, lparam);
+			return 1;
+		default:
+			return 0;
 	}
 }
 
-WInputDev *WIme::MakeClone(char *modeName, HWND hwnd) {
+WInputDev* WIme::MakeClone(char* modeName, HWND hwnd) {
 	return new WIme(hwnd);
 }

@@ -65,7 +65,7 @@ uint8_t WDirect3D::CalcFog(float depth) {
 	return -1;
 }
 
-float WDirect3D::CalcDepth(WtVertex **p, int num) {
+float WDirect3D::CalcDepth(WtVertex** p, int num) {
 	double n = 0.0;
 	for (int i = 0; i < num; i++) {
 		n += p[i]->vz;
@@ -73,19 +73,20 @@ float WDirect3D::CalcDepth(WtVertex **p, int num) {
 	return static_cast<float>(n / static_cast<float>(num));
 }
 
-void WDirect3D::DrawBuffered(const WDirect3D::WPolyBufferSw &bufSw) {
+void WDirect3D::DrawBuffered(const WPolyBufferSw& bufSw) {
 	this->ApplyCustomRenderState(bufSw.customRenderState);
-	this->DrawPrimitive(bufSw.type, bufSw.num, bufSw.dwVertexTypeDesc, bufSw.lpvVertices, bufSw.dptPrimitiveType, bufSw.type2);
+	this->DrawPrimitive(bufSw.type, bufSw.num, bufSw.dwVertexTypeDesc, bufSw.lpvVertices, bufSw.dptPrimitiveType,
+	                    bufSw.type2);
 }
 
-void WDirect3D::DrawBuffered(const WDirect3D::WPolyBufferHw &bufHw) {
+void WDirect3D::DrawBuffered(const WPolyBufferHw& bufHw) {
 	this->ApplyCustomRenderState(bufHw.customRenderState);
 	this->XDrawIndexedPrimitive(bufHw.viewState, bufHw.batchState);
 }
 
-int WDirect3D::ComparePolyDepth(const void *elem1, const void *elem2) {
-	const auto *fElem1 = static_cast<const float*>(elem1);
-	const auto *fElem2 = static_cast<const float*>(elem2);
+int WDirect3D::ComparePolyDepth(const void* elem1, const void* elem2) {
+	const auto* fElem1 = static_cast<const float*>(elem1);
+	const auto* fElem2 = static_cast<const float*>(elem2);
 
 	if (fElem1[4] > fElem2[4]) {
 		return -1;
@@ -105,16 +106,15 @@ int WDirect3D::GetTextureNum(int stage) {
 		}
 		this->m_texList[this->m_texCount2] = TexStateCreated;
 		return this->m_texCount2;
-	} else {
-		for (int i = 0; i < 1920 && this->m_texList[this->m_texCount1]; ++i) {
-			this->m_texCount1 = this->m_texCount1 < 2047 ? this->m_texCount1 + 1 : 128;
-		}
-		this->m_texList[this->m_texCount1] = TexStateCreated;
-		return this->m_texCount1;
 	}
+	for (int i = 0; i < 1920 && this->m_texList[this->m_texCount1]; ++i) {
+		this->m_texCount1 = this->m_texCount1 < 2047 ? this->m_texCount1 + 1 : 128;
+	}
+	this->m_texList[this->m_texCount1] = TexStateCreated;
+	return this->m_texCount1;
 }
 
-int WDirect3D::UploadCompressedTexture(void *pSrc, size_t srcSize, int type) {
+int WDirect3D::UploadCompressedTexture(void* pSrc, size_t srcSize, int type) {
 	int result = this->UploadCompressedTextureSurface(pSrc, srcSize, type);
 	this->m_texList[result] = TexStateUpdated;
 	return result;
@@ -136,14 +136,16 @@ int WDirect3D::CreateTexture(LPBITMAPINFO src, int type) {
 			bChromaKey = 2;
 		}
 
-		this->CreateTextureSurface(src->bmiHeader.biWidth, src->bmiHeader.biHeight, ((type & 0x40000000) | 0x20000000) >> 29, type & 0x1E000, texNum, static_cast<int>(bChromaKey), bitNum);
+		this->CreateTextureSurface(src->bmiHeader.biWidth, src->bmiHeader.biHeight,
+		                           ((type & 0x40000000) | 0x20000000) >> 29, type & 0x1E000, texNum,
+		                           static_cast<int>(bChromaKey), bitNum);
 		this->m_texList[texNum] = TexStateUpdated;
 	}
 
 	return texNum;
 }
 
-void WDirect3D::UpdateTexture(int texHandle, LPBITMAPINFO src, void *data, uint32_t type) {
+void WDirect3D::UpdateTexture(int texHandle, LPBITMAPINFO src, void* data, uint32_t type) {
 	if (this->m_texList[texHandle] == 1) {
 		this->CreateTextureSurface(src->bmiHeader.biWidth, src->bmiHeader.biHeight, 1, 0, texHandle, 0, 16);
 		this->m_texList[texHandle] = TexStateUpdated;
@@ -179,7 +181,7 @@ void WDirect3D::XReleaseIndexBuffer(int hIb) {
 	this->m_xahIbs[hIb] = 0;
 }
 
-void *WDirect3D::ModifyVertices(WtVertex **vl, int n, uint32_t dwVertexTypeDesc, bool store) {
+void* WDirect3D::ModifyVertices(WtVertex** vl, int n, uint32_t dwVertexTypeDesc, bool store) {
 	TRACE("vl=%p, n=%d, dwVertexTypeDesc=%08x, store=%d", vl, n, dwVertexTypeDesc, store);
 
 	uint32_t dwOffset = this->m_dwOffset;
@@ -188,153 +190,153 @@ void *WDirect3D::ModifyVertices(WtVertex **vl, int n, uint32_t dwVertexTypeDesc,
 		dwOffset = 0;
 	}
 
-	char *result = &this->m_chVertex[dwOffset];
-	switch(dwVertexTypeDesc) {
-	case 0x00000000:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->lv, 8);
-		}
-		break;
-	case 0x00000040:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->lv, 8);
-		}
-		break;
-	case 0x00000042:
-		for (int i = 0; i < n; dwOffset += 16, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
-		}
-		break;
-	case 0x00000044:
-		for (int i = 0; i < n; dwOffset += 20, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
-		}
-		break;
-	case 0x00000102:
-		for (int i = 0; i < n; dwOffset += 20, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->tu, 8);
-		}
-		break;
-	case 0x00000104:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 8);
-		}
-		break;
-	case 0x00000142:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 12);
-		}
-		break;
-	case 0x00000144:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 28);
-		}
-		break;
-	case 0x00000202:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->tu, 16);
-		}
-		break;
-	case 0x00000204:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 16);
-		}
-		break;
-	case 0x00000242:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 20);
-		}
-		break;
-	case 0x00000244:
-		for (int i = 0; i < n; dwOffset += 36, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 36);
-		}
-		break;
-	case 0x80000080:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 8);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
-		}
-		break;
-	case 0x800000C2:
-		for (int i = 0; i < n; dwOffset += 20, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
-		}
-		break;
-	case 0x800000C4:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
-			this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i]->z);
-		}
-		break;
-	case 0x80000182:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 8);
-		}
-		break;
-	case 0x80000184:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 8);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
-		}
-	case 0x800001C2:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 8);
-		}
-		break;
-	case 0x800001C4:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
-			memcpy(&this->m_chVertex[dwOffset + 24], &vl[i]->tu, 8);
-			this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i]->z);
-		}
-		break;
-	case 0x80000282:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 16);
-		}
-		break;
-	case 0x80000284:
-		for (int i = 0; i < n; dwOffset += 36, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 16);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
-		}
-		break;
-	case 0x800002C2:
-		for (int i = 0; i < n; dwOffset += 36, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 16);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
-		}
-		break;
-	case 0x800002C4:
-		for (int i = 0; i < n; dwOffset += 40, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
-			memcpy(&this->m_chVertex[dwOffset + 24], &vl[i]->tu, 16);
-			this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i]->z);
-		}
-		break;
-	default:
-		TRACE("Unexpected dwVertexTypeDesc=%08x", dwVertexTypeDesc);
-		break;
+	char* result = &this->m_chVertex[dwOffset];
+	switch (dwVertexTypeDesc) {
+		case 0x00000000:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->lv, 8);
+			}
+			break;
+		case 0x00000040:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->lv, 8);
+			}
+			break;
+		case 0x00000042:
+			for (int i = 0; i < n; dwOffset += 16, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
+			}
+			break;
+		case 0x00000044:
+			for (int i = 0; i < n; dwOffset += 20, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
+			}
+			break;
+		case 0x00000102:
+			for (int i = 0; i < n; dwOffset += 20, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->tu, 8);
+			}
+			break;
+		case 0x00000104:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 8);
+			}
+			break;
+		case 0x00000142:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 12);
+			}
+			break;
+		case 0x00000144:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 28);
+			}
+			break;
+		case 0x00000202:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->tu, 16);
+			}
+			break;
+		case 0x00000204:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 16);
+			}
+			break;
+		case 0x00000242:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 20);
+			}
+			break;
+		case 0x00000244:
+			for (int i = 0; i < n; dwOffset += 36, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 36);
+			}
+			break;
+		case 0x80000080:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 8);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
+			}
+			break;
+		case 0x800000C2:
+			for (int i = 0; i < n; dwOffset += 20, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
+			}
+			break;
+		case 0x800000C4:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
+				this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i]->z);
+			}
+			break;
+		case 0x80000182:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 8);
+			}
+			break;
+		case 0x80000184:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 8);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
+			}
+		case 0x800001C2:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 8);
+			}
+			break;
+		case 0x800001C4:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
+				memcpy(&this->m_chVertex[dwOffset + 24], &vl[i]->tu, 8);
+				this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i]->z);
+			}
+			break;
+		case 0x80000282:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i]->tu, 16);
+			}
+			break;
+		case 0x80000284:
+			for (int i = 0; i < n; dwOffset += 36, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 16);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
+			}
+			break;
+		case 0x800002C2:
+			for (int i = 0; i < n; dwOffset += 36, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i]->diffuse, 4);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i]->tu, 16);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i]->z);
+			}
+			break;
+		case 0x800002C4:
+			for (int i = 0; i < n; dwOffset += 40, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i]->x, 20);
+				memcpy(&this->m_chVertex[dwOffset + 24], &vl[i]->tu, 16);
+				this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i]->z);
+			}
+			break;
+		default:
+			TRACE("Unexpected dwVertexTypeDesc=%08x", dwVertexTypeDesc);
+			break;
 	}
 
 	if (store) {
@@ -344,7 +346,7 @@ void *WDirect3D::ModifyVertices(WtVertex **vl, int n, uint32_t dwVertexTypeDesc,
 	return result;
 }
 
-void *WDirect3D::ModifyVertices(WtVertex *vl, int n, uint32_t dwVertexTypeDesc, bool store) {
+void* WDirect3D::ModifyVertices(WtVertex* vl, int n, uint32_t dwVertexTypeDesc, bool store) {
 	TRACE("vl=%p, n=%d, dwVertexTypeDesc=%08x, store=%d", vl, n, dwVertexTypeDesc, store);
 
 	uint32_t dwOffset = this->m_dwOffset;
@@ -353,152 +355,152 @@ void *WDirect3D::ModifyVertices(WtVertex *vl, int n, uint32_t dwVertexTypeDesc, 
 		dwOffset = 0;
 	}
 
-	char *result = &this->m_chVertex[dwOffset];
-	switch(dwVertexTypeDesc) {
-	case 0x00000000:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].lv, 8);
-		}
-		break;
-	case 0x00000040:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].lv, 8);
-		}
-		break;
-	case 0x00000042:
-		for (int i = 0; i < n; dwOffset += 16, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
-		}
-		break;
-	case 0x00000044:
-		for (int i = 0; i < n; dwOffset += 20, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
-		}
-		break;
-	case 0x00000102:
-		for (int i = 0; i < n; dwOffset += 20, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].tu, 8);
-		}
-		break;
-	case 0x00000104:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 8);
-		}
-		break;
-	case 0x00000142:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 12);
-		}
-		break;
-	case 0x00000144:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 28);
-		}
-		break;
-	case 0x00000202:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].tu, 16);
-		}
-		break;
-	case 0x00000204:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 16);
-		}
-		break;
-	case 0x00000242:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 20);
-		}
-		break;
-	case 0x00000244:
-		for (int i = 0; i < n; dwOffset += 36, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 36);
-		}
-		break;
-	case 0x80000080:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 8);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
-		}
-		break;
-	case 0x800000C2:
-		for (int i = 0; i < n; dwOffset += 20, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
-		}
-		break;
-	case 0x800000C4:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
-			this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i].z);
-		}
-		break;
-	case 0x80000182:
-		for (int i = 0; i < n; dwOffset += 24, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 8);
-		}
-		break;
-	case 0x80000184:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 8);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
-		}
-	case 0x800001C2:
-		for (int i = 0; i < n; dwOffset += 28, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 8);
-		}
-		break;
-	case 0x800001C4:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
-			memcpy(&this->m_chVertex[dwOffset + 24], &vl[i].tu, 8);
-			this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i].z);
-		}
-		break;
-	case 0x80000282:
-		for (int i = 0; i < n; dwOffset += 32, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 16);
-		}
-		break;
-	case 0x80000284:
-		for (int i = 0; i < n; dwOffset += 36, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 16);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
-		}
-		break;
-	case 0x800002C2:
-		for (int i = 0; i < n; dwOffset += 36, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
-			memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
-			memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 16);
-			this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
-		}
-		break;
-	case 0x800002C4:
-		for (int i = 0; i < n; dwOffset += 40, i++) {
-			memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
-			memcpy(&this->m_chVertex[dwOffset + 24], &vl[i].tu, 16);
-			this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i].z);
-		}
-		break;
-	default:
-		TRACE("Unexpected dwVertexTypeDesc=%08x", dwVertexTypeDesc);
+	char* result = &this->m_chVertex[dwOffset];
+	switch (dwVertexTypeDesc) {
+		case 0x00000000:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].lv, 8);
+			}
+			break;
+		case 0x00000040:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].lv, 8);
+			}
+			break;
+		case 0x00000042:
+			for (int i = 0; i < n; dwOffset += 16, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
+			}
+			break;
+		case 0x00000044:
+			for (int i = 0; i < n; dwOffset += 20, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
+			}
+			break;
+		case 0x00000102:
+			for (int i = 0; i < n; dwOffset += 20, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].tu, 8);
+			}
+			break;
+		case 0x00000104:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 8);
+			}
+			break;
+		case 0x00000142:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 12);
+			}
+			break;
+		case 0x00000144:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 28);
+			}
+			break;
+		case 0x00000202:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].tu, 16);
+			}
+			break;
+		case 0x00000204:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 16);
+			}
+			break;
+		case 0x00000242:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 20);
+			}
+			break;
+		case 0x00000244:
+			for (int i = 0; i < n; dwOffset += 36, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 36);
+			}
+			break;
+		case 0x80000080:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 8);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
+			}
+			break;
+		case 0x800000C2:
+			for (int i = 0; i < n; dwOffset += 20, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
+			}
+			break;
+		case 0x800000C4:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
+				this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i].z);
+			}
+			break;
+		case 0x80000182:
+			for (int i = 0; i < n; dwOffset += 24, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 8);
+			}
+			break;
+		case 0x80000184:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 8);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
+			}
+		case 0x800001C2:
+			for (int i = 0; i < n; dwOffset += 28, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 8);
+			}
+			break;
+		case 0x800001C4:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
+				memcpy(&this->m_chVertex[dwOffset + 24], &vl[i].tu, 8);
+				this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i].z);
+			}
+			break;
+		case 0x80000282:
+			for (int i = 0; i < n; dwOffset += 32, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 16], &vl[i].tu, 16);
+			}
+			break;
+		case 0x80000284:
+			for (int i = 0; i < n; dwOffset += 36, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 16);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 16);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
+			}
+			break;
+		case 0x800002C2:
+			for (int i = 0; i < n; dwOffset += 36, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 12);
+				memcpy(&this->m_chVertex[dwOffset + 12], &vl[i].diffuse, 4);
+				memcpy(&this->m_chVertex[dwOffset + 20], &vl[i].tu, 16);
+				this->m_chVertex[dwOffset + 19] = this->CalcFog(vl[i].z);
+			}
+			break;
+		case 0x800002C4:
+			for (int i = 0; i < n; dwOffset += 40, i++) {
+				memcpy(&this->m_chVertex[dwOffset + 0], &vl[i].x, 20);
+				memcpy(&this->m_chVertex[dwOffset + 24], &vl[i].tu, 16);
+				this->m_chVertex[dwOffset + 23] = this->CalcFog(vl[i].z);
+			}
+			break;
+		default:
+			TRACE("Unexpected dwVertexTypeDesc=%08x", dwVertexTypeDesc);
 	}
 
 	if (store) {
@@ -510,7 +512,8 @@ void *WDirect3D::ModifyVertices(WtVertex *vl, int n, uint32_t dwVertexTypeDesc, 
 
 void WDirect3D::ApplyGamma(float gamma) {
 	for (int i = 0; i < 256; i++) {
-		this->m_iRefTable[i] = std::clamp(static_cast<int>(pow(static_cast<double>(i) * 0.00390625, 1.0 / gamma) * 256.0), 0, 255);
+		this->m_iRefTable[i] = std::clamp(
+			static_cast<int>(pow(static_cast<double>(i) * 0.00390625, 1.0 / gamma) * 256.0), 0, 255);
 	}
 }
 
@@ -532,9 +535,9 @@ void WDirect3D::FlushMultiPass(uint32_t flag) {
 
 	for (int i = this->m_bufSortNum - 1; i >= 0; --i) {
 		TRACE("[%d - 1 => 0] i = %d", this->m_bufSortNum, i);
-		WPolyBuffer &polyBuffer = *this->m_buf4Sort[i];
+		WPolyBuffer& polyBuffer = *this->m_buf4Sort[i];
 		if (polyBuffer.bHw) {
-			auto&hwPolyBuf = static_cast<WPolyBufferHw&>(polyBuffer);
+			auto& hwPolyBuf = static_cast<WPolyBufferHw&>(polyBuffer);
 			if (bLastAlphaTest) {
 				hwPolyBuf.batchState.xiFlag0 |= 0x80000000;
 			} else {
@@ -545,7 +548,7 @@ void WDirect3D::FlushMultiPass(uint32_t flag) {
 				this->XDrawIndexedPrimitive(hwPolyBuf.viewState, hwPolyBuf.batchState);
 			}
 		} else {
-			auto&swPolyBuf = static_cast<WPolyBufferSw&>(polyBuffer);
+			auto& swPolyBuf = static_cast<WPolyBufferSw&>(polyBuffer);
 			if (bLastAlphaTest) {
 				swPolyBuf.type |= 0x80000000;
 			} else {
@@ -553,7 +556,8 @@ void WDirect3D::FlushMultiPass(uint32_t flag) {
 			}
 			if (!(swPolyBuf.type & 0x01800000)) {
 				this->ApplyCustomRenderState(swPolyBuf.customRenderState);
-				this->DrawPrimitive(swPolyBuf.type, swPolyBuf.num, swPolyBuf.dwVertexTypeDesc, swPolyBuf.lpvVertices, swPolyBuf.dptPrimitiveType, swPolyBuf.type2);
+				this->DrawPrimitive(swPolyBuf.type, swPolyBuf.num, swPolyBuf.dwVertexTypeDesc, swPolyBuf.lpvVertices,
+				                    swPolyBuf.dptPrimitiveType, swPolyBuf.type2);
 			}
 		}
 	}
@@ -578,9 +582,9 @@ void WDirect3D::FlushMultiPass(uint32_t flag) {
 	}
 
 	for (; ia != endIdx; ia += increment) {
-		WPolyBuffer &polyBuffer = *this->m_buf4Sort[ia];
+		WPolyBuffer& polyBuffer = *this->m_buf4Sort[ia];
 		if (polyBuffer.bHw) {
-			auto&hwPolyBuffer = static_cast<WPolyBufferHw&>(polyBuffer);
+			auto& hwPolyBuffer = static_cast<WPolyBufferHw&>(polyBuffer);
 			if ((hwPolyBuffer.batchState.xiFlag0 & 0x1800000) != lastRenderState) {
 				if (hwPolyBuffer.batchState.xiFlag0 & 0x1800000) {
 					this->SetRenderState4Flushing(2);
@@ -593,7 +597,7 @@ void WDirect3D::FlushMultiPass(uint32_t flag) {
 			this->ApplyCustomRenderState(hwPolyBuffer.customRenderState);
 			this->XDrawIndexedPrimitive(hwPolyBuffer.viewState, hwPolyBuffer.batchState);
 		} else {
-			auto&swPolyBuffer = static_cast<WPolyBufferSw&>(polyBuffer);
+			auto& swPolyBuffer = static_cast<WPolyBufferSw&>(polyBuffer);
 			if ((swPolyBuffer.type & 0x1800000) != lastRenderState) {
 				if (swPolyBuffer.type & 0x1800000) {
 					this->SetRenderState4Flushing(2);
@@ -604,10 +608,11 @@ void WDirect3D::FlushMultiPass(uint32_t flag) {
 			}
 			swPolyBuffer.type = typeToAdd | (swPolyBuffer.type & ~typeMask);
 			this->ApplyCustomRenderState(swPolyBuffer.customRenderState);
-			this->DrawPrimitive(swPolyBuffer.type, swPolyBuffer.num, swPolyBuffer.dwVertexTypeDesc, swPolyBuffer.lpvVertices, swPolyBuffer.dptPrimitiveType, swPolyBuffer.type2);
+			this->DrawPrimitive(swPolyBuffer.type, swPolyBuffer.num, swPolyBuffer.dwVertexTypeDesc,
+			                    swPolyBuffer.lpvVertices, swPolyBuffer.dptPrimitiveType, swPolyBuffer.type2);
 		}
 	}
- 
+
 	this->ApplyCustomRenderState(nullptr);
 	this->FlushRenderPrimitive();
 	this->SetRenderState4Flushing(3);
@@ -632,18 +637,19 @@ void WDirect3D::FlushOnePass(uint32_t flag) {
 	}
 
 	for (; i != n; i += dir) {
-			WPolyBuffer &polyBuffer = *this->m_buf4Sort[i];
-			if (polyBuffer.bHw) {
-				auto&hwPolyBuffer = static_cast<WPolyBufferHw&>(polyBuffer);
-				hwPolyBuffer.batchState.xiFlag0 = typeToAdd | (hwPolyBuffer.batchState.xiFlag0 & ~typeMask);
-				this->ApplyCustomRenderState(hwPolyBuffer.customRenderState);
-				this->XDrawIndexedPrimitive(hwPolyBuffer.viewState, hwPolyBuffer.batchState);
-			} else {
-				auto&swPolyBuffer = static_cast<WPolyBufferSw&>(polyBuffer);
-				swPolyBuffer.type = typeToAdd | (swPolyBuffer.type & ~typeMask);
-				this->ApplyCustomRenderState(swPolyBuffer.customRenderState);
-				this->DrawPrimitive(swPolyBuffer.type, swPolyBuffer.num, swPolyBuffer.dwVertexTypeDesc, swPolyBuffer.lpvVertices, swPolyBuffer.dptPrimitiveType, swPolyBuffer.type2);
-			}
+		WPolyBuffer& polyBuffer = *this->m_buf4Sort[i];
+		if (polyBuffer.bHw) {
+			auto& hwPolyBuffer = static_cast<WPolyBufferHw&>(polyBuffer);
+			hwPolyBuffer.batchState.xiFlag0 = typeToAdd | (hwPolyBuffer.batchState.xiFlag0 & ~typeMask);
+			this->ApplyCustomRenderState(hwPolyBuffer.customRenderState);
+			this->XDrawIndexedPrimitive(hwPolyBuffer.viewState, hwPolyBuffer.batchState);
+		} else {
+			auto& swPolyBuffer = static_cast<WPolyBufferSw&>(polyBuffer);
+			swPolyBuffer.type = typeToAdd | (swPolyBuffer.type & ~typeMask);
+			this->ApplyCustomRenderState(swPolyBuffer.customRenderState);
+			this->DrawPrimitive(swPolyBuffer.type, swPolyBuffer.num, swPolyBuffer.dwVertexTypeDesc,
+			                    swPolyBuffer.lpvVertices, swPolyBuffer.dptPrimitiveType, swPolyBuffer.type2);
+		}
 	}
 
 	this->ApplyCustomRenderState(nullptr);
@@ -652,14 +658,15 @@ void WDirect3D::FlushOnePass(uint32_t flag) {
 
 void WDirect3D::FlushEqual() {
 	for (int i = 0; i < this->m_bufPolySwNum; ++i) {
-		WPolyBufferSw &swPolyBuf = this->m_bufPolySw[i];
+		WPolyBufferSw& swPolyBuf = this->m_bufPolySw[i];
 		if ((swPolyBuf.type & 0x300000) == 0x100000) {
 			this->ApplyCustomRenderState(swPolyBuf.customRenderState);
-			this->DrawPrimitive(swPolyBuf.type, swPolyBuf.num, swPolyBuf.dwVertexTypeDesc, swPolyBuf.lpvVertices, swPolyBuf.dptPrimitiveType, swPolyBuf.type2);
+			this->DrawPrimitive(swPolyBuf.type, swPolyBuf.num, swPolyBuf.dwVertexTypeDesc, swPolyBuf.lpvVertices,
+			                    swPolyBuf.dptPrimitiveType, swPolyBuf.type2);
 		}
 	}
 	for (int i = 0; i < this->m_bufPolyHwNum; ++i) {
-		WPolyBufferHw &hwPolyBuf = this->m_bufPolyHw[i];
+		WPolyBufferHw& hwPolyBuf = this->m_bufPolyHw[i];
 		if ((hwPolyBuf.batchState.xiFlag0 & 0x300000) == 0x100000) {
 			this->ApplyCustomRenderState(hwPolyBuf.customRenderState);
 			this->XDrawIndexedPrimitive(hwPolyBuf.viewState, hwPolyBuf.batchState);
@@ -671,15 +678,16 @@ void WDirect3D::FlushEqual() {
 void WDirect3D::FlushAlways() {
 	TRACE("Called");
 	for (int i = 0; i < this->m_bufPolySwNum; i++) {
-		WPolyBufferSw &swPolyBuf = this->m_bufPolySw[i];
+		WPolyBufferSw& swPolyBuf = this->m_bufPolySw[i];
 		if ((swPolyBuf.type & 0x300000) == 0x300000) {
 			this->ApplyCustomRenderState(swPolyBuf.customRenderState);
-			this->DrawPrimitive(swPolyBuf.type, swPolyBuf.num, swPolyBuf.dwVertexTypeDesc, swPolyBuf.lpvVertices, swPolyBuf.dptPrimitiveType, swPolyBuf.type2);
+			this->DrawPrimitive(swPolyBuf.type, swPolyBuf.num, swPolyBuf.dwVertexTypeDesc, swPolyBuf.lpvVertices,
+			                    swPolyBuf.dptPrimitiveType, swPolyBuf.type2);
 		}
 	}
 
 	for (int i = 0; i < this->m_bufPolyHwNum; i++) {
-		WPolyBufferHw &hwPolyBuf = this->m_bufPolyHw[i];
+		WPolyBufferHw& hwPolyBuf = this->m_bufPolyHw[i];
 		if ((hwPolyBuf.batchState.xiFlag0 & 0x300000) == 0x300000) {
 			this->ApplyCustomRenderState(hwPolyBuf.customRenderState);
 			this->XDrawIndexedPrimitive(hwPolyBuf.viewState, hwPolyBuf.batchState);
@@ -689,8 +697,9 @@ void WDirect3D::FlushAlways() {
 	this->ApplyCustomRenderState(nullptr);
 }
 
-void WDirect3D::Buffering(int type, int type2, int num, uint32_t dwVertexTypeDesc, void *p, D3DPRIMITIVETYPE dptPrimitiveType, float depth) {
-	WDirect3D::WPolyBufferSw *swPolyBuf  = &this->m_bufPolySw[this->m_bufPolySwNum++];
+void WDirect3D::Buffering(int type, int type2, int num, uint32_t dwVertexTypeDesc, void* p,
+                          D3DPRIMITIVETYPE dptPrimitiveType, float depth) {
+	WPolyBufferSw* swPolyBuf = &this->m_bufPolySw[this->m_bufPolySwNum++];
 	type2 &= ~0x10;
 	swPolyBuf->num = num;
 	swPolyBuf->bHw = false;
@@ -712,8 +721,8 @@ void WDirect3D::Buffering(int type, int type2, int num, uint32_t dwVertexTypeDes
 	}
 }
 
-void WDirect3D::Buffering(const WxViewState &viewState, const WxBatchState &batchState) {
-	WPolyBufferHw &hwPolyBuf = this->m_bufPolyHw[this->m_bufPolyHwNum++];
+void WDirect3D::Buffering(const WxViewState& viewState, const WxBatchState& batchState) {
+	WPolyBufferHw& hwPolyBuf = this->m_bufPolyHw[this->m_bufPolyHwNum++];
 	hwPolyBuf.bHw = true;
 	memcpy(&hwPolyBuf.viewState, &viewState, sizeof hwPolyBuf.viewState);
 	memcpy(&hwPolyBuf.batchState, &batchState, sizeof hwPolyBuf.batchState);
@@ -729,7 +738,7 @@ void WDirect3D::Buffering(const WxViewState &viewState, const WxBatchState &batc
 	}
 }
 
-void WDirect3D::XDrawIndexedTriangles(const WxViewState &viewState, const WxBatchState &batchState) {
+void WDirect3D::XDrawIndexedTriangles(const WxViewState& viewState, const WxBatchState& batchState) {
 	if (this->m_devState == WDeviceStateLost) {
 		return;
 	}
@@ -740,12 +749,12 @@ void WDirect3D::XDrawIndexedTriangles(const WxViewState &viewState, const WxBatc
 	}
 }
 
-void WDirect3D::DrawPolygonFan(WtVertex **p, int iType, int iNum, int iType2, uint32_t dwVertexTypeDesc) {
+void WDirect3D::DrawPolygonFan(WtVertex** p, int iType, int iNum, int iType2, uint32_t dwVertexTypeDesc) {
 	TRACE("p=%p, iType=%08x, iNum=%08x, iType2=%08x, dwVertexTypeDesc=%08x", p, iType, iNum, iType2, dwVertexTypeDesc);
 
-	WtVertex **vertexList;
-	void *lpvVertices;
-	WtVertex *t[64];
+	WtVertex** vertexList;
+	void* lpvVertices;
+	WtVertex* t[64];
 	float pa;
 	D3DPRIMITIVETYPE dptPrimitiveType;
 
@@ -905,12 +914,13 @@ void WDirect3D::DrawPolygonFan(WtVertex **p, int iType, int iNum, int iType2, ui
 	}
 }
 
-void WDirect3D::DrawIndexedTriangles(WtVertex *p, int pNum, uint16_t* fList, int fNum, uint32_t iType, uint32_t iType2) {
+void WDirect3D::DrawIndexedTriangles(WtVertex* p, int pNum, uint16_t* fList, int fNum, uint32_t iType,
+                                     uint32_t iType2) {
 	int v9;
-	void *vtxPtr;
-	WtVertex *vl;
-	WtVertex *t;
-	WtVertex *v24;
+	void* vtxPtr;
+	WtVertex* vl;
+	WtVertex* t;
+	WtVertex* v24;
 
 	if (this->m_devState != WDeviceStateLost) {
 		if (iType & 0x3F800)
@@ -980,79 +990,78 @@ int WDirect3D::GetBufferingMeshNum() const {
 	return this->m_bufPolySwNum;
 }
 
-void WDirect3D::FlushRenderPrimitive() {
-}
+void WDirect3D::FlushRenderPrimitive() {}
 
 uint32_t WDirect3D::VertexSize(uint32_t dwVertexTypeDesc) {
 	switch (dwVertexTypeDesc & 0x7FFFFFFF) {
-	case 0x0000:
-		return 24;
-	case 0x0042:
-		return 16;
-	case 0x0044:
-		return 20;
-	case 0x0052:
-	case 0x0080:
-		return 28;
-	case 0x00C2:
-		return 20;
-	case 0x00C4:
-		return 24;
-	case 0x0102:
-		return 20;
-	case 0x0104:
-		return 24;
-	case 0x0112:
-		return 32;
-	case 0x0142:
-		return 24;
-	case 0x0144:
-		return 28;
-	case 0x0152:
-		return 36;
-	case 0x0182:
-		return 24;
-	case 0x0184:
-	case 0x01C2:
-		return 28;
-	case 0x01C4:
-		return 32;
-	case 0x0202:
-		return 28;
-	case 0x0204:
-		return 32;
-	case 0x0212:
-		return 40;
-	case 0x0242:
-		return 32;
-	case 0x0244:
-		return 36;
-	case 0x0252:
-		return 44;
-	case 0x0282:
-		return 32;
-	case 0x0284:
-	case 0x02C2:
-		return 36;
-	case 0x02C4:
-		return 40;
-	case 0x1106:
-		return 24;
-	case 0x1108:
-		return 28;
-	case 0x110A:
-		return 32;
-	case 0x110C:
-	case 0x1116:
-		return 36;
-	case 0x1118:
-		return 40;
-	case 0x111A:
-		return 44;
-	case 0x111C:
-		return 48;
-	default:
-		return 0;
+		case 0x0000:
+			return 24;
+		case 0x0042:
+			return 16;
+		case 0x0044:
+			return 20;
+		case 0x0052:
+		case 0x0080:
+			return 28;
+		case 0x00C2:
+			return 20;
+		case 0x00C4:
+			return 24;
+		case 0x0102:
+			return 20;
+		case 0x0104:
+			return 24;
+		case 0x0112:
+			return 32;
+		case 0x0142:
+			return 24;
+		case 0x0144:
+			return 28;
+		case 0x0152:
+			return 36;
+		case 0x0182:
+			return 24;
+		case 0x0184:
+		case 0x01C2:
+			return 28;
+		case 0x01C4:
+			return 32;
+		case 0x0202:
+			return 28;
+		case 0x0204:
+			return 32;
+		case 0x0212:
+			return 40;
+		case 0x0242:
+			return 32;
+		case 0x0244:
+			return 36;
+		case 0x0252:
+			return 44;
+		case 0x0282:
+			return 32;
+		case 0x0284:
+		case 0x02C2:
+			return 36;
+		case 0x02C4:
+			return 40;
+		case 0x1106:
+			return 24;
+		case 0x1108:
+			return 28;
+		case 0x110A:
+			return 32;
+		case 0x110C:
+		case 0x1116:
+			return 36;
+		case 0x1118:
+			return 40;
+		case 0x111A:
+			return 44;
+		case 0x111C:
+			return 48;
+		default:
+			return 0;
 	}
 }
 
@@ -1075,7 +1084,7 @@ void WDirect3D::Flush(uint32_t flag) {
 		this->BeginUsingCustomRenderState();
 		this->FlushEqual();
 		this->FlushRenderPrimitive();
-		qsort(&this->m_buf4Sort[0], this->m_bufSortNum, 4, WDirect3D::ComparePolyDepth);
+		qsort(&this->m_buf4Sort[0], this->m_bufSortNum, 4, ComparePolyDepth);
 		if (flag & 1) {
 			this->FlushMultiPass(flag);
 		} else {
@@ -1123,5 +1132,3 @@ unsigned int WDirect3D::GetSortBufferSwSize() const {
 unsigned int WDirect3D::GetSortBufferHwSize() const {
 	return this->m_bufPolyHw.size();
 }
-
-

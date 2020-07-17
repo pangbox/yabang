@@ -914,8 +914,8 @@ int WDirect3D8::LockIb(const uint16_t* pvIb, int iNum) {
 	return result;
 }
 
-void __fastcall WDirect3D8::FillVertex(uint8_t* dest, const uint8_t* src, unsigned int xLastVertexDecl, size_t numVertices,
-                                       unsigned int vertexStreamZeroStride, const D3DXMATRIX* m) {
+void __fastcall WDirect3D8::FillVertex(uint8_t* dest, const uint8_t* src, unsigned int xLastVertexDecl,
+                                       size_t numVertices, unsigned int vertexStreamZeroStride, const D3DXMATRIX* m) {
 	TRACE("dest=%p, src=%p, xLastVertexDecl=%08x, NumVertices=%d, VertexStreamZeroStride=%d, m=%p", dest, src,
 	      xLastVertexDecl, numVertices, vertexStreamZeroStride, m);
 
@@ -1603,10 +1603,11 @@ void WDirect3D8::SetRenderTargetFormat() {
 	}
 
 	if (this->m_rtFmtIdx == -1 || this->m_rtNoAlphaFmtIdx == -1) {
-		MessageBox(this->m_hWnd, TEXT("Failed to find valid formats for render target."), TEXT("yabang/wangreal"), MB_OK);
+		MessageBox(this->m_hWnd, TEXT("Failed to find valid formats for render target."), TEXT("yabang/wangreal"),
+		           MB_OK);
 		ExitProcess(1);
 	}
-	
+
 	for (int i = 0; i < 5; i++) {
 		if (FAILED(this->m_d3d8->CheckDeviceFormat(this->m_devId, D3DDEVTYPE_HAL, this->m_d3dpp.BackBufferFormat, 2,
 			D3DRTYPE_SURFACE, m_rtDepthFmt[i].fmt))) {
@@ -2540,10 +2541,9 @@ void WDirect3D8::XCreateIndexBuffer(int hIb, int numIndices, uint32_t dwUsage) {
 
 uint32_t WDirect3D8::XDetermineBufferUsage(uint32_t dwFvf) {
 	TRACE("dwFVF=%d", dwFvf);
-	if (this->m_xdwDevBehavior & 0x80000000 && dwFvf & 0x1000 && (this->m_d3dCaps.MaxVertexBlendMatrices < 4 || this
-	                                                                                                   ->m_d3dCaps.
-	                                                                                                   MaxVertexBlendMatrixIndex
-		< 0x80)) {
+	const auto maxVtxBlendMtx = this->m_d3dCaps.MaxVertexBlendMatrices;
+	const auto vtxBlendMtxIndex = this->m_d3dCaps.MaxVertexBlendMatrixIndex;
+	if (this->m_xdwDevBehavior & 0x80000000 && dwFvf & 0x1000 && (maxVtxBlendMtx < 4 || vtxBlendMtxIndex < 0x80)) {
 		return 16;
 	}
 	return 0;
@@ -2811,7 +2811,7 @@ void WDirect3D8::SetBlendMode(uint32_t dwState) {
 			this->SetBlendState(D3DBLEND_SRCALPHA, D3DBLEND_ONE);
 			break;
 		default:
-			TRACE("Unexpected dwState=%d", dwState);;
+			TRACE("Unexpected dwState=%d", dwState);
 	}
 }
 

@@ -14,7 +14,7 @@ namespace Nv {
 	// ReSharper disable once CppPolymorphicClassWithNonVirtualPublicDestructor
 	class IScreenCape {
 	public:
-		virtual bool Initialize(HWND, void **, Nv::GraphicDeviceType::Enum) = 0;
+		virtual bool Initialize(HWND, void**, GraphicDeviceType::Enum) = 0;
 		virtual void Release() = 0;
 		virtual void Render() = 0;
 		virtual void Pause() = 0;
@@ -22,14 +22,16 @@ namespace Nv {
 	};
 
 	namespace Factory {
-		typedef HRESULT (__stdcall *CreateScreenCapeLayerProc)(IScreenCape **pInterface, DWORD dwVersion);
+		typedef HRESULT (__stdcall *CreateScreenCapeLayerProc)(IScreenCape** pInterface, DWORD dwVersion);
+
 		class ScreenCapeFactory {
 		public:
 			ScreenCapeFactory() {
 				this->m_pProc = nullptr;
 				this->m_hModule = LoadLibraryA("ScreenCape.dll");
 				if (this->m_hModule) {
-					this->m_pProc = reinterpret_cast<CreateScreenCapeLayerProc>(GetProcAddress(this->m_hModule, "CreateScreenCape"));
+					this->m_pProc = reinterpret_cast<CreateScreenCapeLayerProc>(GetProcAddress(
+						this->m_hModule, "CreateScreenCape"));
 				} else {
 					MessageBox(nullptr, TEXT("Failed to load ScreenCape.dll"), TEXT("Warning!"), 0);
 				}
@@ -41,8 +43,8 @@ namespace Nv {
 				}
 			}
 
-			[[nodiscard]] IScreenCape *CreateScreenCapeLayer() const {
-				IScreenCape *pInterface = nullptr;
+			[[nodiscard]] IScreenCape* CreateScreenCapeLayer() const {
+				IScreenCape* pInterface = nullptr;
 
 				if (!this->m_pProc) {
 					return pInterface;

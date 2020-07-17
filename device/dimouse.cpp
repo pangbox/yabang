@@ -129,14 +129,14 @@ int DirectInputMouse::GetState(int sort, int n) {
 			return this->m_b[n];
 		case 0:
 			switch (n) {
-			case 1:
-				return this->m_x;
-			case 2:
-				return this->m_y;
-			case 3:
-				return this->m_z;
-			default:
-				return 0;
+				case 1:
+					return this->m_x;
+				case 2:
+					return this->m_y;
+				case 3:
+					return this->m_z;
+				default:
+					return 0;
 			}
 		default:
 			return 0;
@@ -146,9 +146,8 @@ int DirectInputMouse::GetState(int sort, int n) {
 HRESULT DirectInputMouse::Acquire() const {
 	if (this->m_moveMode) {
 		return 1;
-	} else {
-		return this->m_diMouse->Acquire();
 	}
+	return this->m_diMouse->Acquire();
 }
 
 DirectInputMouse::DirectInputMouse(IDirectInput8A* di, HWND hWnd) {

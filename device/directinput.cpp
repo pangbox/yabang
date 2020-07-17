@@ -14,10 +14,11 @@ WDirectInput::~WDirectInput() {
 	}
 }
 
-WInputDev *WDirectInput::MakeClone(char *modeName, HWND hWnd) {
+WInputDev* WDirectInput::MakeClone(char* modeName, HWND hWnd) {
 	if (!this->m_di) {
 		auto* hInstance = reinterpret_cast<HINSTANCE>(GetWindowLongPtr(hWnd, GWL_HINSTANCE));
-		HRESULT result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8A, reinterpret_cast<void**>(&this->m_di), nullptr);
+		HRESULT result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8A,
+		                                    reinterpret_cast<void**>(&this->m_di), nullptr);
 		if (FAILED(result)) {
 			return nullptr;
 		}
@@ -25,16 +26,17 @@ WInputDev *WDirectInput::MakeClone(char *modeName, HWND hWnd) {
 
 	if (!_strcmpi(modeName, "mouse")) {
 		return new DirectInputMouse(this->m_di, hWnd);
-	} else if (!_strcmpi(modeName, "keyboard")) {
+	}
+	if (!_strcmpi(modeName, "keyboard")) {
 		return new DirectInputKeyboard(this->m_di, hWnd);
 	}
 	return nullptr;
 }
 
-const char *WDirectInput::GetDeviceName() {
+const char* WDirectInput::GetDeviceName() {
 	return "DirectInput";
 }
 
-const char *WDirectInput::EnumModeName() {
+const char* WDirectInput::EnumModeName() {
 	return "Keyboard";
 }

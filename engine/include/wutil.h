@@ -10,7 +10,8 @@ static void WriteToFile(LPCTSTR filename, LPBYTE data, DWORD dwBytesToWrite = 0)
 		dwBytesToWrite = strlen(LPCSTR(data));
 	}
 
-	hFile = CreateFile(filename, FILE_APPEND_DATA, FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	hFile = CreateFile(filename, FILE_APPEND_DATA, FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL,
+	                   nullptr);
 	if (hFile == INVALID_HANDLE_VALUE) {
 		MessageBox(nullptr, TEXT("Error opening file."), TEXT("yabang/device"), 0);
 		ExitProcess(1);

@@ -7,10 +7,10 @@ public:
 	WDirectInput();
 	~WDirectInput();
 
-	WInputDev *MakeClone(char *modeName, HWND hWnd) override;
-	const char *GetDeviceName() override;
-	const char *EnumModeName() override;
+	WInputDev* MakeClone(char* modeName, HWND hWnd) override;
+	const char* GetDeviceName() override;
+	const char* EnumModeName() override;
 
 private:
-	IDirectInput8A *m_di;
+	IDirectInput8A* m_di;
 };
