@@ -36,6 +36,7 @@ public:
 	void Render(WView* view, float angle, int type, int nSprNum);
 	void Render(WView* view, const WVector& angle, int type, int nSprNum);
 	int LoadSpritesInOneTexture(const char* filename, int type, float fSprSizeX, float fSprSizeY);
+	void AllDelSprite();
 
 private:
 	WList<int> m_TextureList{8, 0};

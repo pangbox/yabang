@@ -40,8 +40,7 @@ W3dAniSpr::W3dAniSpr() {
 }
 
 W3dAniSpr::~W3dAniSpr() {
-	// TODO: Call AllDelSprite
-	//this->AllDelSprite();
+	this->AllDelSprite();
 	for (auto hTexture = this->m_TextureList.Start(); hTexture != 0; hTexture = this->m_TextureList.Next()) {
 		this->m_resrcMng->Release(hTexture);
 		this->m_TextureList.DelItem(hTexture);
@@ -220,4 +219,14 @@ void W3dAniSpr::Render(WView* view, const WVector& angle, int type, int nSprNum)
 int W3dAniSpr::LoadSpritesInOneTexture(const char* filename, int type, float fSprSizeX, float fSprSizeY) {
 	// TODO: Implement
 	abort();
+}
+
+void W3dAniSpr::AllDelSprite() {
+	WSPRITE* item = this->m_SpriteList.Start();
+	while (item) {
+		this->m_SpriteList.DelItem(item);
+		delete item;
+		--this->m_nTotalSprite;
+	}
+	this->m_SpriteList.Reset();
 }
