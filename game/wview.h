@@ -10,18 +10,6 @@ extern WView* g_view;
 
 class WView : public WResource {
 public:
-	float GetClipNearValue() const;
-	float GetClipFarValue() const;
-	float GetFOV() const;
-	float GetWidth() const;
-	float GetHeight() const;
-	float GetRatio() const;
-	const WMatrix& GetCamera() const;
-	float xGetProjScale() const;
-	void xConvScreenRectByProjScale(WRect* rc) const;
-	void DrawPolygonFan(WtVertex** vl, int drawoption, int drawoption2, bool projected);
-
-private:
 	enum UPDATE_MODE {
 		BEGINESCENE = 0x1,
 		CLEARZBUFF = 0x2,
@@ -40,6 +28,19 @@ private:
 		NUM_PROJECTION_MODE = 0x2,
 	};
 
+	float GetClipNearValue() const;
+	float GetClipFarValue() const;
+	float GetFOV() const;
+	float GetWidth() const;
+	float GetHeight() const;
+	float GetRatio() const;
+	const WMatrix& GetCamera() const;
+	float xGetProjScale() const;
+	void xConvScreenRectByProjScale(WRect* rc) const;
+	void DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected);
+	void CheckViewAndProjTransformUpdateToVideo();
+
+private:
 	WMatrix camera;
 	WMatrix invcamera;
 	WMatrix matrix;
