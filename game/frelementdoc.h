@@ -18,6 +18,7 @@ class FrElementDoc {
 public:
 	virtual ~FrElementDoc();
 	FrElementLayout* GetLayout(const std::string& resID);
+	void ClearBitmaps();
 
 private:
 	std::list<FrElement*> m_elementList;

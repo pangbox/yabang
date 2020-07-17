@@ -1,9 +1,14 @@
 ﻿#include "frelementdoc.h"
 
+#include "bitmap.h"
 #include "frelementlayout.h"
 
 FrElementDoc::~FrElementDoc() {
-	// TODO: Implement
+	for (auto* element : this->m_elementList) {
+		delete element;
+	}
+	this->m_elementList.clear();
+	this->ClearBitmaps();
 };
 
 FrElementLayout* FrElementDoc::GetLayout(const std::string& resID) {
@@ -14,4 +19,11 @@ FrElementLayout* FrElementDoc::GetLayout(const std::string& resID) {
 		return nullptr;
 	}
 	return dynamic_cast<FrElementLayout*>(*it);
+}
+
+void FrElementDoc::ClearBitmaps() {
+	for (auto [_, value] : this->m_mapBitmap) {
+		delete value.bitmap;
+	}
+	this->m_mapBitmap.clear();
 }
