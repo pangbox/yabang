@@ -15,6 +15,8 @@ public:
 		std::vector<int> Frames;
 	};
 
+	void SetAnim(bool enable);
+	void SetAnimTime(unsigned int time);
 
 protected:
 	int m_Fps;
