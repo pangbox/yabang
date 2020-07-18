@@ -193,6 +193,7 @@
     <ClCompile Include="frelement.cpp" />
     <ClCompile Include="frelementdoc.cpp" />
     <ClCompile Include="frelementlayout.cpp" />
+    <ClCompile Include="fremoticon.cpp" />
     <ClCompile Include="frform.cpp" />
     <ClCompile Include="frgraphicinterface.cpp" />
     <ClCompile Include="frguiitem.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="frelement.h" />
     <ClInclude Include="frelementdoc.h" />
     <ClInclude Include="frelementlayout.h" />
+    <ClInclude Include="fremoticon.h" />
     <ClInclude Include="frform.h" />
     <ClInclude Include="frgraphicinterface.h" />
     <ClInclude Include="frguiitem.h" />

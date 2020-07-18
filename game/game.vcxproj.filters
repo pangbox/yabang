@@ -73,6 +73,7 @@
       <Filter>Third Party\TinyXML</Filter>
     </ClCompile>
     <ClCompile Include="frtypeid.cpp" />
+    <ClCompile Include="fremoticon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -140,6 +141,7 @@
       <Filter>Third Party\TinyXML</Filter>
     </ClInclude>
     <ClInclude Include="frtypeid.h" />
+    <ClInclude Include="fremoticon.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
