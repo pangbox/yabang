@@ -172,6 +172,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\engine\source\bitmap.cpp" />
+    <ClCompile Include="..\third_party\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="..\third_party\tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\third_party\tinyxml\tinyxmlparser.cpp" />
     <ClCompile Include="baseobject.cpp" />
     <ClCompile Include="cchatmsg.cpp" />
     <ClCompile Include="cfiledefault.cpp" />
@@ -235,6 +238,7 @@
     <ClCompile Include="wvieworth.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\third_party\tinyxml\tinyxml.h" />
     <ClInclude Include="baseobject.h" />
     <ClInclude Include="cchatmsg.h" />
     <ClInclude Include="cfiledefault.h" />

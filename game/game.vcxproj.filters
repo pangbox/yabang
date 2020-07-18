@@ -63,6 +63,15 @@
     <ClCompile Include="w3danispr.cpp" />
     <ClCompile Include="wfixedfont.cpp" />
     <ClCompile Include="..\engine\source\bitmap.cpp" />
+    <ClCompile Include="..\third_party\tinyxml\tinyxml.cpp">
+      <Filter>Third Party\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\tinyxml\tinyxmlerror.cpp">
+      <Filter>Third Party\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\third_party\tinyxml\tinyxmlparser.cpp">
+      <Filter>Third Party\TinyXML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -126,6 +135,9 @@
     <ClInclude Include="w3dspr.h" />
     <ClInclude Include="w3danispr.h" />
     <ClInclude Include="wfixedfont.h" />
+    <ClInclude Include="..\third_party\tinyxml\tinyxml.h">
+      <Filter>Third Party\TinyXML</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
@@ -133,5 +145,13 @@
   <ItemGroup>
     <Image Include="yabang.ico" />
     <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Third Party">
+      <UniqueIdentifier>{9bcc5675-cb72-4255-a291-8b067e982906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third Party\TinyXML">
+      <UniqueIdentifier>{263aa146-ce27-47f1-ae7a-22f0e9bcb913}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
