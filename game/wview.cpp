@@ -1,5 +1,6 @@
 ﻿#include "wview.h"
 
+#include "waabb.h"
 #include "wresourcemanager.h"
 
 WView* g_view = nullptr;
@@ -55,6 +56,71 @@ void WView::ResetClippingArea() {
 	this->SetClippingArea(rect);
 }
 
+const WMatrix& WView::GetCamera() const {
+	return this->camera;
+}
+
+WVideoDev* WView::GetVideoDevice() const {
+	return this->m_resrcMng->VideoReference();
+}
+
+void WView::SetReflective(bool value) {
+	this->m_isReflective = value;
+}
+
+const WxViewState& WView::xGetViewState() const {
+	return this->m_xViewState;
+}
+
+bool WView::InFrustum(const Waabb& aabb) const {
+	for (auto p : this->frustum) {
+		float x = p.x >= 0.0f ? aabb.min.x : aabb.max.x;
+		float y = p.y >= 0.0f ? aabb.min.y : aabb.max.y;
+		float z = p.z >= 0.0f ? aabb.min.z : aabb.max.z;
+		if (z * p.z + x * p.x + y * p.y + p.dis > 0.0f) {
+			return false;
+		}
+	}
+	return true;
+}
+
+float WView::GetScale() const {
+	return this->m_scale;
+}
+
+bool WView::GetReflective() const {
+	return this->m_isReflective;
+}
+
+WView::PROJECTION_MODE WView::GetProjectionMode() const {
+	return this->m_projMode;
+}
+
+void WView::DrawProjPolygonFan(WtVertex** wl, int drawOption, int drawOption2) {
+	this->DrawPolygonFan(wl, drawOption, drawOption2, true);
+}
+
+bool WView::InFrustum(const WVector& vec2) const {
+	for (auto p : this->frustum) {
+		if (p.x * vec2.x + p.z * vec2.z + p.normal.p[1] * vec2.y + p.dis > 0.0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool WView::InFrustumSafe(const Waabb& aabb) const {
+	for (auto p : this->frustumSafe) {
+		float x = p.x >= 0.0f ? aabb.min.x : aabb.max.x;
+		float y = p.y >= 0.0f ? aabb.min.y : aabb.max.y;
+		float z = p.z >= 0.0f ? aabb.min.z : aabb.max.z;
+		if (z * p.z + x * p.x + y * p.y + p.dis > 0.0f) {
+			return false;
+		}
+	}
+	return true;
+}
+
 void WView::SetClippingArea(const WRect& rect) {
 	this->m_clipArea.x = rect.x <= 0.0 ? 0.0 : rect.x;
 	this->m_clipArea.y = rect.y <= 0.0 ? 0.0 : rect.y;
@@ -77,6 +143,10 @@ void WView::ResetScreenCenter() {
 	this->SetScreenCenter(x, y);
 }
 
+WVector2D WView::GetScreenCenter() const {
+	return {this->m_center_x, this->m_center_y};
+}
+
 void WView::SetScreenCenter(const WVector2D& center) {
 	this->SetScreenCenter(center.x, center.y);
 }
@@ -90,8 +160,42 @@ void WView::SetScreenCenter(float x, float y) {
 	this->m_center_y = y;
 }
 
-const WMatrix& WView::GetCamera() const {
-	return this->camera;
+void WView::CheckReflectiveAndConvertCullFlag(int& drawFlag2) const {
+	if (!this->m_isReflective) {
+		return;
+	}
+	switch (drawFlag2 & 0xC00) {
+		case 0x800:
+			drawFlag2 &= ~0x800;
+			break;
+		case 0x000:
+			drawFlag2 |= 0x800;
+		default:
+			break;
+	}
+}
+
+void WView::SetClip(float nearplane, float farplane, bool setToRenderer) {
+	this->clip_far = farplane;
+	this->clip_near = nearplane;
+	this->clip_scale_z = farplane / (farplane - nearplane);
+	this->clip_near_scale = this->clip_scale_z * nearplane;
+	this->clip_scaled_near = nearplane / this->clip_near_scale;
+	this->clip_scaled_far = farplane / this->clip_near_scale;
+	if (setToRenderer) {
+		WVideoDev* videoDev = this->m_resrcMng->VideoReference();
+		if (videoDev) {
+			videoDev->m_clipScaleZ = this->clip_scale_z;
+			videoDev->m_clipNearScale = this->clip_near_scale;
+		}
+	}
+	this->update |= 0x2;
+}
+
+void WView::Render() const {
+	WVideoDev* videoDev = this->m_resrcMng->VideoReference();
+	videoDev->EndScene();
+	videoDev->Paint();
 }
 
 float WView::xGetProjScale() const {

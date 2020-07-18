@@ -473,7 +473,6 @@ public:
 	[[nodiscard]] virtual int GetBufferingMeshNum() const = 0;
 	virtual void SetViewPort(uint32_t x, uint32_t y, uint32_t w, uint32_t h) = 0;
 
-protected:
 	unsigned int m_mainThreadId = 0;
 	unsigned int m_renderCount;
 	float m_clipScaleZ;

@@ -1,10 +1,12 @@
 ﻿#pragma once
+#include "waabb.h"
 #include "wmath.h"
 #include "wresource.h"
 #include "wscene.h"
 
 class WView;
 struct WtVertex;
+class WVideoDev;
 
 extern WView* g_view;
 
@@ -41,7 +43,21 @@ public:
 	void ResetScreenCenter();
 	void SetScreenCenter(const WVector2D& center);
 	void SetScreenCenter(float x, float y);
+	void CheckReflectiveAndConvertCullFlag(int& drawFlag2) const;
+	void SetClip(float nearplane, float farplane, bool setToRenderer);
+	void Render() const;
 	const WMatrix& GetCamera() const;
+	WVideoDev* GetVideoDevice() const;
+	void SetReflective(bool value);
+	const WxViewState& xGetViewState() const;
+	bool InFrustum(const Waabb& aabb) const;
+	float GetScale() const;
+	bool GetReflective() const;
+	PROJECTION_MODE GetProjectionMode() const;
+	void DrawProjPolygonFan(WtVertex** wl, int drawOption, int drawOption2);
+	bool InFrustum(const WVector& vec2) const;
+	bool InFrustumSafe(const Waabb& aabb) const;
+	WVector2D GetScreenCenter() const;
 	float xGetProjScale() const;
 	void xConvScreenRectByProjScale(WRect* rc) const;
 	void DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected);
