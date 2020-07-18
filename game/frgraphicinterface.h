@@ -8,6 +8,8 @@ class FrGraphicInterface {
 public:
 	FrGraphicInterface(WView* pView);
 
+	float GetAlpha() const;
+
 private:
 	WView* m_pView;
 	TexCacheManager* m_pCacheManager;

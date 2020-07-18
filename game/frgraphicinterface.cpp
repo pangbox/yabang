@@ -26,3 +26,7 @@ FrGraphicInterface::FrGraphicInterface(WView* pView) {
 	this->m_textOutlineColor = -1;
 	this->m_alpha = 1.0;
 }
+
+float FrGraphicInterface::GetAlpha() const {
+	return this->m_alpha;
+}
