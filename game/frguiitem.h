@@ -50,13 +50,15 @@ class FrCmdTarget;
 
 class FrGuiItem {
 public:
-	enumGuiType m_type;
-	std::string m_resource;
-	std::string m_caption;
-	std::string m_name;
-	std::map<std::string, std::string> m_param;
-	unsigned int m_flag;
-	Rectangle_<short> m_rect;
+	FrGuiItem();
+	
+	enumGuiType m_type = GI_NONE;
+	std::string m_resource{};
+	std::string m_caption{};
+	std::string m_name{};
+	std::map<std::string, std::string> m_param{};
+	unsigned int m_flag = 0;
+	Rectangle_<short> m_rect{};
 };
 
 struct sFrCreateSub {
