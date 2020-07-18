@@ -20,7 +20,7 @@ int FrEmoticon::GetIconNum() const {
 	return this->m_Emoticons.size();
 }
 
-int FrEmoticon::GetIconIndex(const char* key) {
+int FrEmoticon::GetIconIndex(const char* key) const {
 	if (!key || !key[0]) {
 		return -1;
 	}
@@ -46,11 +46,11 @@ int FrEmoticon::GetIconIndex(const char* key) {
 	return -1;
 }
 
-const char* FrEmoticon::GetIconName(int index) {
+const char* FrEmoticon::GetIconName(int index) const {
 	return this->m_Emoticons[index]->Name.c_str();
 }
 
-void FrEmoticon::GetAlias(std::string(&buffer)[2], int index) {
+void FrEmoticon::GetAlias(std::string(&buffer)[2], int index) const {
 	if (!this->m_Emoticons[index]->Alias[0].empty()) {
 		buffer[0] = this->m_Emoticons[index]->Alias[0];
 	}

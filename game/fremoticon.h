@@ -20,9 +20,9 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	int GetIconNum() const;
-	int GetIconIndex(const char* key);
-	const char* GetIconName(int index);
-	void GetAlias(std::string(&buffer)[2], int index);
+	int GetIconIndex(const char* key) const;
+	const char* GetIconName(int index) const;
+	void GetAlias(std::string(&buffer)[2], int index) const;
 
 protected:
 	int m_Fps;
