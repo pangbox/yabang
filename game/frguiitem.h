@@ -77,6 +77,7 @@ struct sFrCreateSub {
 class FrGuiItemNested : public FrGuiItem {
 	FrGuiItemNested();
 	~FrGuiItemNested();
+	std::list<FrGuiItem*>& GetChildList();
 
 	std::list<FrGuiItem*> m_childList;
 };

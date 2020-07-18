@@ -16,3 +16,7 @@ FrGuiItemNested::~FrGuiItemNested() {
 		delete i;
 	}
 }
+
+std::list<FrGuiItem*>& FrGuiItemNested::GetChildList() {
+	return this->m_childList;
+}
