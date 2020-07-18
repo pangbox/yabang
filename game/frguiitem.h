@@ -57,6 +57,7 @@ class FrGuiItem {
 public:
 	FrGuiItem();
 	virtual ~FrGuiItem();
+	void Init(const TiXmlNode* pSrc);
 
 	enumGuiType m_type = GI_NONE;
 	std::string m_resource{};
