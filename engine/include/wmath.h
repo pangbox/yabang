@@ -228,6 +228,17 @@ public:
 	};
 };
 
+inline void SetWMatrix4FromWMatrix(WMatrix4& m4, const WMatrix& m) {
+	m4.xa = m.xa;
+	m4.wx = 0.0f;
+	m4.ya = m.ya;
+	m4.wy = 0.0f;
+	m4.za = m.za;
+	m4.wz = 0.0f;
+	m4.pivot = m.pivot;
+	m4.wm = 1.0f;
+}
+
 class WPlane {
 public:
 	union {
