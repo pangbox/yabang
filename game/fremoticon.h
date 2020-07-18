@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "wmath.h"
+
 class WOverlay;
 class FrWndManager;
 
@@ -27,6 +29,7 @@ public:
 	int GetIconIndex(const char* key) const;
 	const char* GetIconName(int index) const;
 	void GetAlias(std::string (&buffer)[2], int index) const;
+	bool Draw(int icon, const WRect& dst, unsigned diffuse, bool flip) const;
 
 protected:
 	int m_Fps = 0;

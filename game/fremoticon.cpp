@@ -1,5 +1,13 @@
 ﻿#include "fremoticon.h"
 
+#include <windows.h>
+#include <timeapi.h>
+#include "frgraphicinterface.h"
+#include "frwndmanager.h"
+#include "wmath.h"
+#include "woverlay.h"
+#include "wrecvview.h"
+
 FrEmoticon::FrEmoticon(FrWndManager* pManager)
 	: m_pManager(pManager) {}
 
@@ -61,4 +69,42 @@ void FrEmoticon::GetAlias(std::string (&buffer)[2], int index) const {
 	if (!this->m_Emoticons[index]->Alias[1].empty()) {
 		buffer[1] = this->m_Emoticons[index]->Alias[1];
 	}
+}
+
+bool FrEmoticon::Draw(int icon, const WRect& dst, unsigned int diffuse, bool flip) const {
+	if (icon < 0) {
+		return false;
+	}
+	FrGraphicInterface* pGdi = this->m_pManager->GetGDI();
+	if (!pGdi) {
+		return false;
+	}
+	unsigned int frame = (timeGetTime() - this->m_AnimStart) / (1000 / this->m_Fps);
+	sEmoticon* emoticon = this->m_Emoticons[icon];
+	WOverlay* overlay = this->m_overlay;
+	if (this->m_EnableAnim && !emoticon->Frames.empty()) {
+		icon = emoticon->Frames[frame % emoticon->Frames.size()];
+		overlay = emoticon->Overlay;
+	}
+	int selX = icon % this->m_selXNum;
+	int selY = icon % this->m_selNum / this->m_selXNum;
+	auto height = static_cast<float>(overlay->GetHeight());
+	auto width = static_cast<float>(overlay->GetWidth());
+	diffuse = (static_cast<int>(pGdi->GetAlpha() * 255.0) << 24) | 0xFFFFFF;
+	if (flip) {
+		WRect srcRect;
+		srcRect.x = static_cast<float>(this->m_selWidth * (selX + 1)) / width;
+		srcRect.y = static_cast<float>(selY * this->m_selHeight) / height;
+		srcRect.w = static_cast<float>(-this->m_selWidth) / width;
+		srcRect.h = static_cast<float>(this->m_selHeight) / height;
+		overlay->Render(g_view, srcRect, dst, 0, diffuse, 0.0, 0);
+	} else {
+		WRect srcRect;
+		srcRect.x = static_cast<float>(selX * this->m_selWidth) / width;
+		srcRect.y = static_cast<float>(selY * this->m_selHeight) / height;
+		srcRect.w = static_cast<float>(this->m_selWidth) / width;
+		srcRect.h = static_cast<float>(this->m_selHeight) / height;
+		overlay->Render(g_view, srcRect, dst, 0, diffuse, 0.0, 0);
+	}
+	return true;
 }
