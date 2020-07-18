@@ -35,6 +35,7 @@ public:
 	float GetHeight() const;
 	float GetRatio() const;
 	bool InFrustum(const WSphere& sphere) const;
+	bool InFrustumSafe(const WSphere& sphere) const;
 	void ResetClippingArea();
 	void SetClippingArea(const WRect& rect);
 	void ResetScreenCenter();
