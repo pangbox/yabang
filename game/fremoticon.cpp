@@ -7,3 +7,7 @@ void FrEmoticon::SetAnim(bool enable) {
 void FrEmoticon::SetAnimTime(unsigned int time) {
 	this->m_AnimStart = time;
 }
+
+int FrEmoticon::GetWidth() const {
+	return this->m_selWidth;
+}
