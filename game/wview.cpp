@@ -37,6 +37,31 @@ bool WView::InFrustum(const WSphere& sphere) const {
 	return true;
 }
 
+void WView::ResetClippingArea() {
+	WRect rect;
+	rect.x = 0.0;
+	rect.y = 0.0;
+	rect.w = this->SCREEN_XS;
+	rect.h = this->SCREEN_YS;
+	this->SetClippingArea(rect);
+}
+
+void WView::SetClippingArea(const WRect& rect) {
+	this->m_clipArea.x = rect.x <= 0.0 ? 0.0 : rect.x;
+	this->m_clipArea.y = rect.y <= 0.0 ? 0.0 : rect.y;
+	float dx = this->SCREEN_XS - this->m_clipArea.x;
+	this->m_clipArea.w = rect.w > dx ? dx : rect.w;
+	float dy = this->SCREEN_YS - this->m_clipArea.y;
+	this->m_clipArea.h = rect.h > dy ? dy : rect.h;
+	if (this->m_resrcMng->VideoReference()) {
+		this->m_resrcMng->VideoReference()->SetViewPort(static_cast<int>(this->m_clipArea.x),
+		                                                static_cast<int>(this->m_clipArea.y),
+		                                                static_cast<int>(this->m_clipArea.w),
+		                                                static_cast<int>(this->m_clipArea.h));
+	}
+	this->update |= 2u;
+}
+
 void WView::ResetScreenCenter() {
 	float y = this->SCREEN_YS * 0.5;
 	float x = this->SCREEN_XS * 0.5;
