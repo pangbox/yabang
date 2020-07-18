@@ -67,7 +67,7 @@ class FrGuiItem {
 public:
 	FrGuiItem();
 	virtual ~FrGuiItem();
-	void Init(const TiXmlNode* pSrc);
+	virtual void Init(const TiXmlNode* pSrc);
 
 	enumGuiType m_type = GI_NONE;
 	std::string m_resource{};
@@ -87,8 +87,9 @@ struct sFrCreateSub {
 
 class FrGuiItemNested : public FrGuiItem {
 	FrGuiItemNested();
-	~FrGuiItemNested();
-	std::list<FrGuiItem*>& GetChildList();
+	~FrGuiItemNested() override;
+	void Init(const TiXmlNode* pSrc) override;
+	virtual std::list<FrGuiItem*>& GetChildList();
 
 	std::list<FrGuiItem*> m_childList;
 };

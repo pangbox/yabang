@@ -87,6 +87,11 @@ FrGuiItemNested::~FrGuiItemNested() {
 	}
 }
 
+void FrGuiItemNested::Init(const TiXmlNode* pSrc) {
+	FrGuiItem::Init(pSrc);
+	CreateGuiItem(pSrc, this->m_childList);
+}
+
 std::list<FrGuiItem*>& FrGuiItemNested::GetChildList() {
 	return this->m_childList;
 }
