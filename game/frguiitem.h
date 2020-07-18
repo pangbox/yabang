@@ -86,10 +86,12 @@ struct sFrCreateSub {
 };
 
 class FrGuiItemNested : public FrGuiItem {
+public:
 	FrGuiItemNested();
 	~FrGuiItemNested() override;
 	void Init(const TiXmlNode* pSrc) override;
 	virtual std::list<FrGuiItem*>& GetChildList();
 
+protected:
 	std::list<FrGuiItem*> m_childList;
 };

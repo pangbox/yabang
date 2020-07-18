@@ -31,8 +31,11 @@ FrGuiTID::FrGuiTID() {
 FrGuiTID::~FrGuiTID() = default;
 
 void CreateGuiItem(const TiXmlNode* pSrc, std::list<FrGuiItem*>& guiList) {
-	// TODO: implement
-	abort();
+	for (const TiXmlNode* i = pSrc->FirstChild("item"); i; i = i->NextSibling("item")) {
+		FrGuiItem* pItem = i->FirstChild("item") ? new FrGuiItemNested() : new FrGuiItem();
+		pItem->Init(i);
+		guiList.push_back(pItem);
+	}
 }
 
 FrGuiItem::FrGuiItem() = default;
