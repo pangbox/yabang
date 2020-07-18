@@ -15,3 +15,7 @@ int FrEmoticon::GetWidth() const {
 int FrEmoticon::GetHeight() const {
 	return this->m_selHeight;
 }
+
+int FrEmoticon::GetIconNum() const {
+	return this->m_Emoticons.size();
+}

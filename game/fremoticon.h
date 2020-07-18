@@ -19,6 +19,7 @@ public:
 	void SetAnimTime(unsigned int time);
 	int GetWidth() const;
 	int GetHeight() const;
+	int GetIconNum() const;
 
 protected:
 	int m_Fps;
