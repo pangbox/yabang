@@ -37,6 +37,25 @@ bool WView::InFrustum(const WSphere& sphere) const {
 	return true;
 }
 
+void WView::ResetScreenCenter() {
+	float y = this->SCREEN_YS * 0.5;
+	float x = this->SCREEN_XS * 0.5;
+	this->SetScreenCenter(x, y);
+}
+
+void WView::SetScreenCenter(const WVector2D& center) {
+	this->SetScreenCenter(center.x, center.y);
+}
+
+void WView::SetScreenCenter(float x, float y) {
+	if (x == this->m_center_x && y == this->m_center_y) {
+		return;
+	}
+	this->update |= 0x2;
+	this->m_center_x = x;
+	this->m_center_y = y;
+}
+
 const WMatrix& WView::GetCamera() const {
 	return this->camera;
 }

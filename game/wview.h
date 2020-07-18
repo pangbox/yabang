@@ -34,6 +34,10 @@ public:
 	float GetWidth() const;
 	float GetHeight() const;
 	float GetRatio() const;
+	bool InFrustum(const WSphere& sphere) const;
+	void ResetScreenCenter();
+	void SetScreenCenter(const WVector2D& center);
+	void SetScreenCenter(float x, float y);
 	const WMatrix& GetCamera() const;
 	float xGetProjScale() const;
 	void xConvScreenRectByProjScale(WRect* rc) const;
