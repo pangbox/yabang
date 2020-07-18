@@ -150,20 +150,37 @@ public:
 	};
 };
 
-static WMatrix operator*(const WMatrix& a2, const WMatrix& a3) {
+static WMatrix operator*(const WMatrix& m, const WVector& v) {
+	WMatrix result = m;
+	result.xa.x *= v.x;
+	result.ya.x *= v.x;
+	result.za.x *= v.x;
+	result.pivot.x *= v.x;
+	result.xa.y *= v.y;
+	result.ya.y *= v.y;
+	result.za.y *= v.y;
+	result.pivot.y *= v.y;
+	result.xa.z *= v.z;
+	result.ya.z *= v.z;
+	result.za.z *= v.z;
+	result.pivot.z *= v.z;
+	return result;
+}
+
+static WMatrix operator*(const WMatrix& m1, const WMatrix& m2) {
 	WMatrix result;
-	result.xa.x = a2.xa.y * a3.ya.x + a2.xa.x * a3.xa.x + a2.xa.z * a3.za.x;
-	result.xa.y = a2.xa.z * a3.za.y + a2.xa.y * a3.ya.y + a2.xa.x * a3.xa.y;
-	result.xa.z = a2.xa.z * a3.za.z + a2.xa.x * a3.xa.z + a2.xa.y * a3.ya.z;
-	result.ya.x = a2.ya.z * a3.za.x + a2.ya.x * a3.xa.x + a2.ya.y * a3.ya.x;
-	result.ya.y = a2.ya.z * a3.za.y + a2.ya.y * a3.ya.y + a2.ya.x * a3.xa.y;
-	result.ya.z = a2.ya.x * a3.xa.z + a2.ya.z * a3.za.z + a2.ya.y * a3.ya.z;
-	result.za.x = a2.za.z * a3.za.x + a2.za.x * a3.xa.x + a2.za.y * a3.ya.x;
-	result.za.y = a2.za.z * a3.za.y + a2.za.y * a3.ya.y + a2.za.x * a3.xa.y;
-	result.za.z = a2.za.x * a3.xa.z + a2.za.z * a3.za.z + a2.za.y * a3.ya.z;
-	result.pivot.x = a2.pivot.z * a3.za.x + a2.pivot.x * a3.xa.x + a2.pivot.y * a3.ya.x + a3.pivot.x;
-	result.pivot.y = a2.pivot.z * a3.za.y + a2.pivot.y * a3.ya.y + a2.pivot.x * a3.xa.y + a3.pivot.y;
-	result.pivot.z = a2.pivot.x * a3.xa.z + a2.pivot.z * a3.za.z + a2.pivot.y * a3.ya.z + a3.pivot.z;
+	result.xa.x = m1.xa.y * m2.ya.x + m1.xa.x * m2.xa.x + m1.xa.z * m2.za.x;
+	result.xa.y = m1.xa.z * m2.za.y + m1.xa.y * m2.ya.y + m1.xa.x * m2.xa.y;
+	result.xa.z = m1.xa.z * m2.za.z + m1.xa.x * m2.xa.z + m1.xa.y * m2.ya.z;
+	result.ya.x = m1.ya.z * m2.za.x + m1.ya.x * m2.xa.x + m1.ya.y * m2.ya.x;
+	result.ya.y = m1.ya.z * m2.za.y + m1.ya.y * m2.ya.y + m1.ya.x * m2.xa.y;
+	result.ya.z = m1.ya.x * m2.xa.z + m1.ya.z * m2.za.z + m1.ya.y * m2.ya.z;
+	result.za.x = m1.za.z * m2.za.x + m1.za.x * m2.xa.x + m1.za.y * m2.ya.x;
+	result.za.y = m1.za.z * m2.za.y + m1.za.y * m2.ya.y + m1.za.x * m2.xa.y;
+	result.za.z = m1.za.x * m2.xa.z + m1.za.z * m2.za.z + m1.za.y * m2.ya.z;
+	result.pivot.x = m1.pivot.z * m2.za.x + m1.pivot.x * m2.xa.x + m1.pivot.y * m2.ya.x + m2.pivot.x;
+	result.pivot.y = m1.pivot.z * m2.za.y + m1.pivot.y * m2.ya.y + m1.pivot.x * m2.xa.y + m2.pivot.y;
+	result.pivot.z = m1.pivot.x * m2.xa.z + m1.pivot.z * m2.za.z + m1.pivot.y * m2.ya.z + m2.pivot.z;
 	return result;
 }
 
@@ -192,6 +209,14 @@ static WMatrix RotMat(WVector a) {
 	result.p[9] = 0;
 	result.p[10] = 0;
 	result.p[11] = 0;
+	return result;
+}
+
+static WVector RotVec(const WVector& a1, const WMatrix& a2) {
+	WVector result;
+	result.x = a2.za.x * a1.z + a2.ya.x * a1.y + a2.xa.x * a1.x;
+	result.y = a2.za.y * a1.z + a2.ya.y * a1.y + a2.xa.y * a1.x;
+	result.z = a2.za.z * a1.z + a2.ya.z * a1.y + a2.xa.z * a1.x;
 	return result;
 }
 
