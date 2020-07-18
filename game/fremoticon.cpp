@@ -1,5 +1,8 @@
 ﻿#include "fremoticon.h"
 
+FrEmoticon::FrEmoticon(FrWndManager* pManager)
+	: m_pManager(pManager) {}
+
 void FrEmoticon::SetAnim(bool enable) {
 	this->m_EnableAnim = enable;
 }
@@ -50,7 +53,7 @@ const char* FrEmoticon::GetIconName(int index) const {
 	return this->m_Emoticons[index]->Name.c_str();
 }
 
-void FrEmoticon::GetAlias(std::string(&buffer)[2], int index) const {
+void FrEmoticon::GetAlias(std::string (&buffer)[2], int index) const {
 	if (!this->m_Emoticons[index]->Alias[0].empty()) {
 		buffer[0] = this->m_Emoticons[index]->Alias[0];
 	}
