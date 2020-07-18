@@ -11,3 +11,7 @@ void FrEmoticon::SetAnimTime(unsigned int time) {
 int FrEmoticon::GetWidth() const {
 	return this->m_selWidth;
 }
+
+int FrEmoticon::GetHeight() const {
+	return this->m_selHeight;
+}

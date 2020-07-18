@@ -18,6 +18,7 @@ public:
 	void SetAnim(bool enable);
 	void SetAnimTime(unsigned int time);
 	int GetWidth() const;
+	int GetHeight() const;
 
 protected:
 	int m_Fps;
