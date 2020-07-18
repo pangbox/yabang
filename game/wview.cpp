@@ -14,6 +14,9 @@ WtVertex* WView::m_vl[5]{
 	nullptr,
 };
 
+void (WView::* WView::m_fnUpdateCamera[2])() = {
+};
+
 float WView::GetClipNearValue() const {
 	return this->clip_near;
 }
@@ -478,4 +481,246 @@ void WView::CheckViewAndProjTransformUpdateToVideo() {
 		this->m_xNeedToUpdateProjTransfToVideo = false;
 		this->m_resrcMng->VideoReference()->XSetTransform(WTransformStateProjection, this->m_xViewState.xmProj);
 	}
+}
+
+void WView::UpdateProjectionTransform_Perspective() {
+	if ((this->update & 2) == 0) {
+		return;
+	}
+
+	this->update &= ~2;
+	float fw = this->SCREEN_XS;
+	float fh = this->SCREEN_YS;
+	float halfw = fw * 0.5f;
+	float halfh = fh * 0.5f;
+	float clipl = (this->m_clipArea.x - halfw) / fw;
+	float clipr = (this->m_clipArea.x + this->m_clipArea.w - halfw) / fw;
+	float clipt = (this->m_clipArea.y - halfh) / fh;
+	float clipb = (this->m_clipArea.y + this->m_clipArea.h - halfh) / fh;
+	this->m_xViewState.xmProj.xa.x = this->proj_scale / std::tan(this->FOV * 0.5f) * (fw / this->m_clipArea.w);
+	this->m_xViewState.xmProj.ya.y = this->m_xViewState.xmProj.xa.x / (fh / fw) * (this->SCREEN_YS / this->m_clipArea.h)
+		/ (fw / this->m_clipArea.w);
+	this->m_xViewState.xmProj.za.x = ((this->m_center_x - halfw) / halfw - (clipr + clipl)) / (clipr - clipl) + (this->
+		left + this->right) / (this->left - this->right);
+	this->m_xViewState.xmProj.za.y = (this->top + this->bottom) / (this->bottom - this->top) - ((this->m_center_y -
+		halfh) / halfh - (clipb + clipt)) / (clipb - clipt);
+	this->m_xViewState.xmProj.za.z = this->clip_scale_z;
+	this->m_xViewState.xmProj.wz = 1.0f;
+	this->m_xViewState.xmProj.pivot.z = -this->clip_near_scale;
+	this->m_xViewState.xmProj.wm = 0.0f;
+	this->m_xNeedToUpdateProjTransfToVideo = true;
+}
+
+void WView::UpdateProjectionTransform_Parallel() {
+	if ((this->update & 0x2) == 0) {
+		return;
+	}
+
+	this->update &= ~0x2;
+	float fw = this->SCREEN_XS;
+	float fh = this->SCREEN_YS;
+	float halfw = fw * 0.5f;
+	float halfh = fh * 0.5f;
+	float clipl = (this->m_clipArea.x - halfw) / fw;
+	float clipr = (this->m_clipArea.x + this->m_clipArea.w - halfw) / fw;
+	float clipt = (this->m_clipArea.y - halfh) / fh;
+	float clipb = (this->m_clipArea.y + this->m_clipArea.h - halfh) / fh;
+	this->m_xViewState.xmProj.xa.x = (this->proj_scale + this->proj_scale) / this->m_scale * (fw / this->m_clipArea.w);
+	this->m_xViewState.xmProj.ya.y = this->m_xViewState.xmProj.xa.x / (fh / fw) * (fh / this->m_clipArea.h)
+		/ (fw / this->m_clipArea.w);
+	this->m_xViewState.xmProj.za.x = ((this->m_center_x - halfw) / halfw - (clipr + clipl)) / (clipr - clipl) + (this->
+		right + this->left) / (this->left - this->right);
+	this->m_xViewState.xmProj.za.y = (this->top + this->bottom) / (this->bottom - this->top) - ((this->m_center_y -
+		halfh) / halfh - (clipb + clipt)) / (clipb - clipt);
+	this->m_xViewState.xmProj.za.z = 1.0f / (this->clip_far - this->clip_near);
+	this->m_xViewState.xmProj.wz = 0.0f;
+	this->m_xViewState.xmProj.pivot.z = -1.0f / (this->clip_far - this->clip_near) * this->clip_near;
+	this->m_xViewState.xmProj.wm = 1.0f;
+	this->m_xNeedToUpdateProjTransfToVideo = true;
+}
+
+void WView::UpdateCamera_Perspective() {
+	if (!this->update) {
+		return;
+	}
+
+	this->camera = this->lastcam;
+	this->scalex = this->SCREEN_XS * 0.5f;
+	this->scaley = this->SCREEN_YS * 0.5f;
+	float tan[2]{
+		std::tan(this->FOV * 0.5f),
+		this->SCREEN_YS / this->SCREEN_XS * std::tan(this->FOV * 0.5f),
+	};
+	float safetan[2]{
+		(this->scalex - 4.0f) / (this->scalex / tan[0]),
+		(this->scaley - 4.0f) / (this->scaley / tan[1]),
+	};
+	this->invcamera = ~this->camera;
+	this->matrix = this->invcamera * WVector{
+		1.0f / this->clip_near_scale * (this->scalex / tan[0]),
+		1.0f / this->clip_near_scale * -(this->scaley / tan[1]),
+		1.0f / this->clip_near_scale,
+	};
+	this->frustum[0].normal = RotVec(VEC_UNIT_NEG_Z, this->camera);
+	this->frustum[0].dis = -(
+		this->frustum[0].x * (this->clip_near * this->camera.za.x + this->camera.pivot.x) +
+		this->frustum[0].y * (this->clip_near * this->camera.za.y + this->camera.pivot.y) +
+		this->frustum[0].z * (this->clip_near * this->camera.za.z + this->camera.pivot.z)
+	);
+	this->frustumSafe[0] = this->frustum[0];
+	this->frustum[1].normal = RotVec(VEC_UNIT_POS_Z, this->camera);
+	this->frustum[1].dis = -(
+		this->frustum[1].x * (this->clip_far * this->camera.za.x + this->camera.pivot.x) +
+		this->frustum[1].y * this->clip_far * this->camera.za.z +
+		this->frustum[1].z * (this->clip_far * this->camera.za.z + this->camera.pivot.z)
+	);
+	this->frustumSafe[1] = this->frustum[1];
+	this->frustum[2].normal = RotVec({-1.0f, 0.0f, -tan[0]}, this->camera);
+	this->frustum[2].normal.Normalize();
+	this->frustum[2].dis = -(
+		this->frustum[2].x * this->camera.pivot.x +
+		this->frustum[2].y * this->camera.pivot.y +
+		this->frustum[2].z * this->camera.pivot.z
+	);
+	this->frustumSafe[2].normal = RotVec({-1.0f, 0.0f, -safetan[0]}, this->camera);
+	this->frustumSafe[2].normal.Normalize();
+	this->frustumSafe[2].dis = -(
+		this->frustumSafe[2].x * this->camera.pivot.x +
+		this->frustumSafe[2].y * this->camera.pivot.y +
+		this->frustumSafe[2].z * this->camera.pivot.z
+	);
+	this->frustum[3].normal = RotVec({1.0f, 0.0f, -tan[0]}, this->camera);
+	this->frustum[3].normal.Normalize();
+	this->frustum[3].dis = -(
+		this->frustum[3].x * this->camera.pivot.x +
+		this->frustum[3].y * this->camera.pivot.y +
+		this->frustum[3].z * this->camera.pivot.z
+	);
+	this->frustumSafe[3].normal = RotVec({1.0f, 0.0f, -safetan[0]}, this->camera);
+	this->frustumSafe[3].normal.Normalize();
+	this->frustumSafe[3].dis = -(
+		this->frustumSafe[3].x * this->camera.pivot.x +
+		this->frustumSafe[3].y * this->camera.pivot.y +
+		this->frustumSafe[3].z * this->camera.pivot.z
+	);
+	this->frustum[4].normal = RotVec({0.0f, 1.0f, -tan[1]}, this->camera);
+	this->frustum[4].normal.Normalize();
+	this->frustum[4].dis = -(
+		this->frustum[4].x * this->camera.pivot.x +
+		this->frustum[4].y * this->camera.pivot.y +
+		this->frustum[4].z * this->camera.pivot.z
+	);
+	this->frustumSafe[4].normal = RotVec({0.0f, 1.0f, -safetan[1]}, this->camera);
+	this->frustumSafe[4].normal.Normalize();
+	this->frustumSafe[4].dis = -(
+		this->frustumSafe[4].x * this->camera.pivot.x +
+		this->frustumSafe[4].y * this->camera.pivot.y +
+		this->frustumSafe[4].z * this->camera.pivot.z
+	);
+	this->frustum[5].normal = RotVec({0.0f, -1.0f, -tan[1]}, this->camera);
+	this->frustum[5].normal.Normalize();
+	this->frustum[5].dis = -(
+		this->frustum[5].x * this->camera.pivot.x +
+		this->frustum[5].y * this->camera.pivot.y +
+		this->frustum[5].z * this->camera.pivot.z
+	);
+	this->frustumSafe[5].normal = RotVec({0.0f, -1.0f, -safetan[1]}, this->camera);
+	this->frustumSafe[5].normal.Normalize();
+	this->frustumSafe[5].dis = -(
+		this->frustumSafe[5].x * this->camera.pivot.x +
+		this->frustumSafe[5].y * this->camera.pivot.y +
+		this->frustumSafe[5].z * this->camera.pivot.z
+	);
+	if ((this->update & 1) != 0) {
+		this->update &= ~0x1;
+		SetWMatrix4FromWMatrix(this->m_xViewState.xmView, this->invcamera);
+		this->m_xNeedToUpdateViewTransfToVideo = true;
+	}
+	this->UpdateProjectionTransform_Perspective();
+}
+
+void WView::UpdateCamera_Parallel() {
+	if (!this->update) {
+		return;
+	}
+
+	this->camera = this->lastcam;
+	this->invcamera = ~this->camera;
+	this->matrix = this->invcamera;
+	this->scalex = this->SCREEN_XS * 0.5f;
+	this->scaley = this->SCREEN_YS * 0.5f;
+	float scale = 2 * this->scalex / this->m_scale;
+	this->matrix.xa.x = scale * this->matrix.xa.x;
+	this->matrix.ya.x = scale * this->matrix.ya.x;
+	this->matrix.za.x = scale * this->matrix.za.x;
+	this->matrix.pivot.x = scale * this->matrix.pivot.x;
+	this->matrix.xa.y = -(scale * this->matrix.xa.y);
+	this->matrix.ya.y = -(scale * this->matrix.ya.y);
+	this->matrix.za.y = -(scale * this->matrix.za.y);
+	this->matrix.pivot.y = -(scale * this->matrix.pivot.y);
+	this->frustum[0].normal = RotVec(VEC_UNIT_NEG_Z, this->camera);
+	this->frustum[0].dis = -(
+		this->frustum[0].x * (this->camera.pivot.x + this->clip_near * this->camera.za.x) +
+		this->frustum[0].y * (this->camera.pivot.y + this->clip_near * this->camera.za.y) +
+		this->frustum[0].z * (this->camera.pivot.z + this->clip_near * this->camera.za.z)
+	);
+	this->frustumSafe[0] = this->frustum[0];
+	this->frustum[1].normal = RotVec(VEC_UNIT_POS_Z, this->camera);
+	this->frustum[1].dis = -(
+		this->frustum[1].x * (this->camera.pivot.x + this->clip_far * this->camera.za.x) +
+		this->frustum[1].y * (this->camera.pivot.y + this->clip_far * this->camera.za.y) +
+		this->frustum[1].z * (this->camera.pivot.z + this->clip_far * this->camera.za.z)
+	);
+	this->frustumSafe[1] = this->frustum[1];
+	float xscale = this->m_scale * 0.5f;
+	this->frustum[2].normal = RotVec(VEC_UNIT_NEG_X, this->camera);
+	this->frustum[2].dis = -(
+		this->frustum[2].x * (this->camera.pivot.x - xscale * this->camera.xa.x) +
+		this->frustum[2].y * (this->camera.pivot.y - xscale * this->camera.xa.y) +
+		this->frustum[2].z * (this->camera.pivot.z - xscale * this->camera.xa.z)
+	);
+	this->frustumSafe[2] = this->frustum[2];
+	this->frustum[3].normal = RotVec(VEC_UNIT_POS_X, this->camera);
+	this->frustum[3].dis = -(
+		this->frustum[3].x * (this->camera.pivot.x + xscale * this->camera.xa.x) +
+		this->frustum[3].y * (this->camera.pivot.y + xscale * this->camera.xa.y) +
+		this->frustum[3].z * (this->camera.pivot.z + xscale * this->camera.xa.z)
+	);
+	this->frustumSafe[3] = this->frustum[3];
+	float yscale = this->SCREEN_YS / this->SCREEN_XS * this->m_scale * 0.5f;
+	this->frustum[4].normal = RotVec(VEC_UNIT_POS_Y, this->camera);
+	this->frustum[4].dis = -(
+		this->frustum[4].x * (this->camera.pivot.x + yscale * this->camera.ya.x) +
+		this->frustum[4].y * (this->camera.pivot.y + yscale * this->camera.ya.y) +
+		this->frustum[4].z * (this->camera.pivot.z + yscale * this->camera.ya.z)
+	);
+	this->frustumSafe[4] = this->frustum[4];
+	this->frustum[5].normal = RotVec(VEC_UNIT_NEG_Y, this->camera);
+	this->frustum[5].dis = -(
+		this->frustum[5].x * (this->camera.pivot.x - yscale * this->camera.ya.x) +
+		this->frustum[5].y * (this->camera.pivot.y - yscale * this->camera.ya.y) +
+		this->frustum[5].z * (this->camera.pivot.z - yscale * this->camera.ya.z)
+	);
+	this->frustumSafe[5] = this->frustum[5];
+
+	this->frustumByCam[0].normal = VEC_UNIT_NEG_Z;
+	this->frustumByCam[0].dis = 0.0;
+	this->frustumByCam[1].normal = VEC_UNIT_POS_Z;
+	this->frustumByCam[1].dis =
+		-((VEC_UNIT_POS_Z.y + VEC_UNIT_POS_Z.x) * 0.0f + VEC_UNIT_POS_Z.z * (this->clip_far - this->clip_near));
+	this->frustumByCam[2].normal = VEC_UNIT_NEG_X;
+	this->frustumByCam[2].dis = -((VEC_UNIT_NEG_X.z + VEC_UNIT_NEG_X.y) * 0.0f + VEC_UNIT_NEG_X.x * -this->scalex);
+	this->frustumByCam[3].normal = VEC_UNIT_POS_X;
+	this->frustumByCam[3].dis = -((VEC_UNIT_POS_X.z + VEC_UNIT_POS_X.y) * 0.0f + VEC_UNIT_POS_X.x * this->scalex);
+	this->frustumByCam[4].normal = VEC_UNIT_POS_Y;
+	this->frustumByCam[4].dis = -((VEC_UNIT_POS_Y.z + VEC_UNIT_POS_Y.x) * 0.0f + VEC_UNIT_POS_Y.y * this->scaley);
+	this->frustumByCam[5].normal = VEC_UNIT_NEG_Y;
+	this->frustumByCam[5].dis = -((VEC_UNIT_NEG_Y.z + VEC_UNIT_NEG_Y.x) * 0.0f + VEC_UNIT_NEG_Y.y * -this->scaley);
+
+	if ((this->update & 0x1) != 0) {
+		this->update &= ~0x1;
+		SetWMatrix4FromWMatrix(this->m_xViewState.xmView, this->invcamera);
+		this->m_xNeedToUpdateViewTransfToVideo = true;
+	}
+	this->UpdateProjectionTransform_Parallel();
 }

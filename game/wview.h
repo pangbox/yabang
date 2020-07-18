@@ -75,10 +75,15 @@ public:
 	void xConvScreenRectByProjScale(WRect* rc) const;
 	void DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected);
 	void CheckViewAndProjTransformUpdateToVideo();
+	void UpdateProjectionTransform_Perspective();
+	void UpdateProjectionTransform_Parallel();
+	void UpdateCamera_Perspective();
+	void UpdateCamera_Parallel();
 
 private:
 	static WtVertex m_vtx[4];
 	static WtVertex* m_vl[5];
+	static void(WView::* m_fnUpdateCamera[2])();
 	
 	WMatrix camera;
 	WMatrix invcamera;
