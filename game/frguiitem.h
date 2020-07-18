@@ -56,7 +56,8 @@ void CreateGuiItem(const TiXmlNode* pSrc, std::list<FrGuiItem*>& guiList);
 class FrGuiItem {
 public:
 	FrGuiItem();
-	
+	virtual ~FrGuiItem();
+
 	enumGuiType m_type = GI_NONE;
 	std::string m_resource{};
 	std::string m_caption{};
@@ -71,4 +72,11 @@ struct sFrCreateSub {
 	FrWndManager* pManager;
 	FrWnd* pParent;
 	FrCmdTarget* pOwner;
+};
+
+class FrGuiItemNested : public FrGuiItem {
+	FrGuiItemNested();
+	~FrGuiItemNested();
+
+	std::list<FrGuiItem*> m_childList;
 };

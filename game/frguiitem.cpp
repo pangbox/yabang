@@ -6,3 +6,13 @@ void CreateGuiItem(const TiXmlNode* pSrc, std::list<FrGuiItem*>& guiList) {
 }
 
 FrGuiItem::FrGuiItem() = default;
+
+FrGuiItem::~FrGuiItem() = default;
+
+FrGuiItemNested::FrGuiItemNested() = default;
+
+FrGuiItemNested::~FrGuiItemNested() {
+	for (auto* i : m_childList) {
+		delete i;
+	}
+}
