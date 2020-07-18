@@ -9,6 +9,7 @@ class TiXmlNode;
 
 class FrElementLayout : public FrElement {
 public:
+	FrElementLayout();
 	~FrElementLayout();
 	void Init(const TiXmlNode*) override;
 
