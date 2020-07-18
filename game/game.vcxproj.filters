@@ -72,6 +72,7 @@
     <ClCompile Include="..\third_party\tinyxml\tinyxmlparser.cpp">
       <Filter>Third Party\TinyXML</Filter>
     </ClCompile>
+    <ClCompile Include="frtypeid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="..\third_party\tinyxml\tinyxml.h">
       <Filter>Third Party\TinyXML</Filter>
     </ClInclude>
+    <ClInclude Include="frtypeid.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

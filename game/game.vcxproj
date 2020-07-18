@@ -201,6 +201,7 @@
     <ClCompile Include="frlistbox.cpp" />
     <ClCompile Include="frscrollbar.cpp" />
     <ClCompile Include="frtooltip.cpp" />
+    <ClCompile Include="frtypeid.cpp" />
     <ClCompile Include="frwnd.cpp" />
     <ClCompile Include="frwndmanager.cpp" />
     <ClCompile Include="iff.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="frlistbox.h" />
     <ClInclude Include="frscrollbar.h" />
     <ClInclude Include="frtooltip.h" />
+    <ClInclude Include="frtypeid.h" />
     <ClInclude Include="frwnd.h" />
     <ClInclude Include="frwndmanager.h" />
     <ClInclude Include="iff.h" />
