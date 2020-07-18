@@ -217,8 +217,30 @@ void W3dAniSpr::Render(WView* view, const WVector& angle, int type, int nSprNum)
 }
 
 int W3dAniSpr::LoadSpritesInOneTexture(const char* filename, int type, float fSprSizeX, float fSprSizeY) {
-	// TODO: Implement
-	abort();
+	int handle = this->m_resrcMng->LoadTexture(filename, type, 0, nullptr);
+	float nx = static_cast<float>(this->m_resrcMng->GetTextureWidth(handle)) / fSprSizeX;
+	float ny = static_cast<float>(this->m_resrcMng->GetTextureHeight(handle)) / fSprSizeY;
+	float fUnitX = 1.0f / nx, fUnitY = 1.0f / ny;
+	float fy = 0.0f, fx = 0.0f;
+
+	for (int y = 0; y < static_cast<int>(ny); y++) {
+		for (int x = 0; x < static_cast<int>(nx); x++) {
+			auto* sprite = new WSPRITE();
+			sprite->fStartV = fx;
+			sprite->fStartU = fy;
+			sprite->hTexture = handle;
+			sprite->fEndU = fy + fUnitY;
+			sprite->fEndV = fx + fUnitX;
+			this->m_SpriteList.AddItem(sprite, nullptr, false);
+			this->m_nTotalSprite++;
+			fx += fUnitX;
+		}
+		fx = 0.0;
+		fy += fUnitY;
+	}
+
+	this->m_TextureList.AddItem(handle, nullptr, false);
+	return 0;
 }
 
 void W3dAniSpr::AllDelSprite() {
