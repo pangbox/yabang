@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <map>
 #include <string>
 #include <vector>
@@ -22,6 +22,7 @@ public:
 	int GetIconNum() const;
 	int GetIconIndex(const char* key);
 	const char* GetIconName(int index);
+	void GetAlias(std::string(&buffer)[2], int index);
 
 protected:
 	int m_Fps;
