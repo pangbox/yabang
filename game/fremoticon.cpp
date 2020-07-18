@@ -1,4 +1,4 @@
-﻿#include "fremoticon.h"
+#include "fremoticon.h"
 
 void FrEmoticon::SetAnim(bool enable) {
 	this->m_EnableAnim = enable;
@@ -44,4 +44,8 @@ int FrEmoticon::GetIconIndex(const char* key) {
 		}
 	}
 	return -1;
+}
+
+const char* FrEmoticon::GetIconName(int index) {
+	return this->m_Emoticons[index]->Name.c_str();
 }

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <map>
 #include <string>
 #include <vector>
@@ -21,6 +21,7 @@ public:
 	int GetHeight() const;
 	int GetIconNum() const;
 	int GetIconIndex(const char* key);
+	const char* GetIconName(int index);
 
 protected:
 	int m_Fps;
