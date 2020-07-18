@@ -2,6 +2,34 @@
 
 #include "../third_party/tinyxml/tinyxml.h"
 
+FrGuiTID GuiType;
+
+FrGuiTID::FrGuiTID() {
+	this->m_map["NONE"] = GI_NONE;
+	this->m_map["FORM"] = GI_FORM;
+	this->m_map["STATIC"] = GI_STATIC;
+	this->m_map["TEXTBUTTON"] = GI_TEXTBUTTON;
+	this->m_map["EDIT"] = GI_EDIT;
+	this->m_map["COMBOBOX"] = GI_COMBOBOX;
+	this->m_map["COMBOCTLEX"] = GI_COMBOCTLEX;
+	this->m_map["BUTTON"] = GI_BUTTON;
+	this->m_map["FRAME"] = GI_FRAME;
+	this->m_map["RESOURCE"] = GI_RESOURCE;
+	this->m_map["BITMAP"] = GI_BITMAP;
+	this->m_map["AREA"] = GI_AREA;
+	this->m_map["LISTBOX"] = GI_LISTBOX;
+	this->m_map["GAUGEBAR"] = GI_GAUGEBAR;
+	this->m_map["GAUGEBAREX"] = GI_GAUGEBAREX;
+	this->m_map["GAUGEBARIMAGE"] = GI_GAUGEBARIMAGE;
+	this->m_map["VIEWER"] = GI_VIEWER;
+	this->m_map["CONTEXTMENU"] = GI_CONTEXTMENU;
+	this->m_map["TABBUTTON"] = GI_TABBUTTON;
+	this->m_map["GROUPBOX"] = GI_GROUPBOX;
+	this->m_map["MACROITEM"] = GI_MACROITEM;
+}
+
+FrGuiTID::~FrGuiTID() = default;
+
 void CreateGuiItem(const TiXmlNode* pSrc, std::list<FrGuiItem*>& guiList) {
 	// TODO: implement
 	abort();
@@ -33,8 +61,7 @@ void FrGuiItem::Init(const TiXmlNode* pSrc) {
 		this->m_rect.br.y = v[1] + 10;
 	}
 
-	// TODO: Set m_type
-	//this->m_type = GuiType[aType];
+	this->m_type = GuiType[aType];
 	this->m_resource = pElem->Attribute("resource");
 	this->m_name = pElem->Attribute("name");
 	this->m_caption = pElem->Attribute("caption");

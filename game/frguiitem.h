@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+
+#include "frtypeid.h"
 #include "rectangle.h"
 
 class TiXmlNode;
@@ -50,6 +52,14 @@ enum enumGuiType {
 	GI_MACROITEM,
 	GI_LAST,
 };
+
+class FrGuiTID : public FrTypeID<enumGuiType> {
+public:
+	FrGuiTID();
+	~FrGuiTID();
+};
+
+extern FrGuiTID GuiType;
 
 void CreateGuiItem(const TiXmlNode* pSrc, std::list<FrGuiItem*>& guiList);
 
