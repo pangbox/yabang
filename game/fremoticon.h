@@ -20,6 +20,7 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	int GetIconNum() const;
+	int GetIconIndex(const char* key);
 
 protected:
 	int m_Fps;
