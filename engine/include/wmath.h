@@ -110,6 +110,27 @@ public:
 		memset(p, 0, sizeof(p));
 	}
 
+	WMatrix operator~() const {
+		WMatrix result;
+		float x = this->ya.y * this->za.z - this->za.y * this->ya.z;
+		float y = this->za.x * this->ya.z - this->za.z * this->ya.x;
+		float z = this->za.y * this->ya.x - this->ya.y * this->za.x;
+		float f = 1.0f / (z * this->xa.z + y * this->xa.y + x * this->xa.x);
+		result.xa.x = f * x;
+		result.xa.y = f * (this->za.y * this->xa.z - this->xa.y * this->za.z);
+		result.xa.z = f * (this->xa.y * this->ya.z - this->xa.z * this->ya.y);
+		result.ya.x = f * y;
+		result.ya.y = f * (this->xa.x * this->za.z - this->xa.z * this->za.x);
+		result.ya.z = f * (this->xa.z * this->ya.x - this->xa.x * this->ya.z);
+		result.za.x = f * z;
+		result.za.y = f * (this->xa.y * this->za.x - this->za.y * this->xa.x);
+		result.za.z = f * (this->ya.y * this->xa.x - this->xa.y * this->ya.x);
+		result.pivot.x = -(result.xa.x * this->pivot.x + result.za.x * this->pivot.z + result.ya.x * this->pivot.y);
+		result.pivot.y = -(result.xa.y * this->pivot.x + result.za.y * this->pivot.z + result.ya.y * this->pivot.y);
+		result.pivot.z = -(result.xa.z * this->pivot.x + result.za.z * this->pivot.z + result.ya.z * this->pivot.y);
+		return result;
+	}
+
 	union {
 		struct {
 			WVector xa;
