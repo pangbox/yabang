@@ -5,6 +5,15 @@
 
 WView* g_view = nullptr;
 
+WtVertex WView::m_vtx[4]{};
+WtVertex* WView::m_vl[5]{
+	&m_vtx[0],
+	&m_vtx[1],
+	&m_vtx[2],
+	&m_vtx[3],
+	nullptr,
+};
+
 float WView::GetClipNearValue() const {
 	return this->clip_near;
 }
@@ -102,7 +111,7 @@ void WView::DrawProjPolygonFan(WtVertex** wl, int drawOption, int drawOption2) {
 
 bool WView::InFrustum(const WVector& vec2) const {
 	for (auto p : this->frustum) {
-		if (p.x * vec2.x + p.z * vec2.z + p.normal.p[1] * vec2.y + p.dis > 0.0) {
+		if (p.x * vec2.x + p.z * vec2.z + p.normal.p[1] * vec2.y + p.dis > 0.0f) {
 			return false;
 		}
 	}
@@ -122,8 +131,8 @@ bool WView::InFrustumSafe(const Waabb& aabb) const {
 }
 
 void WView::SetClippingArea(const WRect& rect) {
-	this->m_clipArea.x = rect.x <= 0.0 ? 0.0 : rect.x;
-	this->m_clipArea.y = rect.y <= 0.0 ? 0.0 : rect.y;
+	this->m_clipArea.x = rect.x <= 0.0f ? 0.0f : rect.x;
+	this->m_clipArea.y = rect.y <= 0.0f ? 0.0f : rect.y;
 	float dx = this->SCREEN_XS - this->m_clipArea.x;
 	this->m_clipArea.w = rect.w > dx ? dx : rect.w;
 	float dy = this->SCREEN_YS - this->m_clipArea.y;
@@ -138,8 +147,8 @@ void WView::SetClippingArea(const WRect& rect) {
 }
 
 void WView::ResetScreenCenter() {
-	float y = this->SCREEN_YS * 0.5;
-	float x = this->SCREEN_XS * 0.5;
+	float y = this->SCREEN_YS * 0.5f;
+	float x = this->SCREEN_XS * 0.5f;
 	this->SetScreenCenter(x, y);
 }
 
@@ -196,6 +205,170 @@ void WView::Render() const {
 	WVideoDev* videoDev = this->m_resrcMng->VideoReference();
 	videoDev->EndScene();
 	videoDev->Paint();
+}
+
+void WView::SetPrevCamera(const WMatrix& mat) const {
+	WMatrix4 mView;
+	SetWMatrix4FromWMatrix(mView, ~mat);
+	this->m_resrcMng->VideoReference()->XSetPrevViewTransform(mView);
+}
+
+void WView::SetCamera(const WMatrix& mat) {
+	this->update |= 0x1;
+	this->lastcam = mat;
+}
+
+bool WView::SetFogEnable(bool enable) const {
+	if (this->m_resrcMng->VideoReference()) {
+		return this->m_resrcMng->VideoReference()->SetFogEnable(enable);
+	}
+	return false;
+}
+
+void WView::SetFogState(float fogStart, float fogEnd, unsigned int color) const {
+	if (this->m_resrcMng->VideoReference()) {
+		this->m_resrcMng->VideoReference()->SetFogState(fogStart, fogEnd, color);
+	}
+}
+
+void WView::SetViewport(float xs, float ys) {
+	this->m_center_x = xs * 0.5f;
+	this->m_clipArea.x = 0.0f;
+	this->update |= 0x2;
+	this->m_center_y = ys * 0.5f;
+	this->m_clipArea.y = 0.0f;
+	this->m_clipArea.w = xs;
+	this->m_clipArea.h = ys;
+	this->SCREEN_XS = xs;
+	this->SCREEN_YS = ys;
+}
+
+void WView::SetFOV(float fov) {
+	this->update |= 0x2;
+	this->FOV = this->SCREEN_XS / this->SCREEN_YS * fov * 0.75f;
+}
+
+void WView::DrawLine2D(const WPoint& p1, const WPoint& p2, unsigned int diffuse, int type) {
+	WtVertex vtx[2];
+	WtVertex* vl[3];
+
+	vtx[0].x = p1.x;
+	vtx[0].y = p1.y;
+	vtx[0].z = 0.001f;
+	vtx[0].rhw = 1.0f;
+	vtx[0].diffuse = diffuse;
+
+	vtx[1].x = p2.x;
+	vtx[1].y = p2.y;
+	vtx[1].z = 0.001f;
+	vtx[1].rhw = 1.0f;
+	vtx[1].diffuse = diffuse;
+
+	vl[0] = &vtx[0];
+	vl[1] = &vtx[1];
+	vl[2] = nullptr;
+
+	this->DrawPolygonFan(vl, type | 0x4000000, 0, true);
+}
+
+void WView::DrawLine2D(const WPoint& p1, const WPoint& p2, unsigned int diffuse1, unsigned int diffuse2, int type) {
+	WtVertex vtx[2];
+	WtVertex* vl[3];
+
+	vtx[0].x = p1.x;
+	vtx[0].y = p1.y;
+	vtx[0].z = 0.001f;
+	vtx[0].rhw = 1.0f;
+	vtx[0].diffuse = diffuse1;
+
+	vtx[1].x = p2.x;
+	vtx[1].y = p2.y;
+	vtx[1].z = 0.001f;
+	vtx[1].rhw = 1.0f;
+	vtx[1].diffuse = diffuse2;
+
+	vl[0] = &vtx[0];
+	vl[1] = &vtx[1];
+	vl[2] = nullptr;
+
+	this->DrawPolygonFan(vl, type | 0x4000000, 0, true);
+}
+
+void WView::Draw2DTexture(const WRect& src, const WRect& dest, int texHandle, unsigned int diffuse, unsigned int type) {
+	m_vtx[0].x = dest.x - 0.5f;
+	m_vtx[0].y = dest.y - 0.5f;
+	m_vtx[0].z = 0.001f;
+	m_vtx[0].rhw = 1.0f;
+	m_vtx[0].diffuse = diffuse;
+	m_vtx[0].tu = src.x;
+	m_vtx[0].tv = src.y;
+	m_vtx[1].x = dest.w + dest.x - 0.5f;
+	m_vtx[1].y = dest.y - 0.5f;
+	m_vtx[1].z = 0.001f;
+	m_vtx[1].rhw = 1.0f;
+	m_vtx[1].diffuse = diffuse;
+	m_vtx[1].tu = src.w + src.x;
+	m_vtx[1].tv = src.y;
+	m_vtx[2].x = dest.x - 0.5f;
+	m_vtx[2].y = dest.h + dest.y - 0.5f;
+	m_vtx[2].z = 0.001f;
+	m_vtx[2].rhw = 1.0f;
+	m_vtx[2].diffuse = diffuse;
+	m_vtx[2].tu = src.x;
+	m_vtx[2].tv = src.h + src.y;
+	m_vtx[3].x = dest.w + dest.x - 0.5f;
+	m_vtx[3].y = dest.h + dest.y - 0.5f;
+	m_vtx[3].z = 0.001f;
+	m_vtx[3].rhw = 1.0f;
+	m_vtx[3].diffuse = diffuse;
+	m_vtx[3].tu = src.w + src.x;
+	m_vtx[3].tv = src.h + src.y;
+
+	this->DrawPolygonFan(m_vl, type | (texHandle & 0x7FF) | 0x20380000, 0, true);
+}
+
+void WView::DrawLine(const WVector& v1, unsigned int c1, const WVector& v2, unsigned int c2, int type) {
+	WtVertex vtx[2];
+	WtVertex* p[3];
+
+	vtx[0].pos = v1;
+	vtx[0].diffuse = c1;
+	vtx[1].pos = v2;
+	vtx[1].diffuse = c2;
+
+	p[0] = &vtx[0];
+	p[1] = &vtx[1];
+	p[2] = nullptr;
+
+	this->DrawPolygonFan(p, type | 0x4000000, 0, false);
+}
+
+void WView::DrawAABB(const Waabb& aabb, unsigned int diffuse, bool solid, int type) {
+	// Does nothing.
+}
+
+void WView::Clear(unsigned int clearColor, int mode) const {
+	if (!this->m_resrcMng || !this->m_resrcMng->VideoReference()) {
+		return;
+	}
+
+	switch (mode & 6) {
+		case 2:
+			this->m_resrcMng->VideoReference()->Clear(0, 2, 1.0f);
+			break;
+		case 4:
+			this->m_resrcMng->VideoReference()->Clear(clearColor, 1, 1.0f);
+			break;
+		case 6:
+			this->m_resrcMng->VideoReference()->Clear(clearColor, 3, 1.0f);
+			break;
+		default:
+			break;
+	}
+}
+
+void WView::EndScene() {
+	// Does nothing.
 }
 
 float WView::xGetProjScale() const {

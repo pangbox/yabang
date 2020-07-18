@@ -46,6 +46,19 @@ public:
 	void CheckReflectiveAndConvertCullFlag(int& drawFlag2) const;
 	void SetClip(float nearplane, float farplane, bool setToRenderer);
 	void Render() const;
+	void SetPrevCamera(const WMatrix& mat) const;
+	void SetCamera(const WMatrix& mat);
+	bool SetFogEnable(bool enable) const;
+	void SetFogState(float fogStart, float fogEnd, unsigned color) const;
+	void SetViewport(float xs, float ys);
+	void SetFOV(float fov);
+	void DrawLine2D(const WPoint& p1, const WPoint& p2, unsigned diffuse, int type);
+	void DrawLine2D(const WPoint& p1, const WPoint& p2, unsigned diffuse1, unsigned diffuse2, int type);
+	void Draw2DTexture(const WRect& src, const WRect& dest, int texHandle, unsigned diffuse, unsigned type);
+	void DrawLine(const WVector& v1, unsigned c1, const WVector& v2, unsigned c2, int type);
+	void DrawAABB(const Waabb& aabb, unsigned diffuse, bool solid, int type);
+	void Clear(unsigned clearColor, int mode) const;
+	void EndScene();
 	const WMatrix& GetCamera() const;
 	WVideoDev* GetVideoDevice() const;
 	void SetReflective(bool value);
@@ -64,6 +77,9 @@ public:
 	void CheckViewAndProjTransformUpdateToVideo();
 
 private:
+	static WtVertex m_vtx[4];
+	static WtVertex* m_vl[5];
+	
 	WMatrix camera;
 	WMatrix invcamera;
 	WMatrix matrix;
