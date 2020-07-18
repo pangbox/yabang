@@ -108,3 +108,12 @@ bool FrEmoticon::Draw(int icon, const WRect& dst, unsigned int diffuse, bool fli
 	}
 	return true;
 }
+
+bool FrEmoticon::Draw(int icon, float x, float y, unsigned int diffuse, bool flip) const {
+	WRect dst;
+	dst.x = x;
+	dst.w = static_cast<float>(this->m_selWidth);
+	dst.y = y;
+	dst.h = static_cast<float>(this->m_selHeight);
+	return this->Draw(icon, dst, diffuse, flip);
+}

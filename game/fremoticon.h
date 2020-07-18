@@ -30,6 +30,7 @@ public:
 	const char* GetIconName(int index) const;
 	void GetAlias(std::string (&buffer)[2], int index) const;
 	bool Draw(int icon, const WRect& dst, unsigned diffuse, bool flip) const;
+	bool Draw(int icon, float x, float y, unsigned diffuse, bool flip) const;
 
 protected:
 	int m_Fps = 0;
