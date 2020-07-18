@@ -1,8 +1,15 @@
 ﻿#pragma once
+#include <list>
 #include <map>
 #include <string>
 
 #include "rectangle.h"
+
+class TiXmlNode;
+class FrWndManager;
+class FrWnd;
+class FrCmdTarget;
+class FrGuiItem;
 
 enum BGTYPE {
 	BT_IMAGEFILE,
@@ -44,9 +51,7 @@ enum enumGuiType {
 	GI_LAST,
 };
 
-class FrWndManager;
-class FrWnd;
-class FrCmdTarget;
+void CreateGuiItem(const TiXmlNode* pSrc, std::list<FrGuiItem*>& guiList);
 
 class FrGuiItem {
 public:

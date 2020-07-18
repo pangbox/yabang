@@ -25,7 +25,7 @@ void FrElementLayout::Init(const TiXmlNode* pSrc) {
 	sprintf(buff, "0x%s", colorAttr.c_str());
 	sscanf(buff, "%X", &this->m_bgColor);
 	this->m_bgFilename = elem->Attribute("background");
-	//CreateGuiItem(pSrc, &this->m_guiList);
+	CreateGuiItem(pSrc, this->m_guiList);
 
 	const TiXmlNode* aniBg = pSrc->FirstChild("anibg");
 	if (!aniBg || !aniBg->ToElement()) {
