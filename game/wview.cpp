@@ -28,6 +28,15 @@ float WView::GetRatio() const {
 	return this->SCREEN_YS / this->SCREEN_XS;
 }
 
+bool WView::InFrustum(const WSphere& sphere) const {
+	for (auto p : this->frustum) {
+		if (p.x * sphere.pos.x + p.z * sphere.pos.z + p.normal.p[1] * sphere.pos.y + p.dis > sphere.radius) {
+			return false;
+		}
+	}
+	return true;
+}
+
 const WMatrix& WView::GetCamera() const {
 	return this->camera;
 }
