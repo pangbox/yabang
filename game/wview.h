@@ -30,6 +30,19 @@ public:
 		NUM_PROJECTION_MODE = 0x2,
 	};
 
+	WView();
+	virtual ~WView();
+
+	virtual void BeginScene();
+	virtual void Clear(unsigned clearColor, int mode) const;
+	virtual void EndScene();
+	virtual void Flush(unsigned flag);
+	virtual void Render() const;
+	virtual void DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected);
+	virtual void DrawIndexedTriangles(WtVertex* p, int pNum, uint16_t* f, int fNum, int drawOption, int drawOption2);
+	virtual bool IsShadowView();
+	virtual void DrawIndexedTrianglesDirect(WtVertex* plist, int pn, uint16_t* flist, int fn, int type, int type2);
+
 	float GetClipNearValue() const;
 	float GetClipFarValue() const;
 	float GetFOV() const;
@@ -45,7 +58,6 @@ public:
 	void SetScreenCenter(float x, float y);
 	void CheckReflectiveAndConvertCullFlag(int& drawFlag2) const;
 	void SetClip(float nearplane, float farplane, bool setToRenderer);
-	void Render() const;
 	void SetPrevCamera(const WMatrix& mat) const;
 	void SetCamera(const WMatrix& mat);
 	bool SetFogEnable(bool enable) const;
@@ -57,8 +69,11 @@ public:
 	void Draw2DTexture(const WRect& src, const WRect& dest, int texHandle, unsigned diffuse, unsigned type);
 	void DrawLine(const WVector& v1, unsigned c1, const WVector& v2, unsigned c2, int type);
 	void DrawAABB(const Waabb& aabb, unsigned diffuse, bool solid, int type);
-	void Clear(unsigned clearColor, int mode) const;
-	void EndScene();
+	void DrawAABB(WMatrix& m, const Waabb& aabb, unsigned int diffuse, bool solid, int type);
+	void DrawOBB(const WMatrix& mat, unsigned int diffuse);
+	void DrawOBB(const Wobb& obb, unsigned int diffuse);
+	void DrawSphere(const WVector& pivot, float length, unsigned diffuse, int seg, int offset);
+	void DrawSphere(const WSphere& sphere, unsigned diffuse, int seg, int offset);
 	const WMatrix& GetCamera() const;
 	WVideoDev* GetVideoDevice() const;
 	void SetReflective(bool value);
@@ -68,7 +83,7 @@ public:
 	bool GetReflective() const;
 	PROJECTION_MODE GetProjectionMode() const;
 	void DrawProjPolygonFan(WtVertex** wl, int drawOption, int drawOption2);
-	bool InFrustum(const WVector& vec2) const;
+	bool InFrustum(const WVector& vec3) const;
 	bool InFrustumSafe(const Waabb& aabb) const;
 	WVector2D GetScreenCenter() const;
 	float xGetProjScale() const;
@@ -77,7 +92,6 @@ public:
 	bool ProcessEffect() const;
 	float GetFOV_Unmodified() const;
 	const WMatrix& GetInvCamera() const;
-	void DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected);
 	void CheckViewAndProjTransformUpdateToVideo();
 	void Projection2_Parallel(WtVertex* p, const WVector& vec);
 	void UpdateProjectionTransform_Perspective();
@@ -85,12 +99,13 @@ public:
 	void ClipPlane(WtVertex* out, const WtVertex* a, const WtVertex* b, int type, const WPlane& p);
 	void UpdateCamera_Perspective();
 	void UpdateCamera_Parallel();
+	void UpdateCamera();
 
 private:
 	static WtVertex m_vtx[4];
 	static WtVertex* m_vl[5];
-	static void(WView::* m_fnUpdateCamera[2])();
-	
+	static void (WView::* m_fnUpdateCamera[2])();
+
 	WMatrix camera;
 	WMatrix invcamera;
 	WMatrix matrix;

@@ -4,6 +4,7 @@
 #include "wresourcemanager.h"
 
 WView* g_view = nullptr;
+int g_foffset = 0;
 
 WtVertex WView::m_vtx[4]{};
 WtVertex* WView::m_vl[5]{
@@ -14,8 +15,84 @@ WtVertex* WView::m_vl[5]{
 	nullptr,
 };
 
+// This seems pointless.
 void (WView::* WView::m_fnUpdateCamera[2])() = {
+	&WView::UpdateCamera_Perspective,
+	&WView::UpdateCamera_Parallel,
 };
+
+WView::WView() {
+	this->m_xViewState.xLight.type = 0;
+	this->m_xViewState.xLight.diffuse = 0;
+	this->m_xViewState.xLight.ambient = 0;
+	this->m_xViewState.xLight.ambient2 = 0xFFFFFF;
+	this->m_xViewState.xLight.nearOne.z = 0.0;
+	this->m_xViewState.xLight.nearOne.y = 0.0;
+	this->m_xViewState.xLight.nearOne.x = 0.0;
+	this->update = 3;
+	this->FOV = 1.1780972f;
+	this->clip_near = 6.3999996f;
+	this->clip_far = 1600.0f;
+	this->clip_scale_z = 1.004016f;
+	this->clip_near_scale = 6.4257021f;
+	this->clip_scaled_near = 0.99600005f;
+	this->clip_scaled_far = 249.00003f;
+	this->m_fastclip = true;
+	this->m_cliptype = 0;
+	this->camera.pivot.z = 0.0;
+	this->camera.pivot.y = 0.0;
+	this->camera.pivot.x = 0.0;
+	this->camera.za.y = 0.0;
+	this->camera.za.x = 0.0;
+	this->camera.ya.z = 0.0;
+	this->camera.ya.x = 0.0;
+	this->camera.xa.z = 0.0;
+	this->camera.xa.y = 0.0;
+	this->camera.za.z = 1.0;
+	this->camera.ya.y = 1.0;
+	this->camera.xa.x = 1.0;
+	this->lastcam.za.z = 1.0;
+	this->lastcam.ya.y = 1.0;
+	this->lastcam.xa.x = 1.0;
+	this->lastcam.pivot.z = 0.0;
+	this->lastcam.pivot.y = 0.0;
+	this->lastcam.pivot.x = 0.0;
+	this->lastcam.za.y = 0.0;
+	this->lastcam.za.x = 0.0;
+	this->lastcam.ya.z = 0.0;
+	this->lastcam.ya.x = 0.0;
+	this->lastcam.xa.z = 0.0;
+	this->lastcam.xa.y = 0.0;
+	this->m_center_x = 0.5;
+	this->m_center_y = 0.5;
+	this->m_clipArea.x = 0.0;
+	this->m_clipArea.y = 0.0;
+	this->m_clipArea.w = 1.0;
+	this->m_clipArea.h = 1.0;
+	this->update |= 2u;
+	this->right = 0.5;
+	this->bottom = 0.5;
+	this->SCREEN_XS = 1.0;
+	this->SCREEN_YS = 1.0;
+	this->m_bProcessEffect = true;
+	this->proj_scale = 1.0;
+	this->left = -0.5;
+	this->top = -0.5;
+	this->m_bDisableFog = false;
+	this->m_isReflective = false;
+	this->m_xViewState.xLight.type = 2;
+	this->m_xViewState.xLight.nearOne = VEC_UNIT_NEG_Z;
+	this->m_xViewState.xmView = MAT4_IDENTITY;
+	this->m_xViewState.xmProj = MAT4_ZERO;
+	this->update |= 2u;
+	this->m_xNeedToUpdateViewTransfToVideo = true;
+	this->m_xNeedToUpdateProjTransfToVideo = true;
+	this->m_projMode = PERSPECTIVE;
+	this->m_scale = 1.0;
+	(this->*m_fnUpdateCamera[0])();
+}
+
+WView::~WView() = default;
 
 float WView::GetClipNearValue() const {
 	return this->clip_near;
@@ -112,9 +189,9 @@ void WView::DrawProjPolygonFan(WtVertex** wl, int drawOption, int drawOption2) {
 	this->DrawPolygonFan(wl, drawOption, drawOption2, true);
 }
 
-bool WView::InFrustum(const WVector& vec2) const {
+bool WView::InFrustum(const WVector& vec3) const {
 	for (auto p : this->frustum) {
-		if (p.x * vec2.x + p.z * vec2.z + p.normal.p[1] * vec2.y + p.dis > 0.0f) {
+		if (p.x * vec3.x + p.z * vec3.z + p.normal.p[1] * vec3.y + p.dis > 0.0f) {
 			return false;
 		}
 	}
@@ -297,6 +374,18 @@ void WView::DrawLine2D(const WPoint& p1, const WPoint& p2, unsigned int diffuse1
 	this->DrawPolygonFan(vl, type | 0x4000000, 0, true);
 }
 
+void WView::BeginScene() {
+	if (this->m_resrcMng) {
+		WVideoDev* videoDev = this->m_resrcMng->VideoReference();
+		videoDev->BeginScene();
+		if (this->SCREEN_XS != videoDev->GetWidth() || this->SCREEN_YS != videoDev->GetHeight()) {
+			this->SetViewport(static_cast<float>(videoDev->GetWidth()), static_cast<float>(videoDev->GetHeight()));
+		}
+	}
+	this->update |= 0x3;
+	(this->*m_fnUpdateCamera[this->m_projMode])();
+}
+
 void WView::Draw2DTexture(const WRect& src, const WRect& dest, int texHandle, unsigned int diffuse, unsigned int type) {
 	m_vtx[0].x = dest.x - 0.5f;
 	m_vtx[0].y = dest.y - 0.5f;
@@ -350,6 +439,60 @@ void WView::DrawAABB(const Waabb& aabb, unsigned int diffuse, bool solid, int ty
 	// Does nothing.
 }
 
+void WView::DrawAABB(WMatrix& m, const Waabb& aabb, unsigned diffuse, bool solid, int type) {
+	abort();
+}
+
+void WView::DrawOBB(const WMatrix& mat, unsigned diffuse) {
+	abort();
+}
+
+void WView::DrawOBB(const Wobb& obb, unsigned diffuse) {
+	abort();
+}
+
+void WView::DrawSphere(const WVector& pivot, float length, unsigned int diffuse, int seg, int offset) {
+	WVector vtx[24];
+
+	if (seg > 24) {
+		seg = 24;
+	}
+
+	for (int i = 0; i < seg; i++) {
+		float s = sin(static_cast<float>(i) * 6.2831855f / static_cast<float>(seg));
+		float c = cos(static_cast<float>(i) * 6.2831855f / static_cast<float>(seg));
+		vtx[i].x = length * this->camera.xa.x * c + pivot.x + length * this->camera.ya.x * s;
+		vtx[i].y = length * this->camera.xa.y * c + pivot.y + length * this->camera.ya.y * s;
+		vtx[i].z = length * this->camera.xa.y * c + pivot.z + length * this->camera.ya.z * s;
+	}
+
+	WtVertex v1, v2;
+	WtVertex* vl[3];
+	vl[0] = &v1;
+	vl[1] = &v2;
+	vl[2] = nullptr;
+
+	for (int i = 0; i < seg; i++) {
+		WVector& vtx2 = vtx[(i + 1) % seg];
+		if (!offset || (i + 1) % (offset + 1)) {
+			v1.pos = vtx[i];
+			v1.diffuse = diffuse;
+			v2.pos = vtx2;
+			v2.diffuse = diffuse;
+		} else {
+			v1.pos = vtx[i];
+			v1.diffuse = 0xFF00FF00;
+			v2.pos = vtx2;
+			v2.diffuse = 0xFF00FF00;
+		}
+		this->DrawPolygonFan(vl, 0x4000000, 0, false);
+	}
+}
+
+void WView::DrawSphere(const WSphere& sphere, unsigned int diffuse, int seg, int offset) {
+	this->DrawSphere(sphere.pos, sphere.radius, diffuse, seg, offset);
+}
+
 void WView::Clear(unsigned int clearColor, int mode) const {
 	if (!this->m_resrcMng || !this->m_resrcMng->VideoReference()) {
 		return;
@@ -372,6 +515,11 @@ void WView::Clear(unsigned int clearColor, int mode) const {
 
 void WView::EndScene() {
 	// Does nothing.
+}
+
+void WView::Flush(unsigned int flag) {
+	this->m_resrcMng->VideoReference()->Command(WDeviceMessageFlush, flag, 0);
+	g_foffset = 0;
 }
 
 void WView::DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected) {
@@ -735,6 +883,63 @@ void WView::UpdateCamera_Parallel() {
 		this->m_xNeedToUpdateViewTransfToVideo = true;
 	}
 	this->UpdateProjectionTransform_Parallel();
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void WView::UpdateCamera() {
+	(this->*m_fnUpdateCamera[this->m_projMode])();
+}
+
+void WView::DrawIndexedTriangles(WtVertex* p, int pNum, uint16_t* f, int fNum, int drawOption, int drawOption2) {
+	if (this->proj_scale > 1.0) {
+		return;
+	}
+	if (this->m_bDisableFog) {
+		drawOption &= ~0x8000000;
+	}
+	this->DrawIndexedTrianglesDirect(p, pNum, f, fNum, drawOption, drawOption2);
+	if ((drawOption & 0x400000) != 0) {
+		g_foffset += fNum;
+	}
+}
+
+void WView::DrawIndexedTrianglesDirect(WtVertex* plist, int pn, uint16_t* flist, int fn, int type, int type2) {
+	WVideoDev* video = this->m_resrcMng->VideoReference();
+	if (!video) {
+		return;
+	}
+	if ((type & 0x400000) != 0) {
+		for (int i = 0; i < pn; i++) {
+			plist[i].lv = plist[i].x * this->invcamera.xa.z
+				+ plist[i].z * this->invcamera.za.z
+				+ plist[i].y * this->invcamera.ya.z
+				+ this->invcamera.pivot.z;
+		}
+	}
+	if (this->m_xNeedToUpdateViewTransfToVideo) {
+		this->m_xNeedToUpdateViewTransfToVideo = false;
+		video->XSetTransform(WTransformStateView, this->m_xViewState.xmView);
+	}
+	if (this->m_xNeedToUpdateProjTransfToVideo) {
+		this->m_xNeedToUpdateProjTransfToVideo = false;
+		video->XSetTransform(WTransformStateProjection, this->m_xViewState.xmProj);
+	}
+	if (this->m_isReflective) {
+		switch (type2 & 0xC00) {
+			case 0x800:
+				type2 &= ~0x800;
+				break;
+			case 0x000:
+				type2 |= 0x800;
+			default:
+				break;
+		}
+	}
+	video->DrawIndexedTriangles(plist, pn, flist, fn, type, type2);
+}
+
+bool WView::IsShadowView() {
+	return false;
 }
 
 float WView::xGetProjScale() const {

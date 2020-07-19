@@ -231,9 +231,11 @@ inline WVector RotVec(const WVector& a1, const WMatrix& a2) {
 
 class WMatrix4 {
 public:
-	WMatrix4() {
-		memset(p, 0, sizeof(p));
-	}
+	constexpr WMatrix4() {}
+
+	explicit constexpr WMatrix4(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24,
+	                            float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44)
+		: p{m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44} { }
 
 	union {
 		struct {
@@ -258,8 +260,22 @@ public:
 		};
 
 		float m[4][4];
-		float p[16];
+		float p[16]{};
 	};
+};
+
+constexpr static WMatrix4 MAT4_IDENTITY{
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1,
+};
+
+constexpr static WMatrix4 MAT4_ZERO{
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0, 0,
 };
 
 inline void SetWMatrix4FromWMatrix(WMatrix4& m4, const WMatrix& m) {
@@ -275,6 +291,8 @@ inline void SetWMatrix4FromWMatrix(WMatrix4& m4, const WMatrix& m) {
 
 class WPlane {
 public:
+	WPlane() {}
+
 	union {
 		struct {
 			float x;
@@ -291,10 +309,7 @@ public:
 		WVector normal{};
 	};
 
-	union {
-		float dis{};
-		float d;
-	};
+	float dis{};
 };
 
 typedef struct _WPOINT {
@@ -328,6 +343,12 @@ struct WSphere {
 	WVector pos;
 	float radius;
 };
+
+struct Wobb {
+	WVector center;
+	WVector extend[3];
+};
+
 
 typedef struct _WSIZE {
 	float w;
