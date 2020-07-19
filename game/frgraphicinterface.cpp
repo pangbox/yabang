@@ -27,6 +27,23 @@ FrGraphicInterface::FrGraphicInterface(WView* pView) {
 	this->m_alpha = 1.0;
 }
 
+FrGraphicInterface::~FrGraphicInterface() {
+	if (this->m_pCacheManager) {
+		delete this->m_pCacheManager;
+		this->m_pCacheManager = nullptr;
+	}
+	if (g_resourceManager) {
+		if (this->m_pFont12) {
+			g_resourceManager->Release(this->m_pFont12);
+			this->m_pFont12 = nullptr;
+		}
+		if (this->m_pFont11) {
+			g_resourceManager->Release(this->m_pFont11);
+			this->m_pFont11 = nullptr;
+		}
+	}
+}
+
 float FrGraphicInterface::GetAlpha() const {
 	return this->m_alpha;
 }

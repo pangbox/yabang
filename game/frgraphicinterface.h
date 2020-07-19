@@ -7,6 +7,7 @@ class WFont;
 class FrGraphicInterface {
 public:
 	FrGraphicInterface(WView* pView);
+	~FrGraphicInterface();
 
 	float GetAlpha() const;
 
