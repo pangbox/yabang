@@ -69,6 +69,21 @@ float FrGraphicInterface::GetViewHeight() const {
 	return this->m_pView ? this->m_pView->GetHeight() : 0.0;
 }
 
+void FrGraphicInterface::UpdateTextureCacheInfo(const Bitmap* pBitmap) {
+	const sTexCacheInfo* cacheInfo = this->m_pCacheManager->Get(*pBitmap);
+	if (!cacheInfo) {
+		cacheInfo = this->m_pCacheManager->Add(*pBitmap);
+	}
+	if (!cacheInfo) {
+		return;
+	}
+	this->m_pCacheManager->UpdateTextureCacheInfo(*cacheInfo);
+}
+
+void FrGraphicInterface::RefreshTextureCacheInfo(const Bitmap* pBitmap) {
+	this->m_pCacheManager->RefreshTexCache(*pBitmap);
+}
+
 float FrGraphicInterface::GetAlpha() const {
 	return this->m_alpha;
 }

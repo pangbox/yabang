@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "wmath.h"
 
+class Bitmap;
 class WView;
 class TexCacheManager;
 class WFont;
@@ -16,6 +17,8 @@ public:
 	void LineBox(const WRect& rect, unsigned diffuse, unsigned type, float unused);
 	float GetViewWidth() const;
 	float GetViewHeight() const;
+	void UpdateTextureCacheInfo(const Bitmap* pBitmap);
+	void RefreshTextureCacheInfo(const Bitmap* pBitmap);
 	float GetAlpha() const;
 
 private:
