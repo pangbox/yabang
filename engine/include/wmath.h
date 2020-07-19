@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <cstdint>
 #include <cstring>
 
 enum Axis {
@@ -66,7 +67,7 @@ inline void WVector::Normalize() {
 	}
 }
 
-static WVector operator*(const WVector& v, float m) {
+inline WVector operator*(const WVector& v, float m) {
 	WVector result;
 	result.x = m * v.x;
 	result.y = m * v.y;
@@ -74,7 +75,7 @@ static WVector operator*(const WVector& v, float m) {
 	return result;
 }
 
-static WVector operator+(const WVector& a, const WVector& b) {
+inline WVector operator+(const WVector& a, const WVector& b) {
 	WVector result;
 	result.x = a.x + b.x;
 	result.y = a.y + b.y;
@@ -82,7 +83,7 @@ static WVector operator+(const WVector& a, const WVector& b) {
 	return result;
 }
 
-static WVector WCrossProduct(const WVector& a1, const WVector& a2) {
+inline WVector WCrossProduct(const WVector& a1, const WVector& a2) {
 	WVector result;
 	result.x = a1.y * a2.z - a1.z * a2.y;
 	result.y = a1.z * a2.x - a2.z * a1.x;
@@ -150,7 +151,7 @@ public:
 	};
 };
 
-static WMatrix operator*(const WMatrix& m, const WVector& v) {
+inline WMatrix operator*(const WMatrix& m, const WVector& v) {
 	WMatrix result = m;
 	result.xa.x *= v.x;
 	result.ya.x *= v.x;
@@ -167,7 +168,7 @@ static WMatrix operator*(const WMatrix& m, const WVector& v) {
 	return result;
 }
 
-static WMatrix operator*(const WMatrix& m1, const WMatrix& m2) {
+inline WMatrix operator*(const WMatrix& m1, const WMatrix& m2) {
 	WMatrix result;
 	result.xa.x = m1.xa.y * m2.ya.x + m1.xa.x * m2.xa.x + m1.xa.z * m2.za.x;
 	result.xa.y = m1.xa.z * m2.za.y + m1.xa.y * m2.ya.y + m1.xa.x * m2.xa.y;
@@ -184,7 +185,15 @@ static WMatrix operator*(const WMatrix& m1, const WMatrix& m2) {
 	return result;
 }
 
-static WMatrix RotMat(WVector a) {
+inline WVector operator*(const WVector& v, const WMatrix& m) {
+	WVector result;
+	result.x = m.za.x * v.z + m.ya.x * v.y + m.xa.x * v.x + m.pivot.x;
+	result.y = m.za.y * v.z + m.ya.y * v.y + m.xa.y * v.x + m.pivot.y;
+	result.z = m.za.z * v.z + m.ya.z * v.y + m.xa.z * v.x + m.pivot.z;
+	return result;
+}
+
+inline WMatrix RotMat(WVector a) {
 	// TODO: This assumes RotMat is taking euler angles, which may or may not be true.
 	WMatrix result;
 	float cx = std::cos(a.x / 2);
@@ -212,7 +221,7 @@ static WMatrix RotMat(WVector a) {
 	return result;
 }
 
-static WVector RotVec(const WVector& a1, const WMatrix& a2) {
+inline WVector RotVec(const WVector& a1, const WMatrix& a2) {
 	WVector result;
 	result.x = a2.za.x * a1.z + a2.ya.x * a1.y + a2.xa.x * a1.x;
 	result.y = a2.za.y * a1.z + a2.ya.y * a1.y + a2.xa.y * a1.x;
@@ -325,7 +334,7 @@ typedef struct _WSIZE {
 	float h;
 } WSIZE;
 
-struct WSize : public WSIZE {};
+struct WSize : WSIZE {};
 
 constexpr double g_pi = 3.14159265358979323846;
 constexpr double g_pi2 = 1.57079632679489661923;
@@ -334,3 +343,10 @@ constexpr double g_pi4 = 0.785398163397448309616;
 constexpr float g_pif = 3.14159265358979323846f;
 constexpr float g_pi2f = 1.57079632679489661923f;
 constexpr float g_pi4f = 0.785398163397448309616f;
+
+inline uint32_t ULblend(uint32_t x, uint32_t y, uint8_t a) {
+	uint32_t v1 = (a * (y >> 8 & 0xFF00FF) + (255 - a) * (x >> 8 & 0xFF00FF)) >> 0;
+	uint32_t v2 = (a * (y >> 0 & 0xFF00FF) + (255 - a) * (x >> 0 & 0xFF00FF)) >> 8;
+	uint32_t v3 = (a * (y >> 8 & 0xFF00FF) + (255 - a) * (x >> 8 & 0xFF00FF)) >> 0;
+	return v1 ^ ((v2 ^ v3) & 0xFF00FF);
+}
