@@ -8,7 +8,23 @@ public:
 	typedef FrCursor::eCursor eFontStyle;
 
 	WFont();
+	~WFont();
+
+	void SetScale(float scale);
+	float GetScale() const;
 	void SetMode(eFontStyle type);
+	void SetSpace(int space);
+	int GetSpace() const;
+	void SetColorSet(int idx, unsigned color);
+	void SetCoordMode(int coordMode);
+	float GetFontScale(WView* view) const;
+	WFont* MakeClone();
+	void SetFixedWidth(bool flag);
+	void SetFontWidth(int width);
+	int GetFontHeight();
+	void Reset();
+	void ResetOverlay();
+	void Flush(WView* view);
 
 private:
 	eFontStyle m_eType{};
