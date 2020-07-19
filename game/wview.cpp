@@ -374,20 +374,6 @@ void WView::EndScene() {
 	// Does nothing.
 }
 
-float WView::xGetProjScale() const {
-	return this->proj_scale;
-}
-
-void WView::xConvScreenRectByProjScale(WRect* rc) const {
-	if (this->proj_scale <= 1.0f) {
-		return;
-	}
-	rc->x = (rc->x - (this->left + 0.5f) * this->SCREEN_XS) * this->proj_scale;
-	rc->y = (rc->y - (this->top + 0.5f) * this->SCREEN_YS) * this->proj_scale;
-	rc->w = rc->w * this->proj_scale;
-	rc->h = rc->h * this->proj_scale;
-}
-
 void WView::DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected) {
 	if (this->proj_scale <= 1.0) {
 		WVideoDev* video = this->m_resrcMng->VideoReference();
@@ -483,6 +469,14 @@ void WView::CheckViewAndProjTransformUpdateToVideo() {
 	}
 }
 
+void WView::Projection2_Parallel(WtVertex* p, const WVector& vec) {
+	WVector v = vec * this->matrix;
+	p->x = v.x + this->m_center_x;
+	p->y = v.y + this->m_center_y;
+	p->z = (vec.z - this->clip_near) / (this->clip_far - this->clip_near);
+	p->rhw = 1.0;
+}
+
 void WView::UpdateProjectionTransform_Perspective() {
 	if ((this->update & 2) == 0) {
 		return;
@@ -537,6 +531,24 @@ void WView::UpdateProjectionTransform_Parallel() {
 	this->m_xViewState.xmProj.pivot.z = -1.0f / (this->clip_far - this->clip_near) * this->clip_near;
 	this->m_xViewState.xmProj.wm = 1.0f;
 	this->m_xNeedToUpdateProjTransfToVideo = true;
+}
+
+void WView::ClipPlane(WtVertex* out, const WtVertex* a, const WtVertex* b, int type, const WPlane& p) {
+	WVector va = a->pos;
+	WVector vb = b->pos;
+	float t1 = a->x * p.x + a->y * p.y + va.z * p.z + p.dis;
+	float t2 = b->x * p.x + b->y * p.y + vb.z * p.z + p.dis;
+	float t1a = t1 / (t1 - t2);
+	float t2a = 1.0f - t1a;
+	va.x = va.x * t2a + vb.x * t1a;
+	va.y = va.y * t2a + vb.y * t1a;
+	va.z = va.z * t2a + vb.z * t1a;
+	this->Projection2_Parallel(out, va);
+	out->tu = a->tu + (b->tu - a->tu) * t1a;
+	out->tv = a->tv + (b->tv - a->tv) * t1a;
+	out->lu = a->lu * (b->lu - a->lu) * t1a;
+	out->lv = a->lv * (b->lv - a->lv) * t1a;
+	out->diffuse = ULblend(a->diffuse, b->diffuse, uint8_t(t1a * 255.0f));
 }
 
 void WView::UpdateCamera_Perspective() {
@@ -723,4 +735,34 @@ void WView::UpdateCamera_Parallel() {
 		this->m_xNeedToUpdateViewTransfToVideo = true;
 	}
 	this->UpdateProjectionTransform_Parallel();
+}
+
+float WView::xGetProjScale() const {
+	return this->proj_scale;
+}
+
+void WView::xConvScreenRectByProjScale(WRect* rc) const {
+	if (this->proj_scale <= 1.0f) {
+		return;
+	}
+	rc->x = (rc->x - (this->left + 0.5f) * this->SCREEN_XS) * this->proj_scale;
+	rc->y = (rc->y - (this->top + 0.5f) * this->SCREEN_YS) * this->proj_scale;
+	rc->w = rc->w * this->proj_scale;
+	rc->h = rc->h * this->proj_scale;
+}
+
+const WMatrix& WView::GetLastCamera() const {
+	return this->lastcam;
+}
+
+bool WView::ProcessEffect() const {
+	return this->m_bProcessEffect;
+}
+
+float WView::GetFOV_Unmodified() const {
+	return this->FOV;
+}
+
+const WMatrix& WView::GetInvCamera() const {
+	return this->invcamera;
 }

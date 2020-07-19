@@ -73,10 +73,16 @@ public:
 	WVector2D GetScreenCenter() const;
 	float xGetProjScale() const;
 	void xConvScreenRectByProjScale(WRect* rc) const;
+	const WMatrix& GetLastCamera() const;
+	bool ProcessEffect() const;
+	float GetFOV_Unmodified() const;
+	const WMatrix& GetInvCamera() const;
 	void DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected);
 	void CheckViewAndProjTransformUpdateToVideo();
+	void Projection2_Parallel(WtVertex* p, const WVector& vec);
 	void UpdateProjectionTransform_Perspective();
 	void UpdateProjectionTransform_Parallel();
+	void ClipPlane(WtVertex* out, const WtVertex* a, const WtVertex* b, int type, const WPlane& p);
 	void UpdateCamera_Perspective();
 	void UpdateCamera_Parallel();
 
