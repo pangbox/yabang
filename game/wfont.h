@@ -8,7 +8,18 @@ public:
 	typedef FrCursor::eCursor eFontStyle;
 
 	WFont();
-	~WFont();
+	~WFont() override;
+
+	void SetCoordMode(int coordMode) override;
+	virtual WFont* MakeClone();
+	virtual float GetTextWidth(WView* view, const char* text);
+	virtual void SetFixedWidth(bool flag);
+	virtual void SetFontWidth(int width);
+	virtual int GetFontHeight();
+	virtual void Flush(WView* view);
+	virtual void Reset();
+	virtual float PrintInside(WView* view, float x, float y, const char* pText, int type, unsigned int diffuse, Bitmap* bmp) = 0;
+	virtual float GetTextWidthInside(WView* view, const char* pText) = 0;
 
 	void SetScale(float scale);
 	float GetScale() const;
@@ -16,15 +27,9 @@ public:
 	void SetSpace(int space);
 	int GetSpace() const;
 	void SetColorSet(int idx, unsigned color);
-	void SetCoordMode(int coordMode);
 	float GetFontScale(WView* view) const;
-	WFont* MakeClone();
-	void SetFixedWidth(bool flag);
-	void SetFontWidth(int width);
-	int GetFontHeight();
-	void Reset();
 	void ResetOverlay();
-	void Flush(WView* view);
+	float PrintOut(WView* view, float x, float y, const char* text, int type, unsigned diffuse, bool draw, Bitmap* bmp);
 
 private:
 	eFontStyle m_eType{};
