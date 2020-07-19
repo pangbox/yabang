@@ -290,7 +290,7 @@ void WOverlay::DrawLineBox(WView* view, const WRect& rect, int type, unsigned in
 	DrawLine(view, lb, lt, type | 0x300000, diffuse);
 }
 
-double WOverlay::GetUnit(WView* view, float unit, wUnitMode mode) {
+float WOverlay::GetUnit(WView* view, float unit, wUnitMode mode) const {
 	switch (mode) {
 		case W_UNIT_XPOS:
 			if ((this->m_coordMode & 0x100) == 0) {
@@ -298,11 +298,11 @@ double WOverlay::GetUnit(WView* view, float unit, wUnitMode mode) {
 			}
 			switch (this->m_coordMode & 0x06) {
 				case 0x00:
-					return view->GetWidth() / 640.0 * unit;
+					return view->GetWidth() / 640.0f * unit;
 				case 0x02:
-					return view->GetWidth() / 640.0 * (unit + 320.0);
+					return view->GetWidth() / 640.0f * (unit + 320.0f);
 				case 0x04:
-					return view->GetWidth() / 640.0 * (unit + 640.0);
+					return view->GetWidth() / 640.0f * (unit + 640.0f);
 				default:
 					break;
 			}
@@ -313,11 +313,11 @@ double WOverlay::GetUnit(WView* view, float unit, wUnitMode mode) {
 			}
 			switch (this->m_coordMode & 0x60) {
 				case 0x00:
-					return view->GetHeight() / 480.0 * unit;
+					return view->GetHeight() / 480.0f * unit;
 				case 0x20:
-					return view->GetHeight() / 480.0 * (unit + 240.0);
+					return view->GetHeight() / 480.0f * (unit + 240.0f);
 				case 0x40:
-					return view->GetHeight() / 480.0 * (unit + 480.0);
+					return view->GetHeight() / 480.0f * (unit + 480.0f);
 				default:
 					break;
 			}
@@ -326,15 +326,16 @@ double WOverlay::GetUnit(WView* view, float unit, wUnitMode mode) {
 			if ((this->m_coordMode & 0x1000) == 0) {
 				return unit;
 			}
-			return view->GetWidth() / 640.0 * unit;
+			return view->GetWidth() / 640.0f * unit;
 		case W_UNIT_HEIGHT:
 			if ((this->m_coordMode & 0x1000) == 0) {
 				return unit;
 			}
-			return view->GetHeight() / 480.0 * unit;
+			return view->GetHeight() / 480.0f * unit;
 		default:
 			return unit;
 	}
+	return 0;
 }
 
 WRect WOverlay::ConvertRect(WView* view, const WRect& rect, int coorFlag) {

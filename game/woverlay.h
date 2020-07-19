@@ -17,13 +17,17 @@ enum wUnitMode {
 class WOverlay : public WResource {
 public:
 	WOverlay();
-	~WOverlay();
+	~WOverlay() override;
+
+	virtual bool Load(const char* filename, unsigned int flag);
+	virtual void Render(WView* view, const WRect& src, const WRect& dest, int type, unsigned int diffuse, float angle,
+	                    uint8_t flipflag) const;
+	virtual void SetCoordMode(int coordMode);
+
 	[[nodiscard]] unsigned int GetWidth() const;
 	[[nodiscard]] unsigned int GetHeight() const;
-	void SetCoordMode(int coordMode);
 	[[nodiscard]] int GetTexhandle() const;
 	[[nodiscard]] int GetCoordMode() const;
-	bool Load(const char* filename, unsigned int flag);
 	bool Load(const char* filename, Bitmap* bitmap, unsigned flag);
 	void SetClippingArea(const WRect* rect);
 	void DrawTexture(WView* view, int texHandle, const WRect& src, const WRect& dest, float shear, int type,
@@ -36,7 +40,7 @@ public:
 	static void DrawBox(WView* view, const WRect& rect, int type, unsigned int diffuse, float depth);
 	static void DrawRainbowBox(WView* view, const WRect& rect, unsigned int* aDiffuse, int type, float depth);
 	static void DrawLineBox(WView* view, const WRect& rect, int type, unsigned int diffuse);
-	double GetUnit(WView* view, float unit, wUnitMode mode);
+	float GetUnit(WView* view, float unit, wUnitMode mode) const;
 	static WRect ConvertRect(WView* view, const WRect& rect, int coorFlag);
 	static void DrawPicture(WView* view, const WRect& rect, int texhandle, int type, unsigned int diffuse);
 	static void DrawFrameOverlay1(WView* view, WOverlay* frame, float sizeL, float sizeT, float sizeR, float sizeB,
@@ -53,8 +57,6 @@ public:
 	void clip_2D_right(WView* view, WtVertex* out, WtVertex* in, int* outlen, int inlen);
 	void clip_2D_top(WView* view, WtVertex* out, WtVertex* in, int* outlen, int inlen);
 	void clip_2D_bottom(WView* view, WtVertex* out, WtVertex* in, int* outlen, int inlen);
-	void Render(WView* view, const WRect& src, const WRect& dest, int type, unsigned int diffuse, float angle,
-	            uint8_t flipflag) const;
 	void ArcClipRender(WView* view, const WRect& src, const WRect& dest, float startang, float endang, int type,
 	                   unsigned int diffuse);
 	void DrawTextureWithAxis(WView* view, int texHandle, const WRect& src, const WRect& dest, float axisX,
