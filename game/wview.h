@@ -34,9 +34,9 @@ public:
 	virtual ~WView();
 
 	virtual void BeginScene();
-	virtual void Clear(unsigned clearColor, int mode) const;
+	virtual void Clear(unsigned int clearColor, int mode) const;
 	virtual void EndScene();
-	virtual void Flush(unsigned flag);
+	virtual void Flush(unsigned int flag);
 	virtual void Render() const;
 	virtual void DrawPolygonFan(WtVertex** vl, int drawOption, int drawOption2, bool projected);
 	virtual void DrawIndexedTriangles(WtVertex* p, int pNum, uint16_t* f, int fNum, int drawOption, int drawOption2);
