@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "wmath.h"
 
 class WView;
 class TexCacheManager;
@@ -9,6 +10,12 @@ public:
 	FrGraphicInterface(WView* pView);
 	~FrGraphicInterface();
 
+	void Line(const WPoint& p1, const WPoint& p2, unsigned diffuse1, unsigned diffuse2, unsigned type);
+	void Box(const WRect& rect, unsigned diffuse, unsigned type, float depth);
+	unsigned GetTextColor() const;
+	void LineBox(const WRect& rect, unsigned diffuse, unsigned type, float unused);
+	float GetViewWidth() const;
+	float GetViewHeight() const;
 	float GetAlpha() const;
 
 private:

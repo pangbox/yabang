@@ -44,6 +44,31 @@ FrGraphicInterface::~FrGraphicInterface() {
 	}
 }
 
+void FrGraphicInterface::Line(const WPoint& p1, const WPoint& p2, unsigned int diffuse1, unsigned int diffuse2,
+                              unsigned int type) {
+	g_view->DrawLine2D(p1, p2, diffuse1, diffuse2, type);
+}
+
+void FrGraphicInterface::Box(const WRect& rect, unsigned int diffuse, unsigned int type, float depth) {
+	WOverlay::DrawBox(g_view, rect, type, diffuse, depth);
+}
+
+unsigned int FrGraphicInterface::GetTextColor() const {
+	return this->m_textColor;
+}
+
+void FrGraphicInterface::LineBox(const WRect& rect, unsigned int diffuse, unsigned int type, float unused) {
+	WOverlay::DrawLineBox(g_view, rect, type, diffuse);
+}
+
+float FrGraphicInterface::GetViewWidth() const {
+	return this->m_pView ? this->m_pView->GetWidth() : 0.0;
+}
+
+float FrGraphicInterface::GetViewHeight() const {
+	return this->m_pView ? this->m_pView->GetHeight() : 0.0;
+}
+
 float FrGraphicInterface::GetAlpha() const {
 	return this->m_alpha;
 }
