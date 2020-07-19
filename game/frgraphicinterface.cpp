@@ -62,11 +62,11 @@ void FrGraphicInterface::LineBox(const WRect& rect, unsigned int diffuse, unsign
 }
 
 float FrGraphicInterface::GetViewWidth() const {
-	return this->m_pView ? this->m_pView->GetWidth() : 0.0;
+	return this->m_pView ? this->m_pView->GetWidth() : 0.0f;
 }
 
 float FrGraphicInterface::GetViewHeight() const {
-	return this->m_pView ? this->m_pView->GetHeight() : 0.0;
+	return this->m_pView ? this->m_pView->GetHeight() : 0.0f;
 }
 
 void FrGraphicInterface::UpdateTextureCacheInfo(const Bitmap* pBitmap) {
