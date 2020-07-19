@@ -13,6 +13,8 @@ BaseObject::BaseObject() {
 	}
 }
 
+BaseObject::~BaseObject() = default;
+
 void BaseObject::SetLeakHint(const char* hint) {
 	this->m_leakHint = hint;
 }
