@@ -64,6 +64,14 @@ public:
 	int LoadTexture(const char* filename, unsigned type, int level, const char* texname);
 	int GetTextureWidth(int texHandle);
 	int GetTextureHeight(int texHandle);
+	Bitmap* MakeQuarterBitmap(Bitmap* bitmap);
+	void AddMissingTexture(const char* filename);
+	Bitmap* LoadBRES(const char* zipname, const char* filename);
+	Bitmap* LoadBMP(const char* filename);
+	Bitmap* LoadJPG(const char* filename);
+	Bitmap* LoadPNG(const char* filename, bool bFromMem, bool bNet);
+	Bitmap* LoadTGA(const char* filename);
+	Bitmap* LoadBitmapA(const char* filename, int level, bool bNet);
 
 private:
 	WVideoDev* video = nullptr;

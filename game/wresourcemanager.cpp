@@ -1,6 +1,5 @@
 ﻿#include "wresourcemanager.h"
 
-
 #include "bitmap.h"
 #include "w3dspr.h"
 #include "woverlay.h"
@@ -193,4 +192,80 @@ int WResourceManager::GetTextureHeight(int texHandle) {
 		}
 	}
 	return 0;
+}
+
+Bitmap* WResourceManager::MakeQuarterBitmap(Bitmap* bitmap) {
+	// TODO: should downsample image.
+	return new Bitmap(*bitmap);
+}
+
+void WResourceManager::AddMissingTexture(const char* filename) {
+	if (!this->m_missingTextureList.Find(filename)) {
+		char* filenameCopied = new char[strlen(filename) + 1];
+		strcpy(filenameCopied, filename);
+		this->m_missingTextureList.AddItem(filenameCopied, filenameCopied, false);
+	}
+}
+
+Bitmap* WResourceManager::LoadBRES(const char* zipname, const char* filename) {
+	// TODO: Load zipped bitmap.
+	return nullptr;
+}
+
+Bitmap* WResourceManager::LoadBMP(const char* filename) {
+	// TODO: Load bitmap.
+	return nullptr;
+}
+
+Bitmap* WResourceManager::LoadJPG(const char* filename) {
+	// TODO: Load JPEG image.
+	return nullptr;
+}
+
+Bitmap* WResourceManager::LoadPNG(const char* filename, bool bFromMem, bool bNet) {
+	// TODO: Load PNG image.
+	return nullptr;
+}
+
+Bitmap* WResourceManager::LoadTGA(const char* filename) {
+	// TODO: Load TGA image.
+	return nullptr;
+}
+
+Bitmap* WResourceManager::LoadBitmapA(const char* filename, int level, bool bNet) {
+	char temp[256];
+	Bitmap* result = nullptr;
+	this->m_lock[1].Lock();
+	const char* extension = strrchr(filename, '.');
+	const char* zipName = strrchr(filename, '?');
+	if (zipName) {
+		memset(temp, 0, 0x100);
+		memcpy(temp, filename, zipName - filename);
+		result = this->LoadBRES(zipName + 1, temp);
+	} else if (extension) {
+		if (!_strcmpi(extension, ".bmp")) {
+			result = this->LoadBMP(filename);
+		} else if (!_strcmpi(extension, ".jpg")) {
+			result = this->LoadJPG(filename);
+		} else if (!_strcmpi(extension, ".png")) {
+			result = this->LoadPNG(filename, false, bNet);
+		} else if (!_strcmpi(extension, ".tga")) {
+			result = this->LoadTGA(filename);
+		}
+		if (!result && (!_strcmpi(extension, ".jpg") || !_strcmpi(extension, ".bmp"))) {
+			strcpy(&temp[4], filename);
+			strcpy(strrchr(temp + 4, '.'), ".png");
+			result = this->LoadPNG(temp + 4, false, false);
+		}
+	}
+	if (result && result->m_bi->bmiHeader.biWidth > 8 && result->m_bi->bmiHeader.biHeight > 8 && this->m_savemem[level]) {
+		Bitmap* downsampled = this->MakeQuarterBitmap(result);
+		delete result;
+		result = downsampled;
+	}
+	if (!level && result) {
+		result->Update();
+	}
+	this->m_lock[1].Unlock();
+	return result;
 }
