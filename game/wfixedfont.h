@@ -24,6 +24,8 @@ public:
 		char msg[1];
 	};
 
+	void Init(int maxTexture);
+
 private:
 	WList<w_fixedtext*> m_textList{8, 8};
 	w_flush_area m_flush_list[128] = {};
