@@ -18,7 +18,8 @@ public:
 	virtual int GetFontHeight();
 	virtual void Flush(WView* view);
 	virtual void Reset();
-	virtual float PrintInside(WView* view, float x, float y, const char* pText, int type, unsigned int diffuse, Bitmap* bmp) = 0;
+	virtual float PrintInside(WView* view, float x, float y, const char* pText, int type, unsigned int diffuse,
+	                          Bitmap* bmp) = 0;
 	virtual float GetTextWidthInside(WView* view, const char* pText) = 0;
 
 	void SetScale(float scale);
@@ -31,7 +32,7 @@ public:
 	void ResetOverlay();
 	float PrintOut(WView* view, float x, float y, const char* text, int type, unsigned diffuse, bool draw, Bitmap* bmp);
 
-private:
+protected:
 	eFontStyle m_eType{};
 	int m_space{};
 	float m_scale{};
