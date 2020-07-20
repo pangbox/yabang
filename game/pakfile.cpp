@@ -47,7 +47,7 @@ sPak* OpenPAKFILE2(cFile* fp) {
 	// Allocate pak info. The trailer is assumed to come right after the file
 	// table, and we use pointer arithmetic to determine how much space we
 	// need (since file names are variable size.)
-	const int pakInfoLen = trailerOffset - ftOffset + pakFile->num * perFileDiff;
+	const size_t pakInfoLen = trailerOffset - ftOffset + pakFile->num * perFileDiff;
 	char* const pakInfoBlock = new char[pakInfoLen];
 
 	// Seek to file table.
