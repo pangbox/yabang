@@ -28,7 +28,7 @@ Bitmap::Bitmap(int32_t w, int32_t h, int32_t bpp) {
 }
 
 Bitmap::~Bitmap() {
-	if (this->m_lock != false) {
+	if (this->m_lock) {
 		return;
 	}
 	if (this->m_bi) {
@@ -53,6 +53,7 @@ Bitmap& Bitmap::operator=(const Bitmap& other) {
 		memcpy(this->m_bi->bmiColors, other.m_bi->bmiColors, 4 * colorsUsed);
 	}
 	memcpy(this->m_vram, other.m_vram, this->m_bi->bmiHeader.biHeight * this->m_pitch);
+	this->m_lock = false;
 	return *this;
 }
 
