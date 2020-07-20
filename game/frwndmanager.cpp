@@ -247,7 +247,7 @@ void FrWndManager::CheckSystemStatus() {
 }
 
 FrWnd* FrWndManager::DoCreate(FrGuiItem* item, FrWndManager* pManager, FrWnd* pParent, FrCmdTarget* pOwner) {
-	FrWnd* wnd; // eax
+	FrWnd* wnd = nullptr;
 	sFrCreateSub m;
 	m.pItem = item;
 	m.pManager = this;
