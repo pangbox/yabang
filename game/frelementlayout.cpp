@@ -6,13 +6,13 @@ FrElementLayout::FrElementLayout()
 	: FrElement(ED_LAYOUT) {}
 
 FrElementLayout::~FrElementLayout() {
-	for (auto *i : this->m_guiList) {
+	for (auto* i : this->m_guiList) {
 		delete i;
 	}
 }
 
 void FrElementLayout::Init(const TiXmlNode* pSrc) {
-    const TiXmlNode* base = pSrc->FirstChild("base");
+	const TiXmlNode* base = pSrc->FirstChild("base");
 	if (!base || !base->ToElement()) {
 		return;
 	}
@@ -33,13 +33,13 @@ void FrElementLayout::Init(const TiXmlNode* pSrc) {
 	}
 
 	int v[4];
-    const TiXmlElement* aniElement = aniBg->ToElement();
-    std::string rect = aniElement->Attribute("rect");
-    sscanf(rect.c_str(), "%d %d %d %d", &v[0], &v[1], &v[2], &v[3]);
-    this->m_aniBg.m_rect.tl.x = v[0];
-    this->m_aniBg.m_rect.tl.y = v[1];
-    this->m_aniBg.m_rect.br.x = v[2];
-    this->m_aniBg.m_rect.br.y = v[3];
-    this->m_aniBg.m_param["vel"] = aniElement->Attribute("vel");
-    this->m_aniBg.m_param["img"] = aniElement->Attribute("img");
+	const TiXmlElement* aniElement = aniBg->ToElement();
+	std::string rect = aniElement->Attribute("rect");
+	sscanf(rect.c_str(), "%d %d %d %d", &v[0], &v[1], &v[2], &v[3]);
+	this->m_aniBg.m_rect.tl.x = v[0];
+	this->m_aniBg.m_rect.tl.y = v[1];
+	this->m_aniBg.m_rect.br.x = v[2];
+	this->m_aniBg.m_rect.br.y = v[3];
+	this->m_aniBg.m_param["vel"] = aniElement->Attribute("vel");
+	this->m_aniBg.m_param["img"] = aniElement->Attribute("img");
 }
