@@ -74,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="frtypeid.cpp" />
     <ClCompile Include="fremoticon.cpp" />
+    <ClCompile Include="cfilememory.cpp" />
+    <ClCompile Include="pakfile.cpp" />
+    <ClCompile Include="cipher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="frtypeid.h" />
     <ClInclude Include="fremoticon.h" />
+    <ClInclude Include="cfilememory.h" />
+    <ClInclude Include="pakfile.h" />
+    <ClInclude Include="cipher.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

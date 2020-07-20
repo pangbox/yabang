@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+class cFile;
+
+cFile* GetCFileSub(const char* filename, int len, int pakonly);
+cFile* GetCFile(const char* filename, int len, int pakonly);
 void CloseCFile(class cFile* hdl);
 
 class cFile {

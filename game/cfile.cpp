@@ -1,10 +1,77 @@
 ﻿#include "cfile.h"
 
+#include <io.h>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cstdarg>
+#include <direct.h>
+#include <windows.h>
+
+#include "cfilememory.h"
+
+char clonedirectory[128] = {0};
+
+void makedirectory(const char* directory) {
+	TCHAR curdir[MAX_PATH];
+	char dir[MAX_PATH];
+
+	// HACK: This function manipulates the CWD unnecessarily.
+	// Should make improvements or replace.
+	
+	GetCurrentDirectory(_countof(curdir), curdir);
+	const char* pathptr = directory;
+	while (*pathptr) {
+		pathptr = strchr(pathptr + 1, '\\');
+		if (!pathptr) {
+			pathptr = &directory[strlen(directory)];
+		}
+		if (pathptr[-1] != ':') {
+			memcpy(dir, directory, pathptr - directory);
+			dir[pathptr - directory] = 0;
+			_mkdir(dir);
+			_chdir(dir);
+		}
+	}
+	SetCurrentDirectory(curdir);
+}
+
+cFile* GetCFileSub(const char* filename, int len, int pakonly) {
+	if (len < 0) {
+		cFile* f = GetCFile(filename, 4096, pakonly);
+		if (!f) {
+			return nullptr;
+		}
+		return new cFileMemory(f);
+	}
+}
+
+cFile* GetCFile(const char* filename, int len, int pakonly) {
+	char dir[260];
+	char fname[260];
+
+	cFile* f = GetCFileSub(filename, len, pakonly);
+
+	if (f && clonedirectory[0]) {
+		sprintf(fname, "%s%s", clonedirectory, filename);
+		for (; strchr(fname, '/'); *strchr(fname, '/') = '\\') {}
+		if (_access(fname, 0) == -1) {
+			for (int v5 = 0; fname[v5]; v5++) {
+				dir[v5] = fname[v5];
+			}
+			*strrchr(dir, 92) = 0;
+			makedirectory(dir);
+			FILE* out = fopen(fname, "wb");
+			for (int i = 0; i < f->Length(); ++i) {
+				fputc(f->GetByte(), out);
+			}
+			fclose(out);
+		}
+		f->Seek(0, SEEK_SET);
+	}
+	return f;
+}
 
 void CloseCFile(cFile* hdl) {
 	delete hdl;

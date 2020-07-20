@@ -1,6 +1,7 @@
 ﻿#include "wresourcemanager.h"
 
 #include "bitmap.h"
+#include "cfile.h"
 #include "w3dspr.h"
 #include "woverlay.h"
 #include "wresource.h"
@@ -268,4 +269,8 @@ Bitmap* WResourceManager::LoadBitmapA(const char* filename, int level, bool bNet
 	}
 	this->m_lock[1].Unlock();
 	return result;
+}
+
+cFile* WResourceManager::GetCFile(const char* filename, int len) {
+	return ::GetCFile(this->FindMatchFile(filename), len, 0);
 }

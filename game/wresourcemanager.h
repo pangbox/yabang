@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "spak.h"
 #include "w3dspr.h"
 #include "wlist.h"
 #include "wresrccache.h"
@@ -72,6 +73,7 @@ public:
 	Bitmap* LoadPNG(const char* filename, bool bFromMem, bool bNet);
 	Bitmap* LoadTGA(const char* filename);
 	Bitmap* LoadBitmapA(const char* filename, int level, bool bNet);
+	cFile* GetCFile(const char* filename, int len);
 
 private:
 	WVideoDev* video = nullptr;
