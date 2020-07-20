@@ -49,7 +49,6 @@ sPak* OpenPAKFILE2(cFile* fp) {
 	// need (since file names are variable size.)
 	const int pakInfoLen = trailerOffset - ftOffset + pakFile->num * perFileDiff;
 	char* const pakInfoBlock = new char[pakInfoLen];
-	pakFile->list[0] = reinterpret_cast<sPakinfo*>(new char[pakInfoLen]);
 
 	// Seek to file table.
 	fp->Seek(ftOffset, SEEK_SET);
