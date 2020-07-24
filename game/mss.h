@@ -91,6 +91,11 @@ typedef uint32_t(__stdcall* PFN_AIL_sample_status)(HSAMPLE sample);
 typedef uint32_t(__stdcall* PFN_AIL_stream_status)(HSTREAM stream);
 typedef uint32_t(__stdcall* PFN_AIL_sample_position)(HSAMPLE sample);
 typedef void(__stdcall* PFN_AIL_stream_ms_position)(HSAMPLE sample, int32_t *total, int32_t *current);
+typedef void(__stdcall* PFN_AIL_set_sample_loop_count)(HSAMPLE sample, int32_t loop);
+typedef HSTREAM(__stdcall* PFN_AIL_open_stream)(HDIGDRIVER dig, const char* filename, int32_t memory);
+typedef void(__stdcall* PFN_AIL_set_stream_user_data)(HSTREAM stream, uint32_t index, int32_t value);
+typedef void(__stdcall* PFN_AIL_close_digital_driver)(HDIGDRIVER dig);
+
 
 struct AIL {
 	AIL();
@@ -145,4 +150,8 @@ struct AIL {
 	PFN_AIL_stream_status stream_status;
 	PFN_AIL_sample_position sample_position;
 	PFN_AIL_stream_ms_position stream_ms_position;
+	PFN_AIL_set_sample_loop_count set_sample_loop_count;
+	PFN_AIL_open_stream open_stream;
+	PFN_AIL_set_stream_user_data set_stream_user_data;
+	PFN_AIL_close_digital_driver close_digital_driver;
 };

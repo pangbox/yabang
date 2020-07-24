@@ -50,6 +50,10 @@ AIL::AIL() {
 	stream_status = (PFN_AIL_stream_status)GetProcAddress(this->mss32, "AIL_stream_status");
 	sample_position = (PFN_AIL_sample_position)GetProcAddress(this->mss32, "AIL_sample_position");
 	stream_ms_position = (PFN_AIL_stream_ms_position)GetProcAddress(this->mss32, "AIL_stream_ms_position");
+	set_sample_loop_count = (PFN_AIL_set_sample_loop_count)GetProcAddress(this->mss32, "AIL_set_sample_loop_count");
+	open_stream = (PFN_AIL_open_stream)GetProcAddress(this->mss32, "AIL_open_stream");
+	set_stream_user_data = (PFN_AIL_set_stream_user_data)GetProcAddress(this->mss32, "AIL_set_stream_user_data");
+	close_digital_driver = (PFN_AIL_close_digital_driver)GetProcAddress(this->mss32, "AIL_close_digital_driver");
 }
 
 AIL::~AIL() {
