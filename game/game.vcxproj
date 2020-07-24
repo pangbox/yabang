@@ -210,6 +210,7 @@
     <ClCompile Include="iff.cpp" />
     <ClCompile Include="iobject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mss.cpp" />
     <ClCompile Include="pakfile.cpp" />
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="rectcache.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="wfont.cpp" />
     <ClCompile Include="wlock.cpp" />
     <ClCompile Include="wmesh.cpp" />
+    <ClCompile Include="wmilessoundsystem.cpp" />
     <ClCompile Include="woverlay.cpp" />
     <ClCompile Include="wpolysoup.cpp" />
     <ClCompile Include="wpuppet.cpp" />
@@ -278,6 +280,7 @@
     <ClInclude Include="frwndmanager.h" />
     <ClInclude Include="iff.h" />
     <ClInclude Include="iobject.h" />
+    <ClInclude Include="mss.h" />
     <ClInclude Include="pakfile.h" />
     <ClInclude Include="rectangle.h" />
     <ClInclude Include="rectcache.h" />
@@ -297,6 +300,7 @@
     <ClInclude Include="wfont.h" />
     <ClInclude Include="wlock.h" />
     <ClInclude Include="wmesh.h" />
+    <ClInclude Include="wmilessoundsystem.h" />
     <ClInclude Include="woverlay.h" />
     <ClInclude Include="wpolysoup.h" />
     <ClInclude Include="wpuppet.h" />

@@ -77,6 +77,8 @@
     <ClCompile Include="cfilememory.cpp" />
     <ClCompile Include="pakfile.cpp" />
     <ClCompile Include="cipher.cpp" />
+    <ClCompile Include="wmilessoundsystem.cpp" />
+    <ClCompile Include="mss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -148,6 +150,8 @@
     <ClInclude Include="cfilememory.h" />
     <ClInclude Include="pakfile.h" />
     <ClInclude Include="cipher.h" />
+    <ClInclude Include="wmilessoundsystem.h" />
+    <ClInclude Include="mss.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
