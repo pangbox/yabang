@@ -10,6 +10,7 @@
  */
 
 #include <cstdint>
+#include <exception>
 #include <windows.h>
 
 // Opaque pointer types.
@@ -97,6 +98,11 @@ typedef void(__stdcall* PFN_AIL_set_stream_user_data)(HSTREAM stream, uint32_t i
 typedef void(__stdcall* PFN_AIL_close_digital_driver)(HDIGDRIVER dig);
 
 
+class MssNotFound final : public std::exception {
+public:
+	MssNotFound() : std::exception("mss module not found") {}
+};
+
 struct AIL {
 	AIL();
 	~AIL();
@@ -106,7 +112,7 @@ struct AIL {
 	AIL& operator=(const AIL&) = delete;
 	AIL& operator=(AIL&&) = delete;
 	
-	HMODULE mss32;
+	HMODULE mss;
 	PFN_AIL_last_error last_error;
 	PFN_AIL_set_redist_directory set_redist_directory;
 	PFN_AIL_set_file_callbacks set_file_callbacks;

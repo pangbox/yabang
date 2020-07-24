@@ -83,6 +83,7 @@
     <IntDir>$(SolutionDir)obj\wangreal\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>wangreal</TargetName>
     <IncludePath>$(SolutionDir)third_party\dxsdk\include;$(SolutionDir)engine\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)third_party\dxsdk\lib64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
