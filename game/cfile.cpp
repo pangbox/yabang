@@ -45,6 +45,7 @@ cFile* GetCFileSub(const char* filename, int len, int pakonly) {
 		}
 		return new cFileMemory(f);
 	}
+	return nullptr;
 }
 
 cFile* GetCFile(const char* filename, int len, int pakonly) {

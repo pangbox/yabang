@@ -16,7 +16,7 @@ WDirectInput::~WDirectInput() {
 
 WInputDev* WDirectInput::MakeClone(char* modeName, HWND hWnd) {
 	if (!this->m_di) {
-		auto* hInstance = reinterpret_cast<HINSTANCE>(GetWindowLongPtr(hWnd, GWL_HINSTANCE));
+		auto* hInstance = reinterpret_cast<HINSTANCE>(GetWindowLongPtr(hWnd, GWLP_HINSTANCE));
 		HRESULT result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8A,
 		                                    reinterpret_cast<void**>(&this->m_di), nullptr);
 		if (FAILED(result)) {

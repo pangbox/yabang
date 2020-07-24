@@ -401,8 +401,8 @@ public:
 	virtual int CreateTexture(LPBITMAPINFO src, int type) = 0;
 	virtual void UpdateTexture(int texHandle, LPBITMAPINFO src, LPVOID data, uint32_t type) = 0;
 	virtual void DestroyTexture(int texHandle) = 0;
-	virtual int UploadCompressedTexture(void* pSrc, unsigned int srcSize, int type) = 0;
-	virtual void UpdateCompressedTexture(int texHandle, void* pSrcData, unsigned int srcDataSize, int type) = 0;
+	virtual int UploadCompressedTexture(void* pSrc, size_t srcSize, int type) = 0;
+	virtual void UpdateCompressedTexture(int texHandle, void* pSrcData, size_t srcDataSize, int type) = 0;
 	virtual void FixTexturePart(int texHandle, const RECT& rc, BITMAPINFO* src, void* data, int type) = 0;
 	virtual bool IsTextureFilled(int texHandle) = 0;
 	virtual int GetTextureWidth(int hTex) = 0;

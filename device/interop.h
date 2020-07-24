@@ -61,11 +61,11 @@ public:
 		m_dev->DestroyTexture(texHandle);
 	}
 
-	virtual int UploadCompressedTexture(void* pSrc, unsigned int srcSize, int type) {
+	virtual int UploadCompressedTexture(void* pSrc, size_t srcSize, int type) {
 		return m_dev->UploadCompressedTexture(pSrc, srcSize, type);
 	}
 
-	virtual void UpdateCompressedTexture(int texHandle, void* pSrcData, unsigned int srcDataSize, int type) {
+	virtual void UpdateCompressedTexture(int texHandle, void* pSrcData, size_t srcDataSize, int type) {
 		m_dev->UpdateCompressedTexture(texHandle, pSrcData, srcDataSize, type);
 	}
 
@@ -364,7 +364,7 @@ public:
 		return m_dev->FlushAlways();
 	}
 
-	virtual int UploadCompressedTextureSurface(void* pSrcData, unsigned int srcDataSize, int type) {
+	virtual int UploadCompressedTextureSurface(void* pSrcData, size_t srcDataSize, int type) {
 		return m_dev->UploadCompressedTextureSurface(pSrcData, srcDataSize, type);
 	}
 
@@ -475,11 +475,11 @@ public:
 		m_dev->DestroyTexture(texHandle);
 	}
 
-	virtual int UploadCompressedTexture(void* pSrc, unsigned int srcSize, int type) {
+	virtual int UploadCompressedTexture(void* pSrc, size_t srcSize, int type) {
 		return m_dev->UploadCompressedTexture(pSrc, srcSize, type);
 	}
 
-	virtual void UpdateCompressedTexture(int texHandle, void* pSrcData, unsigned int srcDataSize, int type) {
+	virtual void UpdateCompressedTexture(int texHandle, void* pSrcData, size_t srcDataSize, int type) {
 		m_dev->UpdateCompressedTexture(texHandle, pSrcData, srcDataSize, type);
 	}
 
@@ -829,7 +829,7 @@ public:
 		return m_dev->FlushOnePass(flag);
 	}
 
-	virtual int UploadCompressedTextureSurface(void* pSrcData, unsigned int srcDataSize, int type) {
+	virtual int UploadCompressedTextureSurface(void* pSrcData, size_t srcDataSize, int type) {
 		return m_dev->UploadCompressedTextureSurface(pSrcData, srcDataSize, type);
 	}
 

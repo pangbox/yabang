@@ -111,7 +111,7 @@ public:
 	int GetCursor() const;
 	void MoveCursor(const char* name);
 	void SetPushSound(const char* name);
-	char PlayPushSound();
+	bool PlayPushSound();
 	void SetWheelFocus();
 	WRect* GetRect();
 	bool IsEnabled() const;

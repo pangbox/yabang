@@ -1121,14 +1121,14 @@ void WDirect3D::Flush(uint32_t flag) {
 	this->m_bufPolySwNum = 0;
 }
 
-unsigned int WDirect3D::GetSortBufferSize() const {
+size_t WDirect3D::GetSortBufferSize() const {
 	return this->m_buf4Sort.size();
 }
 
-unsigned int WDirect3D::GetSortBufferSwSize() const {
+size_t WDirect3D::GetSortBufferSwSize() const {
 	return this->m_bufPolySw.size();
 }
 
-unsigned int WDirect3D::GetSortBufferHwSize() const {
+size_t WDirect3D::GetSortBufferHwSize() const {
 	return this->m_bufPolyHw.size();
 }

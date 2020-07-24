@@ -1530,7 +1530,7 @@ bool WDirect3D8::SetRenderState4Flushing(int pass) {
 	}
 }
 
-int WDirect3D8::UploadCompressedTextureSurface(void* pSrcData, UINT srcDataSize, int type) {
+int WDirect3D8::UploadCompressedTextureSurface(void* pSrcData, size_t srcDataSize, int type) {
 	int hTex;
 	if (*(static_cast<uint32_t*>(pSrcData) + 4) > this->m_d3dCaps.MaxTextureWidth || *(static_cast<uint32_t*>(pSrcData)
 			+ 3) >

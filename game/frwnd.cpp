@@ -337,8 +337,9 @@ void FrWnd::SetPushSound(const char* name) {
 	this->m_szPushSound = name;
 }
 
-char FrWnd::PlayPushSound() {
+bool FrWnd::PlayPushSound() {
 	// TODO: Audio
+	return false;
 }
 
 void FrWnd::SetWheelFocus() {

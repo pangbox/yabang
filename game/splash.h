@@ -18,7 +18,7 @@ public:
 	void HideSplash() const;
 	void FreeResources();
 	bool MakeTransparent() const;
-	HRESULT WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) const;
+	LRESULT WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) const;
 	unsigned int SetBitmap(HBITMAP h);
 	bool SetTransparentColor(unsigned int colorRef);
 	HWND RegAndCreateWindow();

@@ -1321,7 +1321,7 @@ public:
 	void SetRenderTargetSizeInfo(int hTex, const WRenderToTextureSizeInfo& sizeInfo) override;
 	bool LoadShCoefficient(const char* filename);
 	bool SetRenderState4Flushing(int pass) override;
-	int UploadCompressedTextureSurface(void* pSrcData, UINT srcDataSize, int type) override;
+	int UploadCompressedTextureSurface(void* pSrcData, size_t srcDataSize, int type) override;
 	void UpdateCompressedTexture(int texHandle, void* pSrcData, size_t srcDataSize, int type) override;
 	void CreateTextureSurface(uint32_t dwWidth, uint32_t dwHeight, int iMipmapCount, int renderTargetType, int iIndex,
 	                          int bChromaKey, int bitNum) override;
