@@ -76,7 +76,7 @@ public:
 	msample2d* LoadSample2D(const char* filename);
 	msample3d* LoadSample3D(const char* filename);
 	void ClearIdleSound(int level);
-	int Load(char* filename, int type);
+	int Load(const char* filename, int type);
 
 protected:
 	static cFile* g_files[16];

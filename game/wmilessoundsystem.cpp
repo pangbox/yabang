@@ -751,7 +751,7 @@ void WMilesSoundSystem::ClearIdleSound(int level) {
 	}
 }
 
-int WMilesSoundSystem::Load(char* filename, int type) {
+int WMilesSoundSystem::Load(const char* filename, int type) {
 	uint32_t i;
 	HSTREAM stream;
 	HSAMPLE sample;
