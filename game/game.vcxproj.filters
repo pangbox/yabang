@@ -168,4 +168,7 @@
       <UniqueIdentifier>{263aa146-ce27-47f1-ae7a-22f0e9bcb913}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="mssfunc.x" />
+  </ItemGroup>
 </Project>
