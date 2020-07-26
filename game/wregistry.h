@@ -13,7 +13,7 @@ public:
 	void Write(char* field, unsigned v);
 
 protected:
-	HKEY m_root;
-	char m_location[128];
-	int m_code;
+	HKEY m_root{};
+	char m_location[128]{};
+	int m_code{};
 };
