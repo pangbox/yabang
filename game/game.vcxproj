@@ -218,6 +218,7 @@
     <ClCompile Include="rectangle.cpp" />
     <ClCompile Include="rectcache.cpp" />
     <ClCompile Include="singleton.cpp" />
+    <ClCompile Include="soption.cpp" />
     <ClCompile Include="spak.cpp" />
     <ClCompile Include="spakinfo.cpp" />
     <ClCompile Include="splash.cpp" />
@@ -292,6 +293,7 @@
     <ClInclude Include="rectcache.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="singleton.h" />
+    <ClInclude Include="soption.h" />
     <ClInclude Include="spak.h" />
     <ClInclude Include="spakinfo.h" />
     <ClInclude Include="splash.h" />
