@@ -80,6 +80,7 @@
     <ClCompile Include="wmilessoundsystem.cpp" />
     <ClCompile Include="mss.cpp" />
     <ClCompile Include="csoundmanager.cpp" />
+    <ClCompile Include="cwangrealapplication.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="wmilessoundsystem.h" />
     <ClInclude Include="mss.h" />
     <ClInclude Include="csoundmanager.h" />
+    <ClInclude Include="cwangrealapplication.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
