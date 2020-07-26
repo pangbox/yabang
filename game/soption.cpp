@@ -18,9 +18,9 @@ sOption::sOption() {
 	this->m_vScreenHeight = 600;
 	this->m_vScreenColor = 16;
 	this->m_aMssBits = 16;
-	this->m_aSfxVolume = 1.0;
-	this->m_aBgmVolume = 1.0;
-	this->m_gMouseSensitivity = 1.0;
+	this->m_aSfxVolume = 1.0f;
+	this->m_aBgmVolume = 1.0f;
+	this->m_gMouseSensitivity = 1.0f;
 	this->m_wWindowedMode = 0;
 	this->m_vFillMode = 0;
 	this->m_vWideMode = 0;
@@ -36,7 +36,7 @@ sOption::sOption() {
 	this->m_vReflectionEnabled = 1;
 	this->m_vLodEnabled = 0;
 	this->m_gNpcEnabled = 1;
-	this->m_vScreenRatio = 1.3;
+	this->m_vScreenRatio = 1.3f;
 	this->m_aOverall = 0;
 	this->m_aMssEnabled = 1;
 	this->m_aMssFrequency = 44100;

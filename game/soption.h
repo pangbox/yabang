@@ -9,6 +9,7 @@ struct sOption {
 	static bool IsSupportShadow();
 	static bool IsSupportReflection();
 	static bool IsSupportLod();
+
 	const char* vGetTnlText(int tnl) const;
 	int vGetTnlLvl(const char* tnl) const;
 	const char* aGetSpeakerText(int speaker) const;
