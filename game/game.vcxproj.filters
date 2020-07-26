@@ -81,6 +81,7 @@
     <ClCompile Include="mss.cpp" />
     <ClCompile Include="csoundmanager.cpp" />
     <ClCompile Include="cwangrealapplication.cpp" />
+    <ClCompile Include="cmainframe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="mss.h" />
     <ClInclude Include="csoundmanager.h" />
     <ClInclude Include="cwangrealapplication.h" />
+    <ClInclude Include="cmainframe.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

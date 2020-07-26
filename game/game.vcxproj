@@ -185,6 +185,7 @@
     <ClCompile Include="cfilepacked.cpp" />
     <ClCompile Include="cfileraw.cpp" />
     <ClCompile Include="cipher.cpp" />
+    <ClCompile Include="cmainframe.cpp" />
     <ClCompile Include="coordinates.cpp" />
     <ClCompile Include="csoundmanager.cpp" />
     <ClCompile Include="cwangrealapplication.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="cfilepacked.h" />
     <ClInclude Include="cfileraw.h" />
     <ClInclude Include="cipher.h" />
+    <ClInclude Include="cmainframe.h" />
     <ClInclude Include="coordinates.h" />
     <ClInclude Include="csoundmanager.h" />
     <ClInclude Include="cwangrealapplication.h" />
