@@ -83,6 +83,8 @@
     <ClCompile Include="cwangrealapplication.cpp" />
     <ClCompile Include="cmainframe.cpp" />
     <ClCompile Include="soption.cpp" />
+    <ClCompile Include="coption.cpp" />
+    <ClCompile Include="wregistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -160,6 +162,8 @@
     <ClInclude Include="cwangrealapplication.h" />
     <ClInclude Include="cmainframe.h" />
     <ClInclude Include="soption.h" />
+    <ClInclude Include="coption.h" />
+    <ClInclude Include="wregistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
