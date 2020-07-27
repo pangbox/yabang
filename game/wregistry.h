@@ -8,7 +8,7 @@ public:
 
 	void SetLocation(const char* loc);
 	bool Read(char* field, char* out, int len);
-	int Scan(char* field, char* fmt, ...);
+	int Scan(char* field, const char* fmt, ...);
 	void Write(char* field, const char* str, ...);
 	void Write(char* field, unsigned v);
 

@@ -66,7 +66,7 @@ bool WRegistry::Read(char* field, char* out, int len) {
 	return result;
 }
 
-int WRegistry::Scan(char* field, char* fmt, ...) {
+int WRegistry::Scan(char* field, const char* fmt, ...) {
 	char text[512] = {0};
 	char temp[128] = {0};
 	int n = 0;
