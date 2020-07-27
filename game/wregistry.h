@@ -7,10 +7,10 @@ public:
 	~WRegistry();
 
 	void SetLocation(const char* loc);
-	bool Read(char* field, char* out, int len);
-	int Scan(char* field, const char* fmt, ...);
-	void Write(char* field, const char* str, ...);
-	void Write(char* field, unsigned v);
+	bool Read(const char* field, char* out, int len);
+	int Scan(const char* field, const char* fmt, ...);
+	void Write(const char* field, const char* str, ...);
+	void Write(const char* field, unsigned v);
 
 protected:
 	HKEY m_root{};

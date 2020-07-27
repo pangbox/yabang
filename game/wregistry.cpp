@@ -38,7 +38,7 @@ void WRegistry::SetLocation(const char* loc) {
 	}
 }
 
-bool WRegistry::Read(char* field, char* out, int len) {
+bool WRegistry::Read(const char* field, char* out, int len) {
 	DWORD type;
 	DWORD dataLen;
 	HKEY hKey;
@@ -66,7 +66,7 @@ bool WRegistry::Read(char* field, char* out, int len) {
 	return result;
 }
 
-int WRegistry::Scan(char* field, const char* fmt, ...) {
+int WRegistry::Scan(const char* field, const char* fmt, ...) {
 	char text[512] = {0};
 	char temp[128] = {0};
 	int n = 0;
@@ -163,7 +163,7 @@ int WRegistry::Scan(char* field, const char* fmt, ...) {
 	return c;
 }
 
-void WRegistry::Write(char* field, const char* str, ...) {
+void WRegistry::Write(const char* field, const char* str, ...) {
 	HKEY hKey;
 	char buffer[1024];
 	char subKey[128];
@@ -186,7 +186,7 @@ void WRegistry::Write(char* field, const char* str, ...) {
 	RegCloseKey(hKey);
 }
 
-void WRegistry::Write(char* field, unsigned int v) {
+void WRegistry::Write(const char* field, unsigned int v) {
 	HKEY hKey;
 	char subKey[128];
 
