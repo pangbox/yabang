@@ -15,31 +15,33 @@ class WReceivedPacket;
 
 class CProjectG : public CMainFrame, public CWangrealApplication, public WSingleton<CProjectG>, FrCmdTarget {
 public:
+	void FpuCheck();
+	void SetMoveLoginServer(const char* unk1, const char* unk2);
 
 protected:
-	DWORD m_unkDword = 0;
+	uint32_t m_unkDword = 0;
 	bool m_bUnkFlag1 = false;
 	bool m_bUnkFlag2 = false;
 	std::string m_szUnkStr;
 	std::string m_szUnkLogin1;
 	std::string m_szUnkLogin2;
 	WList<int> m_inputDevices{16, 16};
-	DWORD* m_pdwUnk1 = nullptr;
-	DWORD m_mainThreadId = 0;
-	DWORD m_dwUnkFlag1 = 0;
-	DWORD m_dwUnkFlag2 = 0;
-	DWORD m_baseTime = 0;
+	uint32_t* m_pdwUnk1 = nullptr;
+	uint32_t m_mainThreadId = 0;
+	uint32_t m_dwUnkFlag1 = 0;
+	uint32_t m_dwUnkFlag2 = 0;
+	uint32_t m_baseTime = 0;
 	float m_FPS = 60.0f;
-	DWORD m_dwUnk2 = 4;
+	uint32_t m_dwUnk2 = 4;
 	WDeviceManager* m_deviceManager = nullptr;
 	WProcManager* m_procManager = nullptr;
 	WAVIEncoder m_wAviEncoder;
 	std::deque<WReceivedPacket*> m_packetDeque;
-	DWORD m_fpControl;
-	bool m_bHidePrivacy;
-	bool m_bHideGUI;
-	bool m_bHidePII;
-	DWORD m_captureNum;
+	uint32_t m_fpControl = 0;
+	bool m_bHidePrivacy = false;
+	bool m_bHideGUI = false;
+	bool m_bHidePII = false;
+	uint32_t m_captureNum = 0;
 	WMatrix m_unkMatrix;
 };
 
