@@ -61,7 +61,8 @@ int* WAVIEncoder::Close(int* info) {
 	}
 	this->m_bOpened = false;
 
-	FILE* f = fopen(this->m_filename, "rb");
+	FILE* f;
+	fopen_s(&f, this->m_filename, "rb");
 	int len = f ? _filelength(_fileno(f)) : 0;
 	fclose(f);
 
@@ -94,33 +95,33 @@ void WAVIEncoder::ScaleBitmap(Bitmap* out, Bitmap* bitmap, int w, int h, int px,
 		this->CopyBitmap(out, bitmap, flip);
 		return;
 	}
-	int scale_w = ((bitmap->m_bi->bmiHeader.biWidth - px) << 8) / out->m_bi->bmiHeader.biWidth;
-	int scale_h = ((bitmap->m_bi->bmiHeader.biHeight - py) << 8) / out->m_bi->bmiHeader.biHeight;
-	int extent_div = 0x1000000 / (scale_w / 16 * (scale_h / 16));
-	int v = py * scale_h;
+	int scaleW = ((bitmap->m_bi->bmiHeader.biWidth - px) << 8) / out->m_bi->bmiHeader.biWidth;
+	int scaleH = ((bitmap->m_bi->bmiHeader.biHeight - py) << 8) / out->m_bi->bmiHeader.biHeight;
+	int extentDiv = 0x1000000 / (scaleW / 16 * (scaleH / 16));
+	int v = py * scaleH;
 	for (int y = 0; y < out->m_bi->bmiHeader.biHeight; y++) {
 		int outline = flip ? out->m_bi->bmiHeader.biHeight - y - 1 : y;
 		uint8_t* vram = &out->m_vram[outline * out->m_pitch];
-		int u = px * scale_w;
+		int u = px * scaleW;
 		int x = 0;
 		for (; x < out->m_bi->bmiHeader.biWidth; x++) {
 			int r = 0;
 			int g = 0;
 			int b = 0;
-			for (int y1 = v; y1 < v + scale_h;) {
-				int dv = v + scale_h - y1;
-				if (0x100 - static_cast<uint8_t>(y1) <= v + scale_h - y1) {
+			for (int y1 = v; y1 < v + scaleH;) {
+				int dv = v + scaleH - y1;
+				if (0x100 - static_cast<uint8_t>(y1) <= v + scaleH - y1) {
 					dv = 0x100 - static_cast<uint8_t>(y1);
 				}
 				int x1 = u;
 				int scanline = bitmap->m_pitch * (y1 >> 8);
-				for (; x1 < u + scale_w;) {
-					int dx = u + scale_w - x1;
-					if (0x100 - static_cast<uint8_t>(x1) <= u + scale_w - x1) {
+				for (; x1 < u + scaleW;) {
+					int dx = u + scaleW - x1;
+					if (0x100 - static_cast<uint8_t>(x1) <= u + scaleW - x1) {
 						dx = 0x100 - static_cast<uint8_t>(x1);
 					}
 					int index = scanline + 3 * (x1 >> 8);
-					int f = extent_div * dv * dx >> 16;
+					int f = extentDiv * dv * dx >> 16;
 					r += f * bitmap->m_vram[index + 2];
 					g += f * bitmap->m_vram[index + 1];
 					b += f * bitmap->m_vram[index + 0];
@@ -132,9 +133,9 @@ void WAVIEncoder::ScaleBitmap(Bitmap* out, Bitmap* bitmap, int w, int h, int px,
 			vram[1] = std::min(static_cast<int>(static_cast<float>(g) * 1.2f), 0xFF0000) >> 16;
 			vram[0] = std::min(static_cast<int>(static_cast<float>(b) * 1.2f), 0xFF0000) >> 16;
 			vram += 3;
-			u += scale_w;
+			u += scaleW;
 		}
-		v += scale_h;
+		v += scaleH;
 	}
 }
 
@@ -145,7 +146,7 @@ bool WAVIEncoder::Open(const char* filename, int w, int h, int fps, HWND hwnd) {
 	this->m_width = w;
 	this->m_height = h;
 	AVIFileInit();
-	if (FAILED(AVIFileOpenA(&this->m_pfile, filename, 0x1001u, nullptr))) {
+	if (FAILED(AVIFileOpenA(&this->m_pfile, filename, OF_CREATE|OF_WRITE, nullptr))) {
 		return false;
 	}
 	memset(&streamInfo, 0, sizeof(streamInfo));
@@ -162,21 +163,19 @@ bool WAVIEncoder::Open(const char* filename, int w, int h, int fps, HWND hwnd) {
 	if (FAILED(AVIFileCreateStreamA(this->m_pfile, &this->m_ps, &streamInfo))) {
 		return false;
 	}
-	IAVIStream* v7 = this->m_ps;
 	memset(&opts, 0, sizeof(opts));
-	if (FAILED(AVIMakeCompressedStream(&this->m_psCompressed, v7, &opts, 0))) {
+	if (FAILED(AVIMakeCompressedStream(&this->m_psCompressed, this->m_ps, &opts, nullptr))) {
 		return false;
 	}
 	Bitmap bitmap(w, h, 24);
-	IAVIStream* v12 = this->m_psCompressed;
-	if (FAILED(AVIStreamSetFormat(v12, 0, bitmap.m_bi, 40))) {
+	if (FAILED(AVIStreamSetFormat(this->m_psCompressed, 0, bitmap.m_bi, 40))) {
 		return false;
 	}
 	if (this->m_hisNum > 0) {
 		this->SetFrameBuffer(this->m_hisNum);
 	}
 	this->m_bOpened = true;
-	strcpy(this->m_filename, filename);
+	strcpy_s(this->m_filename, MAX_PATH, filename);
 	return true;
 }
 

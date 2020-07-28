@@ -32,5 +32,5 @@ protected:
 	int m_hisNum = 0;
 	int m_cur = 0;
 	bool m_bOpened = false;
-	char m_filename[260] = {};
+	char m_filename[MAX_PATH] = {};
 };
