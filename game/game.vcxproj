@@ -117,7 +117,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;winmm.lib;atls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atls.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,7 +135,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;winmm.lib;atls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atls.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,7 +149,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;winmm.lib;atls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atls.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,7 +167,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;winmm.lib;atl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -188,6 +188,7 @@
     <ClCompile Include="cmainframe.cpp" />
     <ClCompile Include="coordinates.cpp" />
     <ClCompile Include="coption.cpp" />
+    <ClCompile Include="cprojectg.cpp" />
     <ClCompile Include="csoundmanager.cpp" />
     <ClCompile Include="cwangrealapplication.cpp" />
     <ClCompile Include="frbutton.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="w3danispr.cpp" />
     <ClCompile Include="w3dspr.cpp" />
     <ClCompile Include="waabb.cpp" />
+    <ClCompile Include="waviencoder.cpp" />
     <ClCompile Include="wbone.cpp" />
     <ClCompile Include="wfixedfont.cpp" />
     <ClCompile Include="wflags.cpp" />
@@ -265,6 +267,7 @@
     <ClInclude Include="cmainframe.h" />
     <ClInclude Include="coordinates.h" />
     <ClInclude Include="coption.h" />
+    <ClInclude Include="cprojectg.h" />
     <ClInclude Include="csoundmanager.h" />
     <ClInclude Include="cwangrealapplication.h" />
     <ClInclude Include="frbutton.h" />
@@ -305,6 +308,7 @@
     <ClInclude Include="w3danispr.h" />
     <ClInclude Include="w3dspr.h" />
     <ClInclude Include="waabb.h" />
+    <ClInclude Include="waviencoder.h" />
     <ClInclude Include="wbone.h" />
     <ClInclude Include="wfixedfont.h" />
     <ClInclude Include="wflags.h" />
