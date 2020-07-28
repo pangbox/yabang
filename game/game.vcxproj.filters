@@ -87,6 +87,7 @@
     <ClCompile Include="wregistry.cpp" />
     <ClCompile Include="cprojectg.cpp" />
     <ClCompile Include="waviencoder.cpp" />
+    <ClCompile Include="cinputmanager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="wregistry.h" />
     <ClInclude Include="cprojectg.h" />
     <ClInclude Include="waviencoder.h" />
+    <ClInclude Include="cinputmanager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
