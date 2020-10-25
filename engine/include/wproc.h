@@ -30,6 +30,12 @@ public:
 		}
 	}
 
+	void AddProc(WProc* proc, HWND hWnd) {
+		this->m_procList[this->m_procNum].hWnd = hWnd;
+		this->m_procList[this->m_procNum].proc = proc;
+		++this->m_procNum;
+	}
+
 private:
 	WHandle m_procList[16] = {};
 	int m_procNum = 0;
@@ -48,6 +54,12 @@ public:
 	}
 
 	virtual LRESULT WinProc(UINT msg, WPARAM wParam, LPARAM lParam) = 0;
+
+	void SetProc(WProcManager* procMan, HWND hWnd)
+	{
+		this->m_include = procMan;
+		procMan->AddProc(this, hWnd);
+	}
 
 private:
 	WProcManager* m_include;
