@@ -480,7 +480,7 @@ Bitmap* WResourceManager::LoadBMP(const char* filename) {
 
 	bmp_head header{};
 	fp->Read(&header, sizeof(bmp_head));
-	if (memcmp(reinterpret_cast<void*>(&header), "bm", 2)) {
+	if (memcmp(reinterpret_cast<void*>(&header), "bm", 2) != 0) {
 		CloseCFile(fp);
 		return nullptr;
 	}
