@@ -4,7 +4,7 @@
 #include "wmath.h"
 
 class WMilesSoundSystem;
-class CSoundObject;
+struct CSoundObject;
 class CSoundManager;
 
 struct _SFX_INFO {
