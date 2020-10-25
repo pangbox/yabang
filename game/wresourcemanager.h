@@ -80,6 +80,8 @@ public:
 		char fullname[1];
 	};
 
+	WResourceManager();
+
 	[[nodiscard]] WVideoDev* VideoReference() const;
 	void SetVideoReference(WVideoDev* video);
 	[[nodiscard]] const WList<w_texlist*>& GetTextureList() const;
@@ -126,13 +128,13 @@ private:
 	int m_blankTexture = 0;
 	bool m_savemem[3]{};
 	bool m_matchDirectory = false;
-	WList<char*> m_missingTextureList;
-	WList<w_match_filename*> m_matchList;
-	WList<w_texlist*> texList;
-	WResrcCache<WPuppet*> puppetList;
-	WResrcCache<WSoundFx*> soundList;
-	WResrcCache<WFont*> fontList;
-	WList<WSoundFx*> voiceList;
-	WList<WResource*> originList;
-	WLock m_lock[3];
+	WList<char*> m_missingTextureList{16, 16};
+	WList<w_match_filename*> m_matchList{1024, 1024};
+	WList<w_texlist*> texList{16, 16};
+	WResrcCache<WPuppet*> puppetList{};
+	WResrcCache<WSoundFx*> soundList{};
+	WResrcCache<WFont*> fontList{};
+	WList<WSoundFx*> voiceList{8, 0};
+	WList<WResource*> originList{8, 0};
+	WLock m_lock[3]{};
 };

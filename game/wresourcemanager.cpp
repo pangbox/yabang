@@ -15,6 +15,10 @@
 
 WResourceManager* g_resourceManager = nullptr;
 
+WResourceManager::WResourceManager() {
+	remove("files_of_the_same_name.txt");
+}
+
 WVideoDev* WResourceManager::VideoReference() const {
 	return this->m_video;
 }
