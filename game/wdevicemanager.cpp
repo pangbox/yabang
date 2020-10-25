@@ -156,7 +156,7 @@ void WDeviceManager::LoadModule(const char* directory, int loadtype) {
 	FindClose(hFindFile);
 }
 
-WVideoDev* WDeviceManager::CreateVideoDevice(char* deviceName, char* modeName, int iTnL) {
+WVideoDev* WDeviceManager::CreateVideoDevice(const char* deviceName, const char* modeName, int iTnL) {
     WVideoDev* videoDev = this->m_vidList.Start();
     if (!videoDev) {
 		return nullptr;
@@ -171,7 +171,7 @@ WVideoDev* WDeviceManager::CreateVideoDevice(char* deviceName, char* modeName, i
     return nullptr;
 }
 
-WInputDev* WDeviceManager::CreateInputDevice(char* deviceName, char* modeName) {
+WInputDev* WDeviceManager::CreateInputDevice(const char* deviceName, const char* modeName) {
     WInputDev* inputDev = this->m_inpList.Start();
     if (!inputDev) {
         return nullptr;
