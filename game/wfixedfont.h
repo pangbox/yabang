@@ -1,6 +1,14 @@
 ﻿#pragma once
 #include "wfont.h"
 
+struct w_fnthead
+{
+	int32_t id;
+	int32_t fontsize;
+	int32_t bAntialiased;
+	int32_t dummy;
+};
+
 class WFixedFont : public WFont {
 public:
 	struct w_fixedtext {
@@ -24,7 +32,12 @@ public:
 		char msg[1];
 	};
 
+	WFixedFont(int maxTexture);
 	void Init(int maxTexture);
+
+	float PrintInside(WView* view, float x, float y, const char* pText, int type, unsigned int diffuse, Bitmap* bmp) override;
+	float GetTextWidthInside(WView* view, const char* pText) override;
+	int Load(const char* fntName);
 
 private:
 	WList<w_fixedtext*> m_textList{8, 8};

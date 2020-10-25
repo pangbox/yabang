@@ -1,5 +1,12 @@
 ﻿#include "wfixedfont.h"
 
+#include "cfile.h"
+#include "wresourcemanager.h"
+
+WFixedFont::WFixedFont(int maxTexture) {
+    this->Init(maxTexture);
+}
+
 void WFixedFont::Init(int maxTexture) {
 	this->m_font = nullptr;
     this->m_clone = false;
@@ -26,3 +33,34 @@ void WFixedFont::Init(int maxTexture) {
     this->m_nowX = 0;
 }
 
+float WFixedFont::PrintInside(WView* view, float x, float y, const char* pText, int type, unsigned diffuse, Bitmap* bmp) {
+	// TODO: implement
+    abort();
+}
+
+float WFixedFont::GetTextWidthInside(WView* view, const char* pText) {
+    // TODO: implement
+    abort();
+}
+
+int WFixedFont::Load(const char* fntName) {
+	w_fnthead header;
+    cFile* fp = this->m_resrcMng->GetCFile(fntName, 0xFFFF);
+    if (!fp) {
+        return 1;
+    }
+    unsigned int fontLen = fp->Length() - 16;
+    if (this->m_font) {
+        delete [] this->m_font;
+        this->m_font = nullptr;
+    }
+    this->m_font = new uint8_t[fontLen];
+    fp->Read(&header, 16);
+    fp->Read(this->m_font, fontLen);
+    CloseCFile(fp);
+    this->m_bAntialiased = header.bAntialiased;
+    this->m_bytePerChar = header.fontsize * ((header.fontsize * (header.bAntialiased != 0 ? 4 : 1) + 7) / 8) + 2;
+    this->m_iFontWidth = header.fontsize;
+    this->m_iFontHeight = header.fontsize;
+    return 0;
+}
