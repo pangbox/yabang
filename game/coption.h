@@ -82,12 +82,10 @@ public:
 	};
 	
 	struct sDisplayMode {
-		uint32_t dwUnk1;
-		uint32_t dwUnk2;
-		uint32_t dwUnk3;
-		uint32_t dwUnk4;
-		uint32_t dwUnk5;
-		char name[1];
+		DWORD width;
+		DWORD height;
+		DWORD bpp;
+		char name[16];
 	};
 
 	struct sRegKey {
@@ -139,6 +137,8 @@ public:
 	void gSetPPLSize(int value);
 	void gResetRestore();
 	uint32_t vGetTnLMode();
+	void SetVideoDevice(WVideoDev* videoDev);
+	void CheckDisplayModeList(WVideoDev* videoDev, BOOL windowedMode, bool wideMode);
 	void vApplyLobbyScreenSize();
 	bool vChangeScreenSize(int iWidth, int iHeight, int iColor);
 

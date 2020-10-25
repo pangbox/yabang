@@ -1,10 +1,59 @@
 ﻿#include "coption.h"
 
-
 #include "cprojectg.h"
 #include "WDeviceManager.h"
 #include "wvideo.h"
 #include "wview.h"
+
+struct sResolution {
+	int dx, dy, bpp;
+};
+
+sResolution g_normalModes[] = {
+	{640, 480, 16},
+	{640, 480, 32},
+	{800, 600, 16},
+	{800, 600, 32},
+	{1024, 768, 16},
+	{1024, 768, 32},
+	{1280, 960, 16},
+	{1280, 960, 32},
+	{1280, 1024, 16},
+	{1280, 1024, 32},
+	{1600, 1200, 16},
+	{1600, 1200, 32},
+};
+
+sResolution g_widescreenModes[] = {
+	{1024, 576, 16},
+	{1024, 576, 32},
+	{1280, 720, 16},
+	{1280, 720, 32},
+	{1280, 768, 16},
+	{1280, 768, 32},
+	{1280, 800, 16},
+	{1280, 800, 32},
+	{1366, 768, 16},
+	{1366, 768, 32},
+	{1400, 900, 16},
+	{1400, 900, 32},
+	{1440, 990, 16},
+	{1440, 990, 32},
+	{1400, 1050, 16},
+	{1400, 1050, 32},
+	{1440, 900, 16},
+	{1440, 900, 32},
+	{1440, 1050, 16},
+	{1440, 1050, 32},
+	{1600, 900, 16},
+	{1600, 900, 32},
+	{1680, 1050, 16},
+	{1680, 1050, 32},
+	{1920, 1080, 16},
+	{1920, 1080, 32},
+	{1920, 1200, 16},
+	{1920, 1200, 32},
+};
 
 COption::sRegKey COption::ms_regKeys[RegKeyCount] = {
 	{R"(Ver)", "1.xx"},
@@ -322,6 +371,74 @@ uint32_t COption::vGetTnLMode() {
 	return this->m_vTnLMode;
 }
 
+void COption::SetVideoDevice(WVideoDev* videoDev) {
+	DWORD caps;
+	this->m_videoDev = videoDev;
+	videoDev->Command(WDeviceMessageGetCaps, 0, reinterpret_cast<int>(&caps));
+	sOption::sbHwTnlSupport = caps != 0;
+	sOption::sbRtSupport = this->m_videoDev->SupportRenderTargetFormat();
+	sOption::sbVsSupport = this->m_videoDev->IsSupportVs();
+	sOption::sbPsSupport = this->m_videoDev->IsSupportPs();
+	sOption::sbMrtSupport = this->m_videoDev->IsSupportMrt();
+	sOption::sbClipPlaneSupport = this->m_videoDev->IsSupportClipPlane();
+	this->m_videoDev->Command(WDeviceMessageGetCaps, 1, reinterpret_cast<int>(&caps));
+	if ((caps & 0x80000000) == 0) {
+		if (caps > 2) {
+			this->m_sOption1.m_vTnLMode = 2;
+		} else {
+			this->m_sOption1.m_vTnLMode = caps;
+		}
+	} else {
+		this->m_sOption1.m_vTnLMode = 0;
+	}
+	this->m_vTnLMode = this->m_sOption1.m_vTnLMode;
+	this->m_videoDev->Command(WDeviceMessageSetCaptureMode, this->m_sOption1.m_gPowerGauge, this->m_sOption1.m_wWindowedMode);
+	this->m_deviceManager->ResetVideoDevice(1, 800, 600, this->m_sOption1.m_vScreenColor, 12845056, 0);
+	if (!sOption::sbRtSupport && (this->m_sOption1.m_vShadowEnabled = 0, !sOption::sbRtSupport)
+		|| !sOption::sbClipPlaneSupport
+		|| !sOption::sbVsSupport
+		|| !sOption::sbPsSupport)
+	{
+		this->m_sOption1.m_vReflectionEnabled = 0;
+	}
+	if (!sOption::sbRtSupport)
+		this->m_sOption1.m_vLodEnabled = 0;
+	this->m_sOption1.vSetOverallByVidOptions();
+	this->CheckDisplayModeList(videoDev, this->m_sOption1.m_wWindowedMode != 0, this->m_sOption1.m_vWideMode != 0);
+	this->vApplyMipmap();
+}
+
+void COption::CheckDisplayModeList(WVideoDev* videoDev, BOOL windowedMode, bool wideMode) {
+	sDisplayMode mode;
+
+	if (!videoDev) {
+		return;
+	}
+	this->m_displayModes.clear();
+	if (wideMode)
+	{
+		for (auto i : g_widescreenModes) {
+			mode.width = i.dx;
+			mode.height = i.dy;
+			mode.bpp = i.bpp;
+			sprintf(mode.name, "%dx%dx%d", mode.width, mode.height, mode.bpp);
+			if (videoDev->IsSupportedDisplayMode(windowedMode, mode.width, mode.height, mode.bpp)) {
+				this->m_displayModes.push_back(mode);
+			}
+		}
+	} else {
+		for (auto i : g_normalModes) {
+			mode.width = i.dx;
+			mode.height = i.dy;
+			mode.bpp = i.bpp;
+			sprintf(mode.name, "%dx%dx%d", mode.width, mode.height, mode.bpp);
+			if (videoDev->IsSupportedDisplayMode(windowedMode, mode.width, mode.height, mode.bpp)) {
+				this->m_displayModes.push_back(mode);
+			}
+		}
+	}
+}
+
 void COption::vApplyLobbyScreenSize() {
 	// TODO: This code should be enabled when ready.
 	//if (WSingleton<CShadowManager>::Instance())
@@ -329,8 +446,7 @@ void COption::vApplyLobbyScreenSize() {
 	this->vChangeScreenSize(800, 600, this->m_sOption1.m_vScreenColor);
 }
 
-bool COption::vChangeScreenSize(int iWidth, int iHeight, int iColor)
-{
+bool COption::vChangeScreenSize(int iWidth, int iHeight, int iColor) {
 	bool result;
 	uint32_t captureMode;
 	this->m_videoDev->Command(WDeviceMessageGetCaptureMode, (int)&captureMode, 0);
