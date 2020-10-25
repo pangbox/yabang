@@ -7,16 +7,42 @@
 #include "frcmdtarget.h"
 #include "singleton.h"
 #include "waviencoder.h"
+#include "winput.h"
 #include "wlist.h"
 
+class CSoundManager;
+class WMilesSoundSystem;
 class WDeviceManager;
 class WProcManager;
 class WReceivedPacket;
+class WInputDev;
+
+extern WInputDev* g_keyboard;
+extern WInputDev* g_mouse;
+extern WInputDev* g_ime;
+
+extern WMilesSoundSystem* g_miles;
+extern CSoundManager* g_audio;
 
 class CProjectG : public CMainFrame, public CWangrealApplication, public WSingleton<CProjectG>, FrCmdTarget {
 public:
+	explicit CProjectG(HWND hWnd);
+
+	bool Init();
+	bool SetVideoDevice();
+	void AddInputDev(WInputDev* inputDev);
+	bool SetInputDevice();
+	bool SetAudioDevice();
+
 	void FpuCheck();
 	void SetMoveLoginServer(const char* unk1, const char* unk2);
+
+	void Process(float time) override;
+	void Draw() override;
+	[[nodiscard]] uint32_t GetSystemTime() const override;
+	int MainLoop(int unknown) override;
+	LRESULT __stdcall WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
+	void SetWindowed(bool isWindowed);
 
 protected:
 	uint32_t m_unkDword = 0;
@@ -25,7 +51,7 @@ protected:
 	std::string m_szUnkStr;
 	std::string m_szUnkLogin1;
 	std::string m_szUnkLogin2;
-	WList<int> m_inputDevices{16, 16};
+	WList<WInputDev*> m_inputDevices{16, 16};
 	uint32_t* m_pdwUnk1 = nullptr;
 	uint32_t m_mainThreadId = 0;
 	uint32_t m_dwUnkFlag1 = 0;
