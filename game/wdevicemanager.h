@@ -16,8 +16,8 @@ public:
 	const char* EnumVideoDevice();
 	const char* EnumVideoMode(char* deviceName);
 	void LoadModule(const char* directory, int loadtype);
-	WVideoDev* CreateVideoDevice(char* deviceName, char* modeName, int iTnL);
-	WInputDev* CreateInputDevice(char* deviceName, char* modeName);
+	WVideoDev* CreateVideoDevice(const char* deviceName, const char* modeName, int iTnL);
+	WInputDev* CreateInputDevice(const char* deviceName, const char* modeName);
 	void Release(WDevice* device);
 
 protected:
