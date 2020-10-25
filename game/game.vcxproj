@@ -233,6 +233,7 @@
     <ClCompile Include="waabb.cpp" />
     <ClCompile Include="waviencoder.cpp" />
     <ClCompile Include="wbone.cpp" />
+    <ClCompile Include="wdevicemanager.cpp" />
     <ClCompile Include="wfixedfont.cpp" />
     <ClCompile Include="wflags.cpp" />
     <ClCompile Include="wfont.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="iff.h" />
     <ClInclude Include="iobject.h" />
     <ClInclude Include="jpegbitmap.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="mss.h" />
     <ClInclude Include="pakfile.h" />
     <ClInclude Include="rectangle.h" />
@@ -315,6 +317,7 @@
     <ClInclude Include="waabb.h" />
     <ClInclude Include="waviencoder.h" />
     <ClInclude Include="wbone.h" />
+    <ClInclude Include="wdevicemanager.h" />
     <ClInclude Include="wfixedfont.h" />
     <ClInclude Include="wflags.h" />
     <ClInclude Include="wfont.h" />

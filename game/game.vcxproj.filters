@@ -89,6 +89,7 @@
     <ClCompile Include="waviencoder.cpp" />
     <ClCompile Include="cinputmanager.cpp" />
     <ClCompile Include="jpegbitmap.cpp" />
+    <ClCompile Include="wdevicemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -173,6 +174,8 @@
     <ClInclude Include="cinputmanager.h" />
     <ClInclude Include="cexcept.h" />
     <ClInclude Include="jpegbitmap.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="wdevicemanager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
