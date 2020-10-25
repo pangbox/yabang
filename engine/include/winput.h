@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <timeapi.h>
 
-class WInputDev : WDevice {
+class WInputDev : public WDevice {
 public:
 	enum Sort {
 		Axis,
