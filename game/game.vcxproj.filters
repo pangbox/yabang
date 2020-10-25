@@ -90,6 +90,7 @@
     <ClCompile Include="cinputmanager.cpp" />
     <ClCompile Include="jpegbitmap.cpp" />
     <ClCompile Include="wdevicemanager.cpp" />
+    <ClCompile Include="cmousecursor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="jpegbitmap.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="wdevicemanager.h" />
+    <ClInclude Include="cmousecursor.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
