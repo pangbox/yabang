@@ -118,6 +118,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atls.lib;ijl15.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -136,6 +137,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atls.lib;ijl15.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -150,6 +152,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atls.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -168,6 +171,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vfw32.lib;comctl32.lib;winmm.lib;atl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -187,6 +191,7 @@
     <ClCompile Include="cinputmanager.cpp" />
     <ClCompile Include="cipher.cpp" />
     <ClCompile Include="cmainframe.cpp" />
+    <ClCompile Include="cmousecursor.cpp" />
     <ClCompile Include="coordinates.cpp" />
     <ClCompile Include="coption.cpp" />
     <ClCompile Include="cprojectg.cpp" />
@@ -270,6 +275,7 @@
     <ClInclude Include="cinputmanager.h" />
     <ClInclude Include="cipher.h" />
     <ClInclude Include="cmainframe.h" />
+    <ClInclude Include="cmousecursor.h" />
     <ClInclude Include="coordinates.h" />
     <ClInclude Include="coption.h" />
     <ClInclude Include="cprojectg.h" />
