@@ -1,15 +1,27 @@
-﻿#include <windows.h>
+﻿#include "main.h"
 #include <atlbase.h>
 #include <atlwin.h>
 #include <commctrl.h>
+#include <tchar.h>
 
+
+#include "cmousecursor.h"
+#include "coption.h"
+#include "cprojectg.h"
 #include "splash.h"
 #include "resource.h"
+#include "tikimagicboxdoc.h"
 #include "wlist.h"
 
+constexpr TCHAR g_defaultWindowName[] = TEXT("YaBang!");
 constexpr TCHAR g_className[] = TEXT("PangYa");
 HWND g_hWnd = nullptr;
 bool g_showTime = false;
+bool g_bExitDrawLoading = false;
+HANDLE g_hDrawLoading = nullptr;
+HANDLE g_hInstance = nullptr;
+unsigned int g_iLoadingThreadID;
+TCHAR g_windowName[128] = { 0 };
 WMemFillBlock g_mem{0x4800, 5};
 
 void ShowSplash(bool bShow) {
@@ -50,6 +62,82 @@ bool CheckRelatedDll(HWND hWnd) {
 	}
 	FreeLibrary(directInput);
 	return true;
+}
+
+void SetWindowTitle(HWND hWnd) {
+	_tcscpy_s(g_windowName, _countof(g_windowName), g_defaultWindowName);
+	SetWindowText(hWnd, g_windowName);
+}
+
+unsigned int __stdcall DrawLoadingByThread(void* unused) {
+	// TODO: implement.
+	WaitForSingleObject(GetCurrentThread(), INFINITE);
+
+	return 0;
+}
+
+int gameInit(HWND hWnd) {
+	MSG Msg;
+	RECT Rect;
+	int result = -1;
+
+	new CProjectG(hWnd);
+	new CTikiMagicBoxDoc();
+
+	if (WSingleton<CProjectG>::Instance()->Init()) {
+		if (!g_hDrawLoading && !g_iLoadingThreadID) {
+			g_hDrawLoading = reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, DrawLoadingByThread, nullptr, 0, &g_iLoadingThreadID));
+		}
+		if (WSingleton<CSplash>::Instance()) {
+			WSingleton<CSplash>::Instance()->HideSplash();
+		}
+		if (WSingleton<CProjectG>::Instance()->Ready()) {
+			WSingleton<COption>::Instance()->vApplyLobbyScreenSize();
+			// TODO: fix
+			//WSingleton<CMouseCursor>::Instance()->m_mode = 0;
+			// TODO: g_input requires CProjectG::Ready.
+			//g_input->SetMousePointToLoginBox();
+			// TODO: requires CBrowser
+			//new CBrowser();
+			GetClientRect(hWnd, &Rect);
+			// TODO: requires CBrowser
+			//WSingleton<CBrowser>::Instance()->Init(g_hInstance, hWnd, &Rect);
+			WaitForSingleObject(g_hDrawLoading, 90 * 1000);
+			if (WSingleton<CSplash>::Instance()) {
+				WSingleton<CSplash>::Instance()->CloseSplash();
+				delete WSingleton<CSplash>::Instance();
+			}
+			g_bExitDrawLoading = true;
+			while (true) {
+				while (!PeekMessage(&Msg, nullptr, 0, 0, 0)) {
+					result = WSingleton<CProjectG>::Instance()->MainLoop(0);
+					if (result > 0) {
+						break;
+					}
+				}
+				if (result > 0) {
+					break;
+				}
+				if (!GetMessageA(&Msg, 0, 0, 0)) break;
+				// TODO: requires CBrowser
+				//if (!WSingleton<CBrowser>::Instance() || !WSingleton<CBrowser>::Instance()->PreTranslateMessage(&Msg)) {
+				TranslateMessage(&Msg);
+				DispatchMessageA(&Msg);
+				//}
+			}
+			// TODO: requires CBrowser
+			//if (WSingleton<CBrowser>::m_pInstance)
+			//	delete WSingleton<CBrowser>::m_pInstance;
+		}
+	}
+	g_bExitDrawLoading = true;
+	// TODO: requires CLoginInfo.
+	//result = CLoginInfo::Instance()->Destroy();
+	if (WSingleton<CTikiMagicBoxDoc>::Instance())
+		delete WSingleton<CTikiMagicBoxDoc>::Instance();
+	if (WSingleton<CProjectG>::Instance())
+		delete WSingleton<CProjectG>::Instance();
+	return result;
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -136,6 +224,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 			ShowWindow(hWnd, SW_HIDE);
 			if (CheckRelatedDll(hWnd)) {
 				g_hWnd = hWnd;
+				SetWindowTitle(hWnd);
+				gameInit(hWnd);
 				MessageBox(nullptr, TEXT("Unimplemented."), TEXT("YaBang"), MB_OK | MB_ICONERROR);
 			}
 		}
