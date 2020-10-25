@@ -16,8 +16,8 @@ public:
 		T resource;
 	};
 
-	WList<w_cache*> resrcList;
-	WList<w_origin*> originList;
+	WList<w_cache*> resrcList{32, 32};
+	WList<w_origin*> originList{16, 32};
 
 	T FirstResource() {
 		auto *resource = this->resrcList.Start();
