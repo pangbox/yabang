@@ -824,6 +824,11 @@ int WMilesSoundSystem::Load(const char* filename, int type) {
 	return 0;
 }
 
+void WMilesSoundSystem::SetDistLimit(float maxDist, float minDist) {
+	m_defaultMaxDist = maxDist;
+	m_defaultMinDist = minDist;
+}
+
 unsigned int WMilesSoundSystem::Open_callback(const char* filename, unsigned int* outHandle) {
 	for (size_t i = 1; i < _countof(g_files); i++) {
 		if (g_files[i]) {

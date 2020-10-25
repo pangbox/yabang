@@ -77,6 +77,7 @@ public:
 	msample3d* LoadSample3D(const char* filename);
 	void ClearIdleSound(int level);
 	int Load(const char* filename, int type);
+	void SetDistLimit(float maxDist, float minDist);
 
 protected:
 	static cFile* g_files[16];
