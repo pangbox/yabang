@@ -88,6 +88,7 @@
     <ClCompile Include="cprojectg.cpp" />
     <ClCompile Include="waviencoder.cpp" />
     <ClCompile Include="cinputmanager.cpp" />
+    <ClCompile Include="jpegbitmap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="baseobject.h" />
@@ -170,6 +171,8 @@
     <ClInclude Include="cprojectg.h" />
     <ClInclude Include="waviencoder.h" />
     <ClInclude Include="cinputmanager.h" />
+    <ClInclude Include="cexcept.h" />
+    <ClInclude Include="jpegbitmap.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
