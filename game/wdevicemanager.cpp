@@ -82,9 +82,11 @@ void WDeviceManager::LoadModule(const char* directory, int loadtype) {
     char filter[128];                             
     char ext[8];                                  
 
-    GetModuleFileNameA(0, szModulePath, MAX_PATH);
+    GetModuleFileNameA(nullptr, szModulePath, MAX_PATH);
     _splitpath_s(szModulePath, drive, sizeof(drive), path, sizeof(path), name, sizeof(name), ext, sizeof(ext));
-    strcpy_s(filter, sizeof(filter), "wangreal");
+    strcpy_s(filter, sizeof(filter), drive);
+    strcat_s(filter, sizeof(filter), path);
+    strcat_s(filter, sizeof(filter), "wangreal");
     char* cfgPart = strrchr(name, '_');
     if (cfgPart) {
         strcat_s(filter, sizeof(filter), cfgPart);
@@ -158,10 +160,7 @@ void WDeviceManager::LoadModule(const char* directory, int loadtype) {
 
 WVideoDev* WDeviceManager::CreateVideoDevice(const char* deviceName, const char* modeName, int iTnL) {
     WVideoDev* videoDev = this->m_vidList.Start();
-    if (!videoDev) {
-		return nullptr;
-    }
-    while (!videoDev) {
+    while (videoDev) {
         if (!deviceName || !_strcmpi(videoDev->GetDeviceName(), deviceName)) {
             this->m_devList.AddItem(videoDev, nullptr, false);
             return videoDev;
@@ -173,10 +172,7 @@ WVideoDev* WDeviceManager::CreateVideoDevice(const char* deviceName, const char*
 
 WInputDev* WDeviceManager::CreateInputDevice(const char* deviceName, const char* modeName) {
     WInputDev* inputDev = this->m_inpList.Start();
-    if (!inputDev) {
-        return nullptr;
-    }
-    while (!inputDev) {
+    while (inputDev) {
         if (!deviceName || !_strcmpi(inputDev->GetDeviceName(), deviceName)) {
             this->m_devList.AddItem(inputDev, nullptr, false);
             return inputDev;
