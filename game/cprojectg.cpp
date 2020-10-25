@@ -19,6 +19,7 @@ CSoundManager* g_audio = nullptr;
 
 CProjectG::CProjectG(HWND hWnd) {
 	// TODO: Implement...
+	this->m_procManager = new WProcManager();
 	this->m_deviceManager = new WDeviceManager(nullptr, 9);
 	g_resourceManager = new WResourceManager();
 	new COption(hWnd, this->m_deviceManager, g_resourceManager);
