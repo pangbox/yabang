@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <windows.h>
 
-class Bitmap final {
+class Bitmap {
 public:
 	Bitmap();
 	Bitmap(const Bitmap& other);
@@ -12,9 +12,9 @@ public:
 	Bitmap& operator=(const Bitmap& other);
 	Bitmap& operator=(Bitmap&& other) noexcept;
 
-	~Bitmap();
+	virtual ~Bitmap();
 	void Create(int32_t w, int32_t h, int32_t bpp);
-	void Update();
+	virtual void Update();
 	void GetPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a) const;
 	void GetPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const;
 	void SetPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a) const;
