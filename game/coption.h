@@ -121,7 +121,13 @@ public:
 	bool vIsNpcEnabled();
 	bool aIsMssEnabled();
 	bool aIsMssHwSoundEnabled() const;
+	uint32_t aGetMssFrequency() const;
+	uint32_t aGetMssBits() const;
+	uint32_t aGetMssChannels() const;
+	uint32_t aGetMssBalance() const;
 	uint32_t aGetMssSpeaker() const;
+	float aGetSfxVolume() const;
+	float aGetBgmVolume() const;
 	void aApplyAudioSetting();
 	bool gIsWhisperAllowed() const;
 	bool gIsInvitationAllowed() const;
@@ -132,6 +138,9 @@ public:
 	void gSetPPLEnable(bool enable);
 	void gSetPPLSize(int value);
 	void gResetRestore();
+	uint32_t vGetTnLMode();
+	void vApplyLobbyScreenSize();
+	bool vChangeScreenSize(int iWidth, int iHeight, int iColor);
 
 protected:
 	static sRegKey ms_regKeys[63];

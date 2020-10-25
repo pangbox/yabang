@@ -1,6 +1,10 @@
 ﻿#include "coption.h"
 
+
+#include "cprojectg.h"
+#include "WDeviceManager.h"
 #include "wvideo.h"
+#include "wview.h"
 
 COption::sRegKey COption::ms_regKeys[RegKeyCount] = {
 	{R"(Ver)", "1.xx"},
@@ -244,8 +248,32 @@ bool COption::aIsMssHwSoundEnabled() const {
 	return this->m_sOption1.m_aMssHwSoundEnabled != 0;
 }
 
+uint32_t COption::aGetMssFrequency() const {
+	return this->m_sOption1.m_aMssFrequency;
+}
+
+uint32_t COption::aGetMssBits() const {
+	return this->m_sOption1.m_aMssBits;
+}
+
+uint32_t COption::aGetMssChannels() const {
+	return this->m_sOption1.m_aMssChannels;
+}
+
+uint32_t COption::aGetMssBalance() const {
+	return this->m_sOption1.m_aMssBalance;
+}
+
 uint32_t COption::aGetMssSpeaker() const {
 	return this->m_sOption1.m_aMssSpeaker;
+}
+
+float COption::aGetSfxVolume() const {
+	return this->m_sOption1.m_aSfxVolume;
+}
+
+float COption::aGetBgmVolume() const {
+	return this->m_sOption1.m_aBgmVolume;
 }
 
 void COption::aApplyAudioSetting() {
@@ -288,4 +316,54 @@ void COption::gSetPPLSize(int value) {
 void COption::gResetRestore() {
 	this->m_sOption1.m_gRestore = 0;
 	this->WriteReg_I(RegKeyRestore, 0);
+}
+
+uint32_t COption::vGetTnLMode() {
+	return this->m_vTnLMode;
+}
+
+void COption::vApplyLobbyScreenSize() {
+	// TODO: This code should be enabled when ready.
+	//if (WSingleton<CShadowManager>::Instance())
+	//	WSingleton<CShadowManager>::Instance()->Reset();
+	this->vChangeScreenSize(800, 600, this->m_sOption1.m_vScreenColor);
+}
+
+bool COption::vChangeScreenSize(int iWidth, int iHeight, int iColor)
+{
+	bool result;
+	uint32_t captureMode;
+	this->m_videoDev->Command(WDeviceMessageGetCaptureMode, (int)&captureMode, 0);
+	char unk = 0; // TODO: CSharedDoc+4668h
+	bool forceChange = captureMode != (unk == 11 || unk == 12 ? 0 : this->m_sOption1.m_gPowerGauge);
+	if (this->m_videoDev->IsWindowed() == (this->m_sOption1.m_wWindowedMode != 0)
+		&& this->m_videoDev->GetWidth() == iWidth
+		&& this->m_videoDev->GetHeight() == iHeight
+		&& this->m_videoDev->IsFillScreenMode() == (this->m_sOption1.m_vFillMode != 0)
+		&& (this->m_sOption1.m_wWindowedMode || this->m_videoDev->GetBackBufferBpp() == iColor)
+		&& !forceChange)
+	{
+		return true;
+	}
+	WSingleton<CProjectG>::Instance()->SetWindowed(this->m_sOption1.m_wWindowedMode != 0);
+	char unk2 = 0; // TODO: CSharedDoc+4668h
+	captureMode = unk2 == 11 || unk2 == 12 ? 0 : this->m_sOption1.m_gPowerGauge;
+	this->m_videoDev->Command(WDeviceMessageSetCaptureMode, captureMode, this->m_sOption1.m_wWindowedMode);
+	if (this->m_sOption1.m_wWindowedMode) {
+		result = this->m_deviceManager->ResetVideoDevice(
+			1,
+			iWidth,
+			iHeight,
+			iColor,
+			this->m_sOption1.m_vFillMode != 0 ? 0x90080000 : 0xC40000,
+			this->m_sOption1.m_vFillMode);
+	} else {
+		result = this->m_deviceManager->ResetVideoDevice(0, iWidth, iHeight, iColor, 0x90080000, 0);
+	}
+	WVideoDev* videoDev = this->m_videoDev;
+	this->m_globalView->SetViewport(static_cast<float>(videoDev->GetHeight()), static_cast<float>(videoDev->GetWidth()));
+	this->m_globalView->SetClip(this->m_globalView->GetClipNearValue(), this->m_globalView->GetClipFarValue(), false);
+	this->m_globalView->SetFOV(this->m_globalView->GetFOV());
+	this->m_globalView->UpdateCamera();
+	return result;
 }
